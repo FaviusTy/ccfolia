@@ -1,0 +1,49 @@
+{
+  "name": "ccfolia",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ajv": "^6.5.4",
+    "classnames": "^2.2.6",
+    "crc-32": "^1.2.0",
+    "firebase": "^4.12.1",
+    "immutable": "^3.8.2",
+    "konva": "^2.5.0",
+    "niwatori-dice": "^0.9.0",
+    "react": "^16.7.0-alpha.0",
+    "react-dom": "^16.7.0-alpha.0",
+    "react-dropzone": "^7.0.1",
+    "react-icons": "^3.2.1",
+    "react-konva": "^16.6.0",
+    "react-measure": "^2.1.2",
+    "react-redux": "^5.0.7",
+    "react-redux-firebase": "^2.2.0-alpha.3",
+    "react-scripts": "^2.0.5",
+    "react-transition-group": "^2.4.0",
+    "react-virtualized": "^9.20.1",
+    "react-window": "^1.2.1",
+    "recompose": "^0.30.0",
+    "redux": "^4.0.0",
+    "redux-actions": "^2.6.1",
+    "redux-firestore": "^0.5.8",
+    "redux-form": "^7.4.2",
+    "redux-persist": "^5.10.0",
+    "redux-persist-transform-expire": "0.0.2",
+    "redux-saga": "^0.16.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "redux-saga-test-plan": "^3.7.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
