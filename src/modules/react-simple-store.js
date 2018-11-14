@@ -5,6 +5,20 @@ class Store {
     this.state = defaultValues
     this.callbacks = []
   }
+  add(key, value) {
+    if (Array.isArray(this.state)) {
+      this.state = [...this.state, {
+        key,
+        ...value
+      }]
+    } else {
+      this.state = {
+        ...this.state,
+        [key]: value
+      }
+    }
+    this.fire(this.state)
+  }
   set(key, value) {
     if (key in this.state) {
       this.state = {
@@ -37,9 +51,9 @@ class Store {
 function createStore(defaultValues) {
   const store = new Store(defaultValues)
   const useStore = (mapState) => {
-    const [props, updater] = useState(mapState(store.state))
+    const [props, updater] = useState(mapState ? mapState(store.state) : store.state)
     useEffect(() => store.on((state) => {
-      const nextState = mapState(state)
+      const nextState = mapState ? mapState(store.state) : store.state
       if (nextState !== props) {
         updater(nextState)
       }
