@@ -36,10 +36,10 @@ class Store {
 
 function createStore(defaultValues) {
   const store = new Store(defaultValues)
-  const useStore = (mapToProps) => {
-    const [props, updater] = useState(mapToProps(store.state))
+  const useStore = (mapState) => {
+    const [props, updater] = useState(mapState(store.state))
     useEffect(() => store.on((state) => {
-      const nextState = mapToProps(state)
+      const nextState = mapState(state)
       if (nextState !== props) {
         updater(nextState)
       }
