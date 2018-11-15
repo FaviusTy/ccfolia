@@ -1,9 +1,5 @@
 import createStore from '../modules/react-simple-store'
 
-const defaultValues = {
-  name: 'TEST_ROOM',
-  count: 0,
-  currentTableIndex: 0
-}
+const defaultValues = []
 
 export const { useStore, store } = createStore(defaultValues)
