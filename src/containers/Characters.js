@@ -26,7 +26,7 @@ const CharacterForm = ({ onSubmit }) => (
   </form>
 )
 
-const CharactersContainer = ({ roomId }) => {
+const CharactersContainer = ({ id }) => {
   const [characters, store] = useStore()
   const onSubmit = useCallback((e) => {
     e.preventDefault()

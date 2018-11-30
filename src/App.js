@@ -1,10 +1,15 @@
 import React from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
 import Room from './pages/Room'
+import Home from './pages/Home'
 
 const App = () => (
-  <div className="App">
-    <Room roomId="TEST_ROOM" />
-  </div>
+  <Router initialEntries={[{ pathname: '/' }]}>
+    <div className="App">
+      <Route path="/" component={Home} />
+    </div>
+  </Router>
 )
 
 export default App

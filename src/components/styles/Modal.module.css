@@ -1,0 +1,40 @@
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.container {
+  margin: 64px 30px;
+  padding: 15px;
+  background: #fff;
+  color: #444;
+}
+
+.close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 48px;
+  height: 48px;
+}
+
+.close::before,
+.close::after {
+  content: "";
+  border-top: 1px solid #fff;
+  width: 100%;
+  display: block;
+  transform: rotate(45deg);
+  position: absolute;
+  left: 0;
+  top: 50%;
+}
+
+.close::after {
+  transform: rotate(-45deg);
+}

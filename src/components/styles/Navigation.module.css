@@ -1,0 +1,19 @@
+.wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.container {
+  display: flex;
+}
+
+.btn {
+  display: block;
+  padding: 10px;
+}
+
+.btn + .btn {
+  margin-left: 1px;
+}
