@@ -5,31 +5,8 @@ class Store {
     this.state = defaultValues
     this.callbacks = []
   }
-  add(key, value) {
-    if (Array.isArray(this.state)) {
-      this.state = [...this.state, {
-        key,
-        ...value
-      }]
-    } else {
-      this.state = {
-        ...this.state,
-        [key]: value
-      }
-    }
-    this.fire(this.state)
-  }
-  set(key, value) {
-    if (key in this.state) {
-      this.state = {
-        ...this.state,
-        [key]: value
-      }
-      this.fire(this.state)
-    }
-  }
-  update(cb) {
-    this.state = cb(this.state)
+  update(fn) {
+    this.state = fn(this.state)
     this.fire(this.state)
   }
   on(cb) {
@@ -37,10 +14,13 @@ class Store {
       this.callbacks.push(cb)
     }
     return () => {
-      const index = this.callbacks.indexOf(cb)
-      if (index > -1) {
-        this.callbacks.splice(index, 1)
-      }
+      this.off(cb)
+    }
+  }
+  off(cb) {
+    const index = this.callbacks.indexOf(cb)
+    if (index > -1) {
+      this.callbacks.splice(index, 1)
     }
   }
   fire(state) {
@@ -58,7 +38,7 @@ function createStore(defaultValues) {
         updater(nextState)
       }
     }))
-    return [props, store]
+    return [props, store.update]
   }
   return { useStore, store }
 }

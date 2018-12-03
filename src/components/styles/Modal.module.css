@@ -4,15 +4,17 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 100;
   overflow: auto;
   background: rgba(0, 0, 0, 0.8);
 }
 
 .container {
-  margin: 64px 30px;
+  margin: 64px auto;
   padding: 15px;
   background: #fff;
   color: #444;
+  max-width: 80%;
 }
 
 .close {

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { useStore } from '../stores/characters'
+import { useStore } from '../stores/messages'
 
 const Character = ({ name, image }) => (
   <>

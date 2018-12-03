@@ -23,17 +23,17 @@ const MessageForm = ({ onSubmit }) => (
 )
 
 const MessagesContainer = () => {
-  const [messages, store] = useStore()
+  const [messages, update] = useStore()
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     const form = e.currentTarget
     const { name, text } = form
-    store.add(Date.now().toString(36), {
-      name: name.value,
-      text: text.value
-    })
+    // update(Date.now().toString(36), {
+    //   name: name.value,
+    //   text: text.value
+    // })
     text.value = ''
-  }, [store])
+  }, [update])
   return (
     <>
       <MessageForm onSubmit={onSubmit}></MessageForm>

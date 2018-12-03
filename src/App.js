@@ -1,13 +1,14 @@
 import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-import Room from './pages/Room'
-import Home from './pages/Home'
+import Room from './routes/Room'
+import Home from './routes/Home'
 
 const App = () => (
   <Router initialEntries={[{ pathname: '/' }]}>
     <div className="App">
-      <Route path="/" component={Home} />
+      <Route exact path="/" component={Home} />
+      <Route path="/room/:id" component={Room} />
     </div>
   </Router>
 )
