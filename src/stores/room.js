@@ -23,7 +23,6 @@ const ObjectModel = fromJS // todo
 
 const reducer = (_state, { type, payload }) => {
   console.log({ type, payload });
-
   const state = _state.update('log', (log) => {
     return `${log}${type} ${payload ? JSON.stringify(payload) : ''}\n`
       .split('\n')
@@ -43,10 +42,11 @@ const reducer = (_state, { type, payload }) => {
       // MEMO_SET {"id":"$id","text":"hogehoge"}
       return state.setIn(['memo', payload.id], MemoModel(payload))
     case 'DATASEAT_SET':
-      // DATASEAT_SET {"id":"$id","head":["name","hp","mp"],"rows":[["hoge",1,2],["figa",3,4],["moge",5,6]]}
+      // DATASEAT_SET {"id":"$id","data":[["name","hp","mp"],["hoge",1,2],["figa",3,4],["moge",5,6]]}
+      // DATASEAT_SET {"id":"$id","data":[["name","hp","mp"],[{"bg":"red","val":"1"},{"bg":"blue","val":"1"},{"bg":"green","val":"1"}]]}
       return state.setIn(['datasheets', payload.id], DataSheetModel(payload))
     case 'OBJECT_SET':
-      // OBJECT_SET {"id":"$id", "type": "image", "image": { "url":"/icon-100x100.png" }, "x":10,"y":10,"w":50,"h":50}
+      // OBJECT_SET {"id":"$id","type":"image","image":{"url":"/icon-100x100.png"},"x":10,"y":10,"w":50,"h":50}
       return state.setIn(['objects', payload.id], ObjectModel(payload))
     case 'OBJECT_UPDATE':
       return state.mergeIn(['objects', payload.id], payload)

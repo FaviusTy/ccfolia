@@ -4,6 +4,7 @@ import { useRoomStore } from '../stores/room'
 import ReactPlayer from 'react-player'
 import Screen from '../components/Screen'
 import Messages from '../components/Messages'
+import DataSheets from '../components/DataSheets'
 
 const Table = () => {
   const [state, dispatch] = useRoomStore()
@@ -11,13 +12,18 @@ const Table = () => {
     messages,
     objects,
     background,
-    media
+    media,
+    datasheets
   } = useMemo(() => ({
       messages: state.get('messages').valueSeq().toJS(),
       objects: state.get('objects').valueSeq().toJS(),
+      datasheets: state.get('datasheets').valueSeq().toJS(),
       background: state.get('background').toJS(),
       media: state.get('media').toJS(),
   }), [state])
+
+  console.log(datasheets);
+
 
   const onChangeObject = useCallback((id, e) => {
     const x = e.currentTarget.x()
@@ -37,6 +43,7 @@ const Table = () => {
         h={720}
         onChangeObject={onChangeObject}
       />
+      <DataSheets items={datasheets} />
       <ReactPlayer
         className="player"
         url={media.url}

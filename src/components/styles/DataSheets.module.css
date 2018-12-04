@@ -1,0 +1,15 @@
+.wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.wrap table {
+  border: 1px solid #fff;
+  width: 100%;
+}
+.wrap tr {
+}
+.wrap td {
+  padding: 5px;
+  color: #444;
+}
