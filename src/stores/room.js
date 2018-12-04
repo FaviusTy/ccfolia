@@ -17,6 +17,7 @@ const RoomModel = Record({
 })
 
 const MessageModel = fromJS // todo
+const DataSheetModel = fromJS // todo
 const MemoModel = fromJS // todo
 const ObjectModel = fromJS // todo
 
@@ -41,6 +42,9 @@ const reducer = (_state, { type, payload }) => {
     case 'MEMO_SET':
       // MEMO_SET {"id":"$id","text":"hogehoge"}
       return state.setIn(['memo', payload.id], MemoModel(payload))
+    case 'DATASEAT_SET':
+      // DATASEAT_SET {"id":"$id","head":["name","hp","mp"],"rows":[["hoge",1,2],["figa",3,4],["moge",5,6]]}
+      return state.setIn(['datasheets', payload.id], DataSheetModel(payload))
     case 'OBJECT_SET':
       // OBJECT_SET {"id":"$id", "type": "image", "image": { "url":"/icon-100x100.png" }, "x":10,"y":10,"w":50,"h":50}
       return state.setIn(['objects', payload.id], ObjectModel(payload))
