@@ -1,0 +1,51 @@
+.wrap {
+  padding: 4px;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #eee;
+  z-index: 100;
+}
+
+.wrap form {
+  display: flex;
+  flex: 1;
+}
+.wrap form textarea {
+  padding: 4px;
+  border: none;
+  outline: none;
+  flex: 1;
+  resize: none;
+  height: 2.4em;
+}
+
+.wrap form button {
+  border: none;
+  /* outline: none; */
+  padding: 4px 8px;
+  background: #444;
+  color: #fff;
+}
+
+.wrap form input[type=text] {
+  padding: 4px;
+  border: none;
+  border-right: 4px solid #eee;
+  width: 15%;
+}
+
+.menu {
+  display: flex;
+}
+
+.menu a {
+  margin-left: 4px;
+  width: 36px;
+  background: #fff;
+  text-align: center;
+  text-decoration: none;
+  color: #444;
+}

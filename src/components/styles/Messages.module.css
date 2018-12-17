@@ -1,8 +1,23 @@
 .wrap {
   position: absolute;
+  left: 0;
   right: 0;
-  top: 0;
+  bottom: 0;
   padding: 10px;
+  padding-bottom: 60px;
   overflow: auto;
-  max-height: 50%;
+  max-height: 30%;
+}
+
+.wrap:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.item {
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.item:hover {
+  background: rgba(0, 0, 0, 0.8);
 }

@@ -43,15 +43,15 @@ const Table = () => {
         h={720}
         onChangeObject={onChangeObject}
       />
-      <DataSheets items={datasheets} />
+      {/* <DataSheets items={datasheets} /> */}
       <ReactPlayer
         className="player"
         url={media.url}
         playing
         loop={media.loop}
         muted={media.muted}
-        width={160}
-        height={90}
+        width={80}
+        height={45}
       />
       {/* {objects.map(({ id, url, w, h, x, y }) => (
         <img key={id} src={url} alt="" width={w} height={h} style={{

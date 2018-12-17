@@ -6,7 +6,7 @@ import Home from './routes/Home'
 
 const App = () => (
   <Router initialEntries={[{ pathname: '/' }]}>
-    <div className="App" style={{ height: '100vh', width: '100vw' }}>
+    <div className="App">
       <Route exact path="/" component={Home} />
       <Route path="/room/:id" component={Room} />
     </div>

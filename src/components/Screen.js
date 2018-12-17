@@ -75,7 +75,7 @@ const Screen = ({ objects, background, w, h, onChangeObject }) => {
     <Stage className={styles.wrap} width={w} height={h} options={{ transparent: true, autoStart: false, sharedTicker: true }}>
       <Sprite key={`bg`} texture={PIXI.Texture.fromImage(background.url)} width={w * 1.1} height={h * 1.1} x={-blur} y={-blur} filters={[blurFilter]} />
       {objects.map(obj => (
-        <Sprite key={obj.id} texture={PIXI.Texture.fromImage(obj.image.url)} />
+        <Sprite key={obj.id} texture={PIXI.Texture.fromImage(obj.image.url)} x={obj.x} y={obj.y} width={obj.w} height={obj.h} />
       ))}
     </Stage>
   )

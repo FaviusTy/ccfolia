@@ -2,7 +2,7 @@ import React, { memo, useLayoutEffect, useRef } from 'react'
 import styles from './styles/Messages.module.css'
 
 const _Message = ({ name, text }) => (
-  <div>{name}: {text}</div>
+  <div className={styles.item}>{name}: {text}</div>
 )
 const Message = memo(_Message)
 

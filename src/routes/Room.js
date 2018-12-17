@@ -6,6 +6,7 @@ import Provider from '../stores/room'
 import Table from '../containers/Table'
 import Console from '../containers/Console'
 import Navigation from '../containers/Navigation'
+import ChatBox from '../containers/ChatBox'
 
 import Modal from '../components/Modal'
 
@@ -47,6 +48,7 @@ const Room = ({
         </Modal>
       )} />
       <Table />
+      <ChatBox />
     </Provider>
     <Navigation url={url} onBack={goBack} />
   </>)
