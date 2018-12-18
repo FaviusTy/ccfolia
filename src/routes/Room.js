@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useEffect, memo } from 'react'
 import { Route, Link } from 'react-router-dom'
 
 import Provider from '../stores/room'
@@ -9,6 +9,8 @@ import Navigation from '../containers/Navigation'
 import ChatBox from '../containers/ChatBox'
 
 import Modal from '../components/Modal'
+
+import { useCollection } from '../modules/react-hooks-firebase'
 
 const Room = ({
   match: {
@@ -23,6 +25,13 @@ const Room = ({
     goBack
   }
 }) => {
+  const [tekitos, tekitoCollection] = useCollection({
+    select: (db) => db.collection('/hoge')
+  })
+  const h = useEffect(() => {
+    console.log(111);
+    tekitoCollection.add({ hoge: 1 })
+  }, [])
   return (<>
     {/* <Screen /> */}
     <Provider>
@@ -50,11 +59,12 @@ const Room = ({
       <Table />
       <ChatBox />
     </Provider>
+    {tekitos.map((t) => (<p>{t.data.hoge}</p>))}
     <Navigation url={url} onBack={goBack} />
   </>)
 }
 
-export default Room
+export default memo(Room)
 
 
 // 部屋
