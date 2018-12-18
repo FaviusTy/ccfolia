@@ -3,111 +3,74 @@ import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import config from '../config/firebase'
 
 firebase.initializeApp(config)
 
 const db = firebase.firestore()
-// db.settings({ timestampsInSnapshots: true })
-
 const storage = firebase.storage()
 
-const updateHandler = (state, { type, doc }) => {
-  if (type === 'removed') {
-    return state.filter((item) => {
-      return item.id !== doc.id
-    })
-  }
-  if (type === 'modified') {
-    return state.map((item) => {
-      if (item.id === doc.id) {
-        return {
-          data: doc.data(),
+const handlers = {
+  doc: (name, doc, commit) => {
+    commit(`$firestore.${name}.set`, doc.data())
+  },
+  collection: (name, { docChanges }, commit) => {
+    docChanges.forEach(({ type, doc }) => {
+      if (type === 'removed') {
+        commit(`$firestore.${name}.remove`, doc.id)
+      }
+      if (type === 'modified') {
+        commit(`$firestore.${name}.modified`, {
+          ...doc.data(),
           id: doc.id
-        }
-      } else {
-        return item
+        })
+      }
+      if (type === 'added') {
+        commit(`$firestore.${name}.added`, {
+          ...doc.data(),
+          id: doc.id
+        })
       }
     })
   }
-  if (type === 'added') {
-    // mutable change (for performance)
-    return state.push({ id: doc.id, data: doc.data() })
-  }
 }
 
-export const useCollection = ({ select, sort }) => {
-  const [state, setState] = useState([])
-  const collection = useMemo(() => {
+export const useFirestore = ({ name, type, select }, commit) => {
+  const ref = useMemo(() => {
     return select(db)
-  })
-  useEffect(() => {
-    return collection.onSnapshot(({ docChanges }) => {
-      const nextState = [...state]
-      docChanges.forEach((change) => {
-        updateHandler(nextState, change)
-      })
-      console.log(111);
-      setState(sort ? sort(nextState) : nextState)
-    })
   }, [])
-  return [state, collection]
+  useEffect(() => {
+    const handler = handlers[type]
+    return ref.onSnapshot((snapshot) => handler(name, snapshot, commit))
+  }, [])
+  return ref
 }
 
-export const useDocument = ({ select, initialState }) => {
-  const [state, setState] = useState({ ...initialState })
-  const doc = useMemo(() => {
-    return select(db)
-  })
-  useEffect(() => {
-    return doc.onSnapshot(({ data }) => {
-      setState(data())
-    })
-  }, [])
-  return [state, doc]
+export const firestoreActions = {
 }
 
-export const useStorageWithCollection = ({ select, sort, path }) => {
-  const [state, setState] = useState([])
-  const [collection, storageRef] = useMemo(() => {
-    return [select(db), storage.ref(path)]
+export const firestoreMutations = {
+  collection: (name) => ({
+    [`$firestore.${name}.removed`]: (state, id) => {
+      state[name] = state[name].filter((item) => item.id !== id)
+    },
+    [`$firestore.${name}.modified`]: (state, newItem) => {
+      state[name] = state[name].map((item) => {
+        if (item.id === newItem.id) {
+          return newItem
+        } else {
+          return item
+        }
+      })
+    },
+    [`$firestore.${name}.added`]: (state, item) => {
+      state[name].push(item)
+    }
+  }),
+  doc: (name) => ({
+    [`$firestore.${name}.set`]: (state, item) => {
+      Object.assign(state, item)
+    }
   })
-  useEffect(() => {
-    return collection.onSnapshot(({ docChanges }) => {
-      const nextState = [...state]
-      docChanges.forEach((change) => {
-        updateHandler(nextState, change)
-      })
-      setState(sort ? sort(nextState) : nextState)
-    })
-  }, [])
-  const add = async (file, metadata) => {
-    try {
-      const doc = await collection.add({
-        uploaded: false,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      const { ref } = await storageRef.child(doc.id).put(file)
-      const metadata = await ref.updateMetadata(metadata)
-      const downloadURL = await ref.getDownloadURL()
-      doc.set({
-        uploaded: true,
-        downloadURL,
-        contentType: metadata.contentType,
-        size: metadata.size
-      }, { merge: true })
-    } catch (err) {
-      console.error(err)
-    }
-  }
-  const remove = async (id) => {
-    try {
-      await storageRef.child(id).delete()
-    } catch(err) {
-      console.error(err)
-    }
-    return collection.doc(id).delete()
-  }
-  return [state, { add, remove }]
 }

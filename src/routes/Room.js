@@ -1,7 +1,9 @@
 import React, { useMemo, useEffect, memo } from 'react'
 import { Route, Link } from 'react-router-dom'
 
-import Provider from '../stores/room'
+// import Provider from '../stores/room'
+import { Provider, commit, useStore } from '../contexts/room'
+import { useFirestore } from '../modules/react-hooks-firebase'
 
 import Table from '../containers/Table'
 import Console from '../containers/Console'
@@ -10,7 +12,14 @@ import ChatBox from '../containers/ChatBox'
 
 import Modal from '../components/Modal'
 
-import { useCollection } from '../modules/react-hooks-firebase'
+const Messages = () => {
+  const [messages] = useStore((state) => state.messages)
+  return (<>
+    {messages.map(({ text }) => {
+      return <p>{text}</p>
+    })}
+  </>)
+}
 
 const Room = ({
   match: {
@@ -25,15 +34,17 @@ const Room = ({
     goBack
   }
 }) => {
-  const [tekitos, tekitoCollection] = useCollection({
-    select: (db) => db.collection('/hoge')
-  })
-  const h = useEffect(() => {
-    console.log(111);
-    tekitoCollection.add({ hoge: 1 })
-  }, [])
+  const m = useFirestore({
+    name: 'messages',
+    type: 'collection',
+    select: (db) => db.collection(`rooms/${id}/messages`)
+  }, commit)
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     m.add({ text: 1 })
+  //   }, 300)
+  // }, [])
   return (<>
-    {/* <Screen /> */}
     <Provider>
       <Route exact path={`${url}/console`} render={() => (
         <Modal onClose={() => replace(url)}>
@@ -43,7 +54,6 @@ const Room = ({
       <Route exact path={`${url}/objects`} render={() => (
         <Modal onClose={() => replace(url)}>
           <h1>My objects</h1>
-          {/* <Characters /> */}
         </Modal>
       )} />
       <Route exact path={`${url}/books`} render={() => (
@@ -56,10 +66,10 @@ const Room = ({
           <h1>My effects</h1>
         </Modal>
       )} />
-      <Table />
+      {/* <Table /> */}
+      <Messages></Messages>
       <ChatBox />
     </Provider>
-    {tekitos.map((t) => (<p>{t.data.hoge}</p>))}
     <Navigation url={url} onBack={goBack} />
   </>)
 }

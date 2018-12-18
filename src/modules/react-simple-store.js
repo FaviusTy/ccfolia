@@ -10,8 +10,6 @@ class Store {
     this.fire(this.state)
   }
   on(cb) {
-    console.log(cb);
-
     if (!this.callbacks.includes(cb)) {
       this.callbacks.push(cb)
     }

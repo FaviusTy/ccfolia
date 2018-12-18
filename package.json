@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "ajv": "^6.5.4",
+    "bcdice-js": "^0.10.1",
     "classnames": "^2.2.6",
     "crc-32": "^1.2.0",
     "firebase": "^4.12.1",
