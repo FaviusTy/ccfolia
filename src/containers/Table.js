@@ -1,12 +1,23 @@
 import React, { useMemo, useCallback, useEffect } from 'react'
-import { useRoomStore } from '../stores/room'
+import { useRoomStore } from '../contexts/room'
 
 import ReactPlayer from 'react-player'
 import Screen from '../components/Screen'
 import Messages from '../components/Messages'
 
 const Table = () => {
-  const [state, dispatch] = useRoomStore()
+  const { state, dispatch } = useRoomStore()
+  const { messages } = state
+  const objects = []
+  const background = { url: '' }
+  const media = {
+    url: 'https://www.youtube.com/watch?v=WSUFzC6_fp8',
+    loop: true,
+    muted: true,
+    volume: 0.1
+  }
+  console.log(messages);
+
   // const [room, doc] = useDocument({
   //   select: (db) => db.doc('rooms/1'),
   //   initialState: {
@@ -52,19 +63,19 @@ const Table = () => {
   //   }
   // })
 
-  const {
-    messages,
-    objects,
-    background,
-    media,
-    // datasheets
-  } = useMemo(() => ({
-      messages: state.get('messages').valueSeq().toJS(),
-      objects: state.get('objects').valueSeq().toJS(),
-      datasheets: state.get('datasheets').valueSeq().toJS(),
-      background: state.get('background').toJS(),
-      media: state.get('media').toJS(),
-  }), [state])
+  // const {
+  //   // messages,
+  //   objects,
+  //   background,
+  //   media,
+  //   // datasheets
+  // } = useMemo(() => ({
+  //     // messages: state.get('messages').valueSeq().toJS(),
+  //     objects: state.get('objects').valueSeq().toJS(),
+  //     datasheets: state.get('datasheets').valueSeq().toJS(),
+  //     background: state.get('background').toJS(),
+  //     media: state.get('media').toJS(),
+  // }), [state])
 
   const onChangeObject = useCallback((id, e) => {
     const x = e.currentTarget.x()

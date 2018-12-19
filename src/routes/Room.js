@@ -2,8 +2,8 @@ import React, { useMemo, useEffect, memo } from 'react'
 import { Route, Link } from 'react-router-dom'
 
 // import Provider from '../stores/room'
-import { Provider, commit, useStore } from '../contexts/room'
-import { useFirestore } from '../modules/react-hooks-firebase'
+import { Provider, useRoomStore } from '../contexts/room'
+// import { useFirestore } from '../modules/react-hooks-firebase'
 
 import Table from '../containers/Table'
 import Console from '../containers/Console'
@@ -12,14 +12,15 @@ import ChatBox from '../containers/ChatBox'
 
 import Modal from '../components/Modal'
 
-const Messages = () => {
-  const [messages] = useStore((state) => state.messages)
-  return (<>
-    {messages.map(({ text }) => {
-      return <p>{text}</p>
-    })}
-  </>)
-}
+// const Messages = memo(() => {
+//   const { state, dispatch, commit } = useRoomStore()
+//   return (<>
+//     <button onClick={() => dispatch('MESSAGE_ADD')}>ddd</button>
+//     {state.messages.map(({ text }, i) => {
+//       return <p key={i}>{text}</p>
+//     })}
+//   </>)
+// })
 
 const Room = ({
   match: {
@@ -34,18 +35,8 @@ const Room = ({
     goBack
   }
 }) => {
-  const m = useFirestore({
-    name: 'messages',
-    type: 'collection',
-    select: (db) => db.collection(`rooms/${id}/messages`)
-  }, commit)
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     m.add({ text: 1 })
-  //   }, 300)
-  // }, [])
   return (<>
-    <Provider>
+    <Provider id={id}>
       <Route exact path={`${url}/console`} render={() => (
         <Modal onClose={() => replace(url)}>
           <Console />
@@ -66,8 +57,8 @@ const Room = ({
           <h1>My effects</h1>
         </Modal>
       )} />
-      {/* <Table /> */}
-      <Messages></Messages>
+      <Table />
+      {/* <Messages></Messages> */}
       <ChatBox />
     </Provider>
     <Navigation url={url} onBack={goBack} />

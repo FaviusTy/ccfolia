@@ -1,6 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
-import 'firebase/auth'
+// import 'firebase/auth'
 import 'firebase/storage'
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
@@ -11,43 +11,44 @@ firebase.initializeApp(config)
 const db = firebase.firestore()
 const storage = firebase.storage()
 
-const handlers = {
-  doc: (name, doc, commit) => {
-    commit(`$firestore.${name}.set`, doc.data())
-  },
-  collection: (name, { docChanges }, commit) => {
-    docChanges.forEach(({ type, doc }) => {
-      if (type === 'removed') {
-        commit(`$firestore.${name}.remove`, doc.id)
-      }
-      if (type === 'modified') {
-        commit(`$firestore.${name}.modified`, {
-          ...doc.data(),
-          id: doc.id
-        })
-      }
-      if (type === 'added') {
-        commit(`$firestore.${name}.added`, {
-          ...doc.data(),
-          id: doc.id
-        })
-      }
-    })
-  }
+const changesReducer = (state, changes) => {
+  return changes.reduce((currentState, { type, doc }) => {
+    if (type === 'removed') {
+      return currentState.filter((item) => {
+        return item.id !== doc.id
+      })
+    }
+    if (type === 'modified') {
+      return currentState.map((item) => {
+        if (item.id === doc.id) {
+          return {
+            ...doc.data(),
+            id: doc.id
+          }
+        } else {
+          return item
+        }
+      })
+    }
+    if (type === 'added') {
+      return [...currentState, { ...doc.data(), id: doc.id }]
+    }
+  }, state)
 }
 
-export const useFirestore = ({ name, type, select }, commit) => {
+export const useFirestore = ({ select }) => {
+  const [state, setState] = useState([])
   const ref = useMemo(() => {
     return select(db)
-  }, [])
+  }, [select])
   useEffect(() => {
-    const handler = handlers[type]
-    return ref.onSnapshot((snapshot) => handler(name, snapshot, commit))
+    return ref.onSnapshot(({ docChanges }) => {
+      setState((prevState) => {
+        return changesReducer(prevState, docChanges)
+      })
+    })
   }, [])
-  return ref
-}
-
-export const firestoreActions = {
+  return [state, ref]
 }
 
 export const firestoreMutations = {
