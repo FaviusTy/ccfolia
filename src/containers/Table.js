@@ -1,82 +1,25 @@
-import React, { useMemo, useCallback, useEffect } from 'react'
-import { useRoomStore } from '../contexts/room'
+import React, { useMemo, useCallback, useEffect, memo } from 'react'
+// import { useRoomStore } from '../contexts/room'
 
 import ReactPlayer from 'react-player'
 import Screen from '../components/Screen'
 import Messages from '../components/Messages'
 
 const Table = () => {
-  const { state, dispatch } = useRoomStore()
+  // const { state, dispatch } = useRoomStore((state) => state.messages)
+  const state = { messages: [] }
+  const dispatch = () => {}
+  // todo
   const { messages } = state
   const objects = []
-  const background = { url: '' }
+  const background = { url: '/bg.jpg' }
   const media = {
-    url: 'https://www.youtube.com/watch?v=WSUFzC6_fp8',
+    // url: 'https://www.youtube.com/watch?v=WSUFzC6_fp8',
+    url: '',
     loop: true,
     muted: true,
     volume: 0.1
   }
-  console.log(messages);
-
-  // const [room, doc] = useDocument({
-  //   select: (db) => db.doc('rooms/1'),
-  //   initialState: {
-  //     background: {
-  //       url: ''
-  //     },
-  //     media: {
-  //       url: '',
-  //       loop: true,
-  //       muted: true,
-  //       volume: 0.025
-  //     }
-  //   }
-  // })
-
-  // useEffect(() => {
-  //   doc.set({
-  //     background: {
-  //       url: '/bg.jpg'
-  //     },
-  //     media: {
-  //       url: 'https://www.youtube.com/watch?v=WSUFzC6_fp8',
-  //       loop: true,
-  //       muted: false,
-  //       volume: 0.1
-  //     }
-  //   })
-  // }, [])
-
-  // const [messages] = useCollection({
-  //   select: (db) => db.collection('rooms/1/messages')
-  // })
-
-  // const [messages2] = useCollection({
-  //   select: (db) => db.collection('rooms/1/messages')
-  // })
-
-  // const { background, media } = room
-
-  // doc.set({
-  //   background: {
-  //     url: '/bg.jpg'
-  //   }
-  // })
-
-  // const {
-  //   // messages,
-  //   objects,
-  //   background,
-  //   media,
-  //   // datasheets
-  // } = useMemo(() => ({
-  //     // messages: state.get('messages').valueSeq().toJS(),
-  //     objects: state.get('objects').valueSeq().toJS(),
-  //     datasheets: state.get('datasheets').valueSeq().toJS(),
-  //     background: state.get('background').toJS(),
-  //     media: state.get('media').toJS(),
-  // }), [state])
-
   const onChangeObject = useCallback((id, e) => {
     const x = e.currentTarget.x()
     const y = e.currentTarget.y()
@@ -116,4 +59,4 @@ const Table = () => {
   )
 }
 
-export default Table
+export default memo(Table)

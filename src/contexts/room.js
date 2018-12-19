@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext } from 'react'
 import { useDispatcher } from '../modules/react-hooks-dispatcher'
+// import { createStore } from '../modules/react-hooks-store'
 import { useFirestore, firestoreMutations, firestoreDispatcher } from '../modules/react-hooks-firebase'
 
 // Room Context
@@ -8,7 +9,7 @@ const Context = createContext()
 
 const actions = {
   MESSAGE_ADD: ({ refs }, paylaod) => {
-    refs.messageRef.add({ text: 'hogehoge' })
+    refs.messageRef.add(paylaod)
   },
   increment: ({ commit }, payload) => {
     commit('increment')
@@ -21,11 +22,18 @@ const mutations = {
   },
   incriment: (state) => {
     state.count++
+  },
+  FRAME_CLOSE: (state) => {
+    state.frame = null
+  },
+  FRAME_SET: (state) => {
+    state.frame = 'console'
   }
 }
 
-export const useRoomStore = () => {
-  return useContext(Context)
+export const useRoomStore = (mapToState) => {
+  const { state, dispatch, commit } = useContext(Context)
+  return { dispatch, commit, state: mapToState ? mapToState(state) : state }
 }
 
 export const Provider = ({ id, uid, children }) => {
@@ -38,7 +46,8 @@ export const Provider = ({ id, uid, children }) => {
     actions: actions,
     refs: { messageRef },
     initialState: {
-      count: 0
+      count: 0,
+      frame: null
     }
   })
 

@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from './styles/Modal.module.css'
+import React, { memo } from 'react'
+import styles from '../styles/ui/Modal.module.css'
 
 const Modal = ({ onClose, children }) => (
   <div className={styles.wrapper} onClick={(e) => {
@@ -14,4 +14,4 @@ const Modal = ({ onClose, children }) => (
   </div>
 )
 
-export default Modal
+export default memo(Modal)

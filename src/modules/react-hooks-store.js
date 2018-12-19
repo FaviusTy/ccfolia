@@ -30,17 +30,21 @@ export const createStore = (actions, mutations, initialState = {}) => {
     }
   }
   const Context = createContext()
-  const Provider = ({ children, store }) => {
-    return <Context.Provider value={{...store}}>{children}</Context.Provider>
+  const Provider = ({ children }) => {
+    return <Context.Provider value={{
+      dispatch,
+      commit,
+      state
+    }}>{children}</Context.Provider>
   }
-  const useStore = (mapToState, initialState = []) => {
-    const [localState, setLocalState] = useState(initialState)
+  const useStore = (mapToState) => {
     const context = useContext(Context)
+    const [state, setState] = useState(mapToState(context.state))
     useEffect(() => {
-      return on((state) => {
-        const nextLocalState = mapToState(state)
-        if (nextLocalState !== localState) {
-          setLocalState(nextLocalState)
+      return on((prevState) => {
+        const nextState = mapToState(prevState)
+        if (nextState !== prevState) {
+          setState(nextState)
         }
       })
     }, [state])

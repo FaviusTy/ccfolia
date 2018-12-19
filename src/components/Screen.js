@@ -69,7 +69,7 @@ blurFilter.blur = blur
 
 const Screen = ({ objects, background, w, h, onChangeObject }) => {
   useLayoutEffect(() => {
-    render(1000)
+    render(100)
   })
   return (
     <Stage className={styles.wrap} width={w} height={h} options={{ transparent: true, autoStart: false, sharedTicker: true }}>
