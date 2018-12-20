@@ -1,10 +1,10 @@
 import { createDocStore } from '../modules/react-firebase-hooks'
 
-const select = ({ uid, id }) => (db) => db.doc(`users/${uid}/chatpalets/${id}`)
+const select = (uid, id) => (db) => db.doc(`users/${uid}/chatpalets/${id}`)
 
 const actions = (ref) => ({
   update: (item) => {
-    ref.set(item, { merge: true })
+    // ref.set(item, { merge: true })
   }
 })
 

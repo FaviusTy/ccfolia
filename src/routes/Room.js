@@ -40,7 +40,7 @@ const Room = ({
 }) => {
   const [messages] = useMessagesStore(id)
   const [table] = useTableStore(id)
-  const [chatpalet] = useChatPaletStore({ uid: 'TEST_USER', id })
+  const [chatpalet] = useChatPaletStore('TEST_USER', id)
   return (<>
     <Route exact path={`${url}/console`} render={() => (
       <Frame onClose={() => replace(url)} title="Console">

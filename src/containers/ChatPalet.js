@@ -18,7 +18,7 @@ const ChatPaletItem = ({ name, texts, submit, onSubmit }) => {
 const ChatPalet = ({ id, chatpalet }) => {
   const [current, setCurrent] = useState(0)
   const { add } = useMessagesAction(id)
-  const { update } = useChatPaletAction({ uid: 'TEST_USER', id })
+  const { update } = useChatPaletAction('TEST_USER', id)
   const item = useMemo(() => {
     return chatpalet.items[current] || { name: '', texts: '' }
   }, [chatpalet, current])
@@ -28,7 +28,9 @@ const ChatPalet = ({ id, chatpalet }) => {
     const item = { name: name.value, texts: texts.value }
     const nextItems = [...chatpalet.items]
     nextItems[current] = item
-    update({ items: nextItems })
+    console.log(item);
+
+    // update({ items: nextItems })
   }, [update])
 
   return (<>
