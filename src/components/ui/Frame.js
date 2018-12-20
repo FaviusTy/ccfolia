@@ -1,4 +1,6 @@
 import React, { memo } from 'react'
+import { Route, NavLink } from 'react-router-dom'
+
 import { CSSTransition } from 'react-transition-group'
 import styles from '../styles/ui/Frame.module.css'
 
@@ -16,6 +18,17 @@ const Frame = ({ onClose, children, title }) => (
       <div className={styles.container}>
         {children}
       </div>
+      <footer>
+        <NavLink replace to={`/room/0/character`}>👨‍👩‍👧‍👦</NavLink>
+        <NavLink replace to={`/room/0/chatpalet`}>💬</NavLink>
+        <NavLink replace to={`/room/0/dice`}>🎲</NavLink>
+        <NavLink replace to={`/room/0/datasheat`}>📊</NavLink>
+        <NavLink replace to={`/room/0/effect`}>🎬</NavLink>
+        <NavLink replace to={`/room/0/object`}>⛄</NavLink>
+        <NavLink replace to={`/room/0/note`}>🗒</NavLink>
+        <NavLink replace to={`/room/0/media`}>🎥</NavLink>
+        {/* <NavLink replace to={`/room/0/console`}>💻</NavLink> */}
+      </footer>
     </div>
   </CSSTransition>
 )

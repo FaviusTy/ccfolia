@@ -1,33 +1,22 @@
-import React, { useMemo, useCallback, useEffect, memo } from 'react'
-// import { useRoomStore } from '../contexts/room'
+import React, { useCallback, memo } from 'react'
+import { useTableAction } from '../stores/table'
 
 import ReactPlayer from 'react-player'
 import Screen from '../components/Screen'
-import Messages from '../components/Messages'
 
-const Table = () => {
-  // const { state, dispatch } = useRoomStore((state) => state.messages)
-  const state = { messages: [] }
-  const dispatch = () => {}
+const Table = ({ id, table }) => {
+  if (!id || !table) return null
+  const { update } = useTableAction({ rid: id, id: 'default' })
+  const { objects, background, media } = table
   // todo
-  const { messages } = state
-  const objects = []
-  const background = { url: '/bg.jpg' }
-  const media = {
-    // url: 'https://www.youtube.com/watch?v=WSUFzC6_fp8',
-    url: '',
-    loop: true,
-    muted: true,
-    volume: 0.1
-  }
   const onChangeObject = useCallback((id, e) => {
     const x = e.currentTarget.x()
     const y = e.currentTarget.y()
-    dispatch({
-      type: 'OBJECT_UPDATE',
-      payload: { id, x, y }
-    })
-  }, [dispatch])
+    // dispatch({
+    //   type: 'OBJECT_UPDATE',
+    //   payload: { id, x, y }
+    // })
+  }, [update])
   return (
     <>
       {/* bg */}
@@ -54,7 +43,7 @@ const Table = () => {
           transform: `translate(${x}px, ${y}px)`
         }} />
       ))} */}
-      <Messages messages={messages} />
+      {/* <Messages messages={messages} /> */}
     </>
   )
 }

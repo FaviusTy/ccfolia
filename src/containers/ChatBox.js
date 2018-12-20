@@ -1,33 +1,34 @@
-import React, { useState, useCallback, useRef, useLayoutEffect, memo } from 'react'
+import React, { useCallback, useRef, memo } from 'react'
 import { NavLink } from 'react-router-dom'
-// import { useRoomStore } from '../contexts/room'
+import { useMessagesAction } from '../stores/messages'
+
 import styles from '../components/styles/ChatBox.module.css'
 
-const ChatBox = () => {
-  // const { dispatch, commit } = useRoomStore()
-  const dispatch = () => {}
+const ChatBox = ({ id }) => {
+  if (!id) return null
+  const { add } = useMessagesAction(id)
   const formRef = useRef(null)
   const onKeyDown = useCallback((e) => {
-    if (e.key == 'Enter' && e.metaKey && formRef.current) {
+    if (e.key === 'Enter' && e.metaKey && formRef.current) {
       const { name, text } = formRef.current
-      dispatch('MESSAGE_ADD', {
+      add({
         name: name.value,
         text: text.value
       })
       text.value = ''
     }
-  }, [dispatch])
+  }, [add])
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     if (formRef.current) {
       const { name, text } = formRef.current
-      dispatch('MESSAGE_ADD', {
+      add({
         name: name.value,
         text: text.value
       })
       text.value = ''
     }
-  }, [dispatch])
+  }, [add])
   return (
     <div className={styles.wrap}>
       <form onSubmit={onSubmit} ref={formRef}>
@@ -39,8 +40,8 @@ const ChatBox = () => {
         <button>send</button>
       </form>
       <div className={styles.menu}>
-        <NavLink replace to={`/room/0/console/`}>🎲</NavLink>
-        <NavLink replace to={`/room/0/console/`}>+</NavLink>
+        <NavLink replace to={`/room/${id}/chatpalet`}>🎲</NavLink>
+        <NavLink replace to={`/room/${id}/console`}>+</NavLink>
       </div>
     </div>
   )

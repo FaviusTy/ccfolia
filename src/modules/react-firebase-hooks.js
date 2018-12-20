@@ -36,7 +36,7 @@ const changesReduce = (state, changes) => {
 
 // Export Functions
 export const createCollectionStore = (selector, actions) => {
-  const useCollectionStore = (param) => {
+  const useStore = (param) => {
     const [state, setState] = useState([])
     const ref = useMemo(() => {
       return selector(param)(db)
@@ -50,33 +50,38 @@ export const createCollectionStore = (selector, actions) => {
     }, [ref])
     return [state, ref]
   }
-  const useCollectionAction = (param) => {
+  const useAction = (param) => {
     const ref = useMemo(() => {
       return selector(param)(db)
     }, [param])
     return actions(ref)
   }
-  return { useCollectionStore, useCollectionAction }
+  return { useStore, useAction }
 }
 
-export const createDocStore = (selector, actions) => {
-  const useDocStore = (param) => {
-    const [state, setState] = useState([])
+export const createDocStore = (selector, actions, initialState) => {
+  const useStore = (param) => {
+    const [state, setState] = useState(initialState)
     const ref = useMemo(() => {
       return selector(param)(db)
     }, [param])
     useEffect(() => {
       return ref.onSnapshot((doc) => {
-        setState(doc.data())
+        setState((prevState) => {
+          return {
+            ...prevState,
+            ...doc.data()
+          }
+        })
       })
     }, [ref])
     return [state]
   }
-  const useDocAction = (param) => {
+  const useAction = (param) => {
     const ref = useMemo(() => {
       return selector(param)(db)
     }, [param])
     return actions(ref)
   }
-  return { useDocStore, useDocAction }
+  return { useStore, useAction }
 }

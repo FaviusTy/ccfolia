@@ -19,7 +19,10 @@ const actions = (dispatch) => ({
 })
 
 export const store = createStore(reducer)
-export const { useStore, useAction } = createReactReduxHooks(store, actions)
+export const {
+  useStore: useRoomStore,
+  useAction: useRoomAction
+} = createReactReduxHooks(store, actions)
 
 // export const { useStore, useAction } = createReactFirebaseHooks((db, id) => db.collection(`rooms/${id}/messages`), actions)
 
