@@ -35,11 +35,6 @@ interface EffectItem {
   y: number
 }
 
-interface MemoItem {
-  id: string
-  text: string
-}
-
 // Records
 interface User {
   id: string
