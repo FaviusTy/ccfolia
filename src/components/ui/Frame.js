@@ -19,13 +19,13 @@ const Frame = ({ onClose, children, title }) => (
         {children}
       </div>
       <footer>
-        <NavLink replace to={`/room/0/character`}>👨‍👩‍👧‍👦</NavLink>
-        <NavLink replace to={`/room/0/chatpalet`}>💬</NavLink>
-        <NavLink replace to={`/room/0/dice`}>🎲</NavLink>
-        <NavLink replace to={`/room/0/datasheat`}>📊</NavLink>
-        <NavLink replace to={`/room/0/effect`}>🎬</NavLink>
-        <NavLink replace to={`/room/0/object`}>⛄</NavLink>
-        <NavLink replace to={`/room/0/note`}>🗒</NavLink>
+        <NavLink replace to={`/room/0/characters`}>👨‍👩‍👧‍👦</NavLink>
+        <NavLink replace to={`/room/0/chatpalets`}>🎲</NavLink>
+        {/* <NavLink replace to={`/room/0/dice`}>🎲</NavLink> */}
+        <NavLink replace to={`/room/0/datasheats`}>📊</NavLink>
+        <NavLink replace to={`/room/0/effects`}>🎬</NavLink>
+        <NavLink replace to={`/room/0/objects`}>⛄</NavLink>
+        <NavLink replace to={`/room/0/notes`}>🗒</NavLink>
         <NavLink replace to={`/room/0/media`}>🎥</NavLink>
         {/* <NavLink replace to={`/room/0/console`}>💻</NavLink> */}
       </footer>

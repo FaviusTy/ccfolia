@@ -40,7 +40,7 @@ const ChatBox = ({ id }) => {
         <button>send</button>
       </form>
       <div className={styles.menu}>
-        <NavLink replace to={`/room/${id}/chatpalet`}>🎲</NavLink>
+        <NavLink replace to={`/room/${id}/chatpalets`}>🎲</NavLink>
         <NavLink replace to={`/room/${id}/console`}>+</NavLink>
       </div>
     </div>

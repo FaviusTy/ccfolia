@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useCallback, memo } from 'react'
 import { useMessagesAction } from '../stores/messages'
-import { useChatPaletAction } from '../stores/chatpalet'
+import { useChatPaletsAction } from '../stores/chatpalets'
 
-const ChatPaletItem = ({ name, texts, submit, onSubmit }) => {
+const ChatPaletItem = ({ id, name, texts, submit, onSubmit }) => {
   return (<div>
     <form onSubmit={onSubmit}>
+      <input name="id" type="hidden" defaultValue={id} />
       <input name="name" type="text" defaultValue={name} />
       <textarea name="texts" defaultValue={texts}></textarea>
       <button>save</button>
@@ -15,30 +16,34 @@ const ChatPaletItem = ({ name, texts, submit, onSubmit }) => {
   </div>)
 }
 
-const ChatPalet = ({ id, chatpalet }) => {
+const ChatPalets = ({ id, chatpalets }) => {
   const [current, setCurrent] = useState(0)
   const { add } = useMessagesAction(id)
-  const { update } = useChatPaletAction('TEST_USER', id)
+  const { add: addChatPalet, set } = useChatPaletsAction('TEST_USER')
   const item = useMemo(() => {
-    return chatpalet.items[current] || { name: '', texts: '' }
-  }, [chatpalet, current])
+    return chatpalets[current] || { id: '', name: '', texts: '' }
+  }, [chatpalets, current])
   const onSubmit = useCallback((e) => {
     e.preventDefault()
-    const { name, texts } = e.currentTarget
-    const item = { name: name.value, texts: texts.value }
-    const nextItems = [...chatpalet.items]
-    nextItems[current] = item
-    console.log(item);
+    const {
+      id: { value: id },
+      name: { value: name },
+      texts: { value: texts }
+    } = e.currentTarget
+    console.log(id, name, texts);
 
-    // update({ items: nextItems })
-  }, [update])
+    const item = { name, texts }
+    set(id, item)
+  }, [set])
 
   return (<>
-    {chatpalet.items.map(({ name }, i) => {
+    <button onClick={() => addChatPalet({ name: Date.now().toString(34), texts: 'hoge\nfuga' })}>add</button>
+    {chatpalets.map(({ name }, i) => {
       return <a key={i} onClick={() => setCurrent(i)}>{name}</a>
     })}
     <ChatPaletItem
       key={current}
+      id={item.id}
       name={item.name}
       texts={item.texts}
       submit={add}
@@ -47,4 +52,4 @@ const ChatPalet = ({ id, chatpalet }) => {
   </>)
 }
 
-export default memo(ChatPalet)
+export default memo(ChatPalets)

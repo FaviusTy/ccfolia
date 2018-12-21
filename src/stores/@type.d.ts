@@ -71,6 +71,12 @@ interface Table {
   order: number
 }
 
+interface Piece {
+  id: string,
+  datasheat: DataSheat,
+  panel: Panel
+}
+
 interface Effect {
   id: string
   image: Image
@@ -82,6 +88,12 @@ interface Effect {
 interface Panel {
   id: string
   images: Array<Image>
+  order: number
+}
+
+interface Piece {
+  id: string
+  image: Array<Image>
   order: number
 }
 

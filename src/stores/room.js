@@ -23,13 +23,3 @@ export const {
   useStore: useRoomStore,
   useAction: useRoomAction
 } = createReactReduxHooks(store, actions)
-
-// export const { useStore, useAction } = createReactFirebaseHooks((db, id) => db.collection(`rooms/${id}/messages`), actions)
-
-// const fs = (ref) => ({
-//   add: (item) => {
-//     ref.add(item)
-//   },
-//   remove: (id) => {
-//   },
-// })

@@ -4,16 +4,11 @@ import { Route, NavLink } from 'react-router-dom'
 import { useRoomStore, useRoomAction } from '../stores/room'
 import { useMessagesStore } from '../stores/messages'
 import { useTableStore } from '../stores/table'
-import { useChatPaletStore } from '../stores/chatpalet'
-
-// import Provider from '../stores/room'
-// import { Provider, useRoomStore } from '../contexts/room'
-// import { useFirestore } from '../modules/react-hooks-firebase'
+import { useChatPaletsStore } from '../stores/chatpalets'
 
 import Table from '../containers/Table'
-// import Console from '../containers/Console'
 import ChatBox from '../containers/ChatBox'
-import ChatPalet from '../containers/ChatPalet'
+import ChatPalets from '../containers/ChatPalets'
 
 // import Modal from '../components/ui/Modal'
 import Frame from '../components/ui/Frame'
@@ -40,7 +35,7 @@ const Room = ({
 }) => {
   const [messages] = useMessagesStore(id)
   const [table] = useTableStore(id)
-  const [chatpalet] = useChatPaletStore('TEST_USER', id)
+  const [chatpalets] = useChatPaletsStore('TEST_USER')
   return (<>
     <Route exact path={`${url}/console`} render={() => (
       <Frame onClose={() => replace(url)} title="Console">
@@ -57,9 +52,29 @@ const Room = ({
         <h1>Dice</h1>
       </Frame>
     )} />
-    <Route exact path={`${url}/chatpalet`} render={() => (
+    <Route exact path={`${url}/chatpalets`} render={() => (
       <Frame onClose={() => replace(url)} title="ChatPalet">
-        <ChatPalet id={id} chatpalet={chatpalet} />
+        <ChatPalets id={id} chatpalets={chatpalets} />
+      </Frame>
+    )} />
+    <Route exact path={`${url}/datasheats`} render={() => (
+      <Frame onClose={() => replace(url)} title="DataSheats">
+      </Frame>
+    )} />
+    <Route exact path={`${url}/objects`} render={() => (
+      <Frame onClose={() => replace(url)} title="Objects">
+      </Frame>
+    )} />
+    <Route exact path={`${url}/effects`} render={() => (
+      <Frame onClose={() => replace(url)} title="Effects">
+      </Frame>
+    )} />
+    <Route exact path={`${url}/media`} render={() => (
+      <Frame onClose={() => replace(url)} title="Media">
+      </Frame>
+    )} />
+    <Route exact path={`${url}/notes`} render={() => (
+      <Frame onClose={() => replace(url)} title="Notes">
       </Frame>
     )} />
     <Table id={id} table={table} />
