@@ -1,12 +1,571 @@
 * { margin: 0; padding: 0; }
 
+/* html, body, #root .App {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+} */
+
 body {
   background: #222;
   color: #eee;
   font-size: 14px;
   font-family: sans-serif;
+}
+
+img {
+  vertical-align: middle;
+}
+
+a {
+  text-decoration: none;
+}
+
+.Room {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.Room::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  filter: blur(8px) brightness(45%);
+  background-image: url(/bg2.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.AreaInfo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  /* height: 80px; */
+  /* background: rgba(50, 0, 0, 0.1); */
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; */
+}
+
+.AreaScreen {
+  position: relative;
+  flex: 1;
+}
+
+.AreaChat {
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@media(min-width: 640px) {
+  .Room {
+    flex-direction: row;
+  }
+  .AreaInfo {
+    right: 30%;
+  }
+  .AreaChat {
+    width: 30%;
+    height: 100%;
+  }
+}
+
+.Media {
+  padding: 8px;
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.Media .player {
+  border-radius: 4px;
   overflow: hidden;
 }
+
+.Media .info {
+  padding: 2px 8px;
+  flex: 1;
+}
+.Media .info p {
+  display: flex;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.Menu {
+  padding: 8px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+}
+
+.Menu nav {
+  display: flex;
+}
+
+.Menu nav a {
+  padding: 4px 8px;
+  box-sizing: border-box;
+  border: 2px solid #000;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ccc;
+  font-size: 10px;
+}
+.Menu nav a + a {
+  margin-left: 4px;
+}
+
+.Players {
+  padding: 8px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+}
+.Players p {
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 16px;
+  border: 2px solid #eee;
+  background: rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+}
+.Players a {
+  padding: 2px 4px;
+  border: 2px solid #000;
+  border-radius: 16px;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  color: #000;
+  font-size: 10px;
+  font-weight: 800;
+}
+.Players * + * {
+  margin-left: 4px;
+}
+.Players ul {
+  margin-top: 8px;
+  padding-right: 4px;
+  display: flex;
+}
+.Players ul li {
+  max-width: 20px;
+  list-style: none;
+}
+.Players ul li figure {
+  border-radius: 12px;
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  overflow: hidden;
+}
+.Players ul li img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.Background {
+  width: 100%;
+  height: 100%;
+  background: url(/bg2.jpg);
+  background-size: cover;
+  background-position: 50% 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.Fields {
+  transform-style: preserve-3d;
+  perspective: 1200;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* left: 50%; */
+}
+
+.Fields .inner {
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  left: 5%;
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  transform: rotateX(72deg);
+  transform-origin: bottom;
+  transform-style: preserve-3d;
+  background: url('/bg2.jpg');
+  background-size: 100% 100%;
+}
+
+.Fields .cell {
+  box-sizing: border-box;
+  position: relative;
+  /* background: rgba(255, 255, 255, 0.2); */
+}
+.Fields .cell::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.Fields .cell figure {
+  transform: rotateX(-72deg);
+  transform-origin: bottom;
+}
+
+.Fields .cell figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.Fields .cell:hover {
+  background: #fff;
+}
+
+.Buttons {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+
+.Buttons a {
+  box-sizing: border-box;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.2);
+  color: #222;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.Buttons a + a {
+  margin-top: 8px;
+}
+
+.DataSheets {
+  margin-top: 8px;
+  position: absolute;
+  left: 8px;
+  top: 100%;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.DataSheets::-webkit-scrollbar {
+  display: none;
+}
+
+.DataSheet {
+}
+
+.DataSheet + .DataSheet {
+  margin-top: 2px;
+}
+
+.DataSheet h1 {
+  padding: 2px 4px;
+  border-radius: 4px 4px 0 0;
+  display: inline-block;
+  font-size: 10px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.DataSheet .row {
+  display: flex;
+  /* background: rgba(0, 0, 0, 0.4); */
+}
+
+.DataSheet .col {
+  font-size: 10px;
+  /* display: flex; */
+}
+
+.DataSheet .col .name {
+  margin-right: 1px;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+}
+
+.DataSheet .col .name span {
+  display: inline-block;
+  padding: 2px 4px 0;
+  /* max-width: 30px; */
+  /* overflow: hidden; */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.DataSheet .col .name span::-webkit-scrollbar {
+  display: none;
+}
+
+.DataSheet .col .bar {
+  display: block;
+  background: #222;
+  flex: 1;
+  /* height: 4px; */
+  position: relative;
+}
+
+.DataSheet .col .bar span {
+  display: inline-block;
+  padding: 0 8px;
+  /* transform: scale(0.8); */
+  line-height: 1;
+}
+
+
+.DataSheet .col .bar + .bar {
+  margin-left: 1px;
+}
+
+.ChatTab {
+  /* border-top: 1px solid #000; */
+  /* border-bottom: 1px solid #000; */
+}
+
+.ChatTab nav {
+  padding: 6px 4px;
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.ChatTab nav a {
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: #888;
+  font-size: 10px;
+  line-height: 1;
+  text-align: center;
+}
+.ChatTab nav a + a {
+  /* margin-left: 4px; */
+}
+.ChatTab nav a[active] {
+  background: #000;
+  color: #fff;
+}
+
+.Messages {
+  box-sizing: border-box;
+  padding: 8px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+  flex: 1;
+}
+.Messages::-webkit-scrollbar {
+  display: none;
+}
+.Messages .inner {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: flex-end; */
+  /* align-items: flex-start; */
+}
+.Message {
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  border-radius: 0 8px 8px 8px;
+  background: #112;
+  color: #fff;
+  max-width: 90%;
+  align-self: flex-start;
+  /* border: 2px solid #4ff; */
+}
+
+.Message h1 {
+  font-size: 10px;
+  font-weight: 800;
+}
+.Message p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.Message p.dice {
+  margin: 4px 0;
+  /* border: 2px solid #eee; */
+  border-radius: 4px;
+  padding: 4px 8px;
+  background: #fff;
+  color: #222;
+}
+.Message p.dice::before {
+  margin-right: 4px;
+  content: "🎲";
+}
+.Message figure {
+  margin: 4px 0;
+  border-radius: 4px;
+  max-width: 240px;
+  max-height: 135px;
+  overflow: hidden;
+  text-align: center;
+}
+.Message figure img {
+  vertical-align: middle;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.Message[from="me"] {
+  border-radius: 8px 0 8px 8px;
+  align-self: flex-end;
+  background: #488;
+}
+
+.Message[from="me"] h1 {
+  /* display: none; */
+}
+
+.Message[from="sys"] {
+  border-radius: none;
+  align-self: center;
+  background: none;
+  font-size: 10px;
+}
+
+.Message[from="sys"] h1 {
+  display: none;
+}
+
+.Message[from="sys"] p {
+  font-size: 10px;
+  text-align: center;
+}
+
+.ChatBox {
+  padding: 4px;
+  padding-bottom: 4px;
+  padding-bottom: calc(constant(safe-area-inset-bottom) + 4px);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 4px);
+  display: flex;
+  /* position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0; */
+  background: #eee;
+  /* z-index: 100; */
+}
+
+.ChatBox form {
+  display: flex;
+  flex: 1;
+}
+.ChatBox form textarea {
+  padding: 4px;
+  border: none;
+  outline: none;
+  flex: 1;
+  resize: none;
+  height: 2.4em;
+}
+
+.ChatBox form button {
+  border: none;
+  /* outline: none; */
+  padding: 4px 8px;
+  background: #444;
+  color: #fff;
+}
+
+.ChatBox form input[type=text] {
+  padding: 4px;
+  border: none;
+  border-right: 4px solid #eee;
+  width: 15%;
+}
+
+.ChatBox nav {
+  display: flex;
+}
+
+.ChatBox nav a {
+  margin-left: 4px;
+  width: 36px;
+  background: #fff;
+  text-align: center;
+  text-decoration: none;
+  color: #444;
+}
+
+.Panels {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  display: none;
+}
+.Panels figure::after {
+  content: "";
+  display: block;
+  height: 1px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+}
+
+.Panels figure {
+  margin-right: 12px;
+  max-width: 20%;
+  position: relative;
+}
+.Panels figure img {
+  margin-left: 50%;
+  max-height: 120px;
+  transform: translate(-50%);
+}
+
+/* ---------------- */
 
 /* todos */
 .console {
@@ -43,12 +602,6 @@ body {
   color: #ccc;
   background: #444;
 }
-.player {
-  position: absolute;
-  bottom: 50px;
-  right: 4px;
-  z-index: 10;
-}
 .konvajs-content {
   object-fit: contain;
 }
@@ -62,4 +615,23 @@ body {
   /* opacity: 1; */
   transform: translate3d(0, 0, 0);
   transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Components */
+.MenuBar {
+
+}
+
+.MenuGlobal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.MenuSide {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
 }

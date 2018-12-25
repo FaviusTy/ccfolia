@@ -13,8 +13,8 @@ export const {
   useAction: useTableAction
 } = createDocStore(select, actions, {
   objects: [],
-  // background: { url: '/bg.jpg' },
-  background: { url: '' },
+  background: { url: '/bg.jpg' },
+  // background: { url: '' },
   media: {
     // url: 'https://www.youtube.com/watch?v=WSUFzC6_fp8',
     url: '',

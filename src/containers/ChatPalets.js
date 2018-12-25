@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, memo } from 'react'
 import { useMessagesAction } from '../stores/messages'
 import { useChatPaletsAction } from '../stores/chatpalets'
 
-const ChatPaletItem = ({ id, name, texts, submit, onSubmit }) => {
+const ChatPaletItem = ({ id, name, texts, submit, remove, onSubmit }) => {
   return (<div>
     <form onSubmit={onSubmit}>
       <input name="id" type="hidden" defaultValue={id} />
@@ -10,6 +10,7 @@ const ChatPaletItem = ({ id, name, texts, submit, onSubmit }) => {
       <textarea name="texts" defaultValue={texts}></textarea>
       <button>save</button>
     </form>
+    <button onClick={() => remove(id)}>DEL</button>
     {texts.split('\n').map((text, i) => {
       return <p onClick={() => submit({ name, text })} key={i}>{text}</p>
     })}
@@ -19,7 +20,7 @@ const ChatPaletItem = ({ id, name, texts, submit, onSubmit }) => {
 const ChatPalets = ({ id, chatpalets }) => {
   const [current, setCurrent] = useState(0)
   const { add } = useMessagesAction(id)
-  const { add: addChatPalet, set } = useChatPaletsAction('TEST_USER')
+  const { add: addChatPalet, set, remove } = useChatPaletsAction('TEST_USER')
   const item = useMemo(() => {
     return chatpalets[current] || { id: '', name: '', texts: '' }
   }, [chatpalets, current])
@@ -47,6 +48,7 @@ const ChatPalets = ({ id, chatpalets }) => {
       name={item.name}
       texts={item.texts}
       submit={add}
+      remove={remove}
       onSubmit={onSubmit}
     />
   </>)

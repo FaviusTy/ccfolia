@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group'
 import styles from '../styles/ui/Frame.module.css'
 
 const Frame = ({ onClose, children, title }) => (
-  <CSSTransition classNames="fade" in appear={true} timeout={1000}>
+  <CSSTransition classNames="_fade" in appear={true} timeout={1000}>
     <div className={styles.wrapper} onClick={(e) => {
       if (e.target === e.currentTarget) {
         onClose(e)
@@ -19,7 +19,7 @@ const Frame = ({ onClose, children, title }) => (
         {children}
       </div>
       <footer>
-        <NavLink replace to={`/room/0/characters`}>👨‍👩‍👧‍👦</NavLink>
+        {/* <NavLink replace to={`/room/0/characters`}>👨‍👩‍👧‍👦</NavLink> */}
         <NavLink replace to={`/room/0/chatpalets`}>🎲</NavLink>
         {/* <NavLink replace to={`/room/0/dice`}>🎲</NavLink> */}
         <NavLink replace to={`/room/0/datasheats`}>📊</NavLink>

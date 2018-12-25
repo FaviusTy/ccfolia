@@ -35,8 +35,8 @@ const Table = ({ id, table }) => {
         loop={media.loop}
         muted={media.muted}
         volume={media.volume}
-        width={80}
-        height={45}
+        width={112}
+        height={65}
       />
       {/* {objects.map(({ id, url, w, h, x, y }) => (
         <img key={id} src={url} alt="" width={w} height={h} style={{
