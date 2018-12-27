@@ -2,7 +2,11 @@ import React, { memo, useState, useLayoutEffect, useCallback, useMemo, useRef } 
 import * as PIXI from 'pixi.js'
 import { Stage, Sprite, Container, Graphics } from 'react-pixi-fiber'
 import Rect from './pixi/Rect'
-import Plane from './pixi/Plane'
+import Camera3d from './pixi/Camera3d'
+import Container3d from './pixi/Container3d'
+import Sprite3d from './pixi/Sprite3d'
+import Container2d from './pixi/Container2d'
+import Sprite2d from './pixi/Sprite2d'
 import styles from './styles/Screen.module.css'
 
 // Ticker
@@ -26,36 +30,21 @@ blurFilter.blur = blur
 const centerAnchor = new PIXI.Point(0.5, 0.5)
 const hitArea = new PIXI.Rectangle(-1500, -1500, 3000, 3000)
 
-const Field = ({ row, col, width = 30, height = 30, span = 2 }) => {
-  return (<Plane
-    pivot={[width*col/2, height*row/2]}
-  >
-    {/* {[...Array(row * col)].map((_, i) => {
-      return <Rect
-        key={i}
-        lineColor={0x111111}
-        fill={0xffffff}
-        width={width - span}
-        height={height - span}
-        x={(i % col) * width + span}
-        y={Math.floor(i / col) * height + span}
-      />
-    })} */}
-  </Plane>)
-}
-
 const Screen = ({ objects, background, w, h, onChangeObject }) => {
   useLayoutEffect(() => {
+    console.log(stageRef)
     render(1000)
   })
   const containerRef = useRef()
+  const cameraRef = useRef()
+  const stageRef = useRef()
   const center = useMemo(() => {
     return [~~(w*-0.5), ~~(h*-0.5)]
   }, [w, h])
   const [target, setTarget] = useState()
   const onTouchStart = useCallback((e) => {
-    e.stopPropagation()
     if (e.target) {
+      e.stopPropagation()
       const pos = e.data.getLocalPosition(e.target.parent)
       const target = {
         id: e.target.id,
@@ -69,18 +58,24 @@ const Screen = ({ objects, background, w, h, onChangeObject }) => {
       setTarget(target)
     }
   }, [setTarget])
+  let timer = null
   const onTouchMove = useCallback((e) => {
-    e.stopPropagation()
     if (target) {
+      e.stopPropagation()
       const pos = e.data.getLocalPosition(target.parent)
       target.el.x = target.sx + pos.x - target.tx
       target.el.y = target.sy + pos.y - target.ty
+      clearTimeout(timer)
+      render(1000)
+    } else {
+      // cameraRef.current.euler.x += 0.02
+      // cameraRef.current.position3d.z -= 10
+      // render(1000)
     }
-    render(1000)
-  }, [target])
+  }, [target, setTarget])
   const onTouchEnd = useCallback((e) => {
-    e.stopPropagation()
     if (!target) return
+    e.stopPropagation()
     if (target.id) {
       onChangeObject({
         id: target.id,
@@ -90,18 +85,57 @@ const Screen = ({ objects, background, w, h, onChangeObject }) => {
     }
     setTarget(null)
   }, [onChangeObject, target, setTarget])
-  return (
+  const [width, height, row, col, span] = [60, 60, 30, 30, 8]
+  return (<div className={styles.wrap}>
     <Stage
-      className={styles.wrap}
+      ref={stageRef}
+      className={styles.stage}
       width={w}
       height={h}
       options={{
         transparent: true,
         autoStart: false,
-        sharedTicker: true
+        sharedTicker: true,
+        autoResize: true
       }}
     >
-      <Container
+      <Camera3d x={0} y={0}
+        ref={cameraRef}
+        pointerdown={onTouchStart}
+        pointermove={onTouchMove}
+        pointerup={onTouchEnd}
+        interactive
+      >
+        <Container3d x={0} y={0}
+          ref={containerRef}
+          interactive
+          // pointerdown={onTouchStart}
+          // pointermove={onTouchMove}
+          // pointerup={onTouchEnd}
+          // pointerupoutside={onTouchEnd}
+        >
+          <Sprite3d
+            buttonMode
+            texture={PIXI.Texture.WHITE}
+            interactive
+            x={0}
+            y={0}
+            width={1800}
+            height={1800}
+          />
+           <Sprite
+            buttonMode
+            texture={PIXI.Texture.fromImage('/bg.jpg')}
+            interactive
+            x={0}
+            y={0}
+            width={100}
+            height={100}
+          />
+        </Container3d>
+      </Camera3d>
+
+      {/* <Container
         ref={containerRef}
         interactive
         pointerdown={onTouchStart}
@@ -109,8 +143,8 @@ const Screen = ({ objects, background, w, h, onChangeObject }) => {
         pointerup={onTouchEnd}
         pivot={center}
       >
-        <Container interactive hitArea={hitArea}>
-          <Field row={30} col={30} width={60} height={60} />
+        <Container interactive hitArea={hitArea} scale={0.5}>
+          <Field row={30} col={30} width={60} height={60} span={8} />
           <Rect
             lineColor={0xFFFFFF}
             lineWidth={4}
@@ -135,9 +169,9 @@ const Screen = ({ objects, background, w, h, onChangeObject }) => {
             />
           })}
         </Container>
-      </Container>
+      </Container> */}
     </Stage>
-  )
+  </div>)
 }
 
 export default memo(Screen)

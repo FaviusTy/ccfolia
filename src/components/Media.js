@@ -15,7 +15,7 @@ const Media = ({ media: { name, url, loop, muted, volume } }) => (
     />
     <div className="info">
       <h1>{name || 'NONAME'}</h1>
-      <p>loop:{loop ? 'on' : 'off'} muted:{!muted ? 'on' : 'off'} volume:{volume}</p>
+      <p>loop:{loop ? 'on' : 'off'} muted:{muted ? 'on' : 'off'} volume:{volume}</p>
     </div>
   </div>
 )

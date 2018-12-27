@@ -12,6 +12,6 @@ export const behavior = {
     instance.drawRect(x, y, width, height)
     fill && instance.endFill()
   }
-};
+}
 
 export default CustomPIXIComponent(behavior, TYPE)

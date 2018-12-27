@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import * as minimist from 'minimist'
 import { parse } from '../modules/command-parser'
+import useMeasure from '../modules/react-measure-hooks'
 
 // Stores
 import { useMessagesStore, useMessagesAction } from '../stores/messages'
@@ -34,7 +35,8 @@ const commands = {
   'media': {
     url: String,
     muted: Boolean,
-    loop: Boolean
+    loop: Boolean,
+    volume: Number
   },
   'obj': {
     id: String,
@@ -108,6 +110,8 @@ const Room = ({ id }) => {
     }
   }, [exec, $messages])
 
+  const [[screenWidth, screenHeight], screenWrapRef] = useMeasure()
+
   // render
   return (<div className="Room">
     <Background url={table.background.url} />
@@ -127,7 +131,7 @@ const Room = ({ id }) => {
       <div className="AreaScreenHead">
         <Media media={table.media} />
       </div>
-      <div className="AreaScreenBody">
+      <div ref={screenWrapRef} className="AreaScreenBody">
         <Screen objects={table.objects} w={1280} h={720} onChangeObject={console.log} />
         {/* <div>{Object.keys(table.objects).map((id) => {
           const { url, x, y, w, h } = table.objects[id]
