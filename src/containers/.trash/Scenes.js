@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, memo } from 'react'
 import serialize from 'form-serialize'
-import { useScenesAction } from '../stores/scenes'
-import { useTableAction } from '../stores/table'
+import { useScenesAction } from '../../stores/scenes'
+import { useTableAction } from '../../stores/table'
 
 const Scenes = ({ id, scenes }) => {
   const { add, remove } = useScenesAction('TEST_USER')

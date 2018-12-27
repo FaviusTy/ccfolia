@@ -3,6 +3,8 @@ import { createReactReduxHooks } from '../modules/react-redux-hooks'
 
 function reducer(state = 0, action) {
   switch (action.type) {
+    case 'INIT':
+      console.log(state)
     case 'INCREMENT':
       return state + 1
     case 'DECREMENT':

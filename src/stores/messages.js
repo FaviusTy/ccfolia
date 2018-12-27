@@ -4,6 +4,7 @@ const select = (id) => (db) => db.collection(`rooms/${id}/messages`)
 
 const actions = (ref) => ({
   add: (item) => {
+    item.timestamp = Date.now()
     ref.add(item)
   }
 })

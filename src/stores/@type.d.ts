@@ -60,13 +60,13 @@ interface Table {
   name: string
   text: string
   background: Image
-  floor: Image
+  // floor: Image
   media: Media
   objects: Array<VisualItem>
-  panels: Array<VisualItem>
-  effects: Array<EffectItem>
-  datasheats: Array<DataSheat>
-  memo: Array<Memo>
+  // panels: Array<VisualItem>
+  // effects: Array<EffectItem>
+  // datasheats: Array<DataSheat>
+  // memo: Array<Memo>
   timestamp: number
   order: number
 }

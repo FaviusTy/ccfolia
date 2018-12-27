@@ -8,7 +8,7 @@
 
 body {
   background: #222;
-  color: #eee;
+  color: #fff;
   font-size: 14px;
   font-family: sans-serif;
 }
@@ -23,13 +23,15 @@ a {
 
 .Room {
   height: 100vh;
+  /* height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); */
   width: 100vw;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
-.Room::after {
+/* .Room::after {
   content: "";
   display: block;
   position: absolute;
@@ -43,10 +45,10 @@ a {
   bottom: 0;
   z-index: -1;
   filter: blur(8px) brightness(45%);
-  background-image: url(/bg2.jpg);
+  background-image: url(/bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
-}
+} */
 
 .AreaInfo {
   position: absolute;
@@ -66,24 +68,34 @@ a {
 .AreaScreen {
   position: relative;
   flex: 1;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+}
+.AreaScreenHead {
+  position: relative;
+  z-index: 1;
+}
+.AreaScreenBody {
+  position: relative;
+  flex: 1;
 }
 
 .AreaChat {
-  height: 50%;
+  height: 45%;
   display: flex;
   flex-direction: column;
   background: rgba(0, 0, 0, 0.1);
 }
 
-@media(min-width: 640px) {
+@media(min-width: 720px) {
   .Room {
     flex-direction: row;
   }
-  .AreaInfo {
-    right: 30%;
-  }
   .AreaChat {
     width: 30%;
+    max-width: 375px;
+    min-width: 320px;
     height: 100%;
   }
 }
@@ -103,18 +115,21 @@ a {
   padding: 2px 8px;
   flex: 1;
 }
+.Media .info h1 {
+  font-size: 12px;
+  font-weight: 800;
+}
 .Media .info p {
   display: flex;
   border-radius: 12px;
-  font-size: 12px;
-  color: #ccc;
+  font-size: 10px;
+  color: #eee;
 }
 
 .Menu {
-  padding: 8px;
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 8px;
+  right: 8px;
 }
 
 .Menu nav {
@@ -135,10 +150,9 @@ a {
 }
 
 .Players {
-  padding: 8px;
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 8px;
+  right: 8px;
   /* display: flex; */
   /* align-items: center; */
   /* justify-content: space-between; */
@@ -191,7 +205,7 @@ a {
 .Background {
   width: 100%;
   height: 100%;
-  background: url(/bg2.jpg);
+  background: url(/bg.jpg);
   background-size: cover;
   background-position: 50% 50%;
   position: absolute;
@@ -224,7 +238,7 @@ a {
   transform: rotateX(72deg);
   transform-origin: bottom;
   transform-style: preserve-3d;
-  background: url('/bg2.jpg');
+  background: url('/bg.jpg');
   background-size: 100% 100%;
 }
 
@@ -286,11 +300,13 @@ a {
 }
 
 .DataSheets {
-  margin-top: 8px;
+  box-sizing: border-box;
+  padding: 8px;
   position: absolute;
-  left: 8px;
-  top: 100%;
-  max-height: 240px;
+  left: 0;
+  top: 0;
+  /* bottom: 0; */
+  max-height: 100%;
   overflow: auto;
 }
 
@@ -320,7 +336,7 @@ a {
 
 .DataSheet .col {
   font-size: 10px;
-  /* display: flex; */
+  display: flex;
 }
 
 .DataSheet .col .name {
@@ -334,7 +350,7 @@ a {
   display: inline-block;
   padding: 2px 4px 0;
   /* max-width: 30px; */
-  /* overflow: hidden; */
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -354,6 +370,9 @@ a {
   display: inline-block;
   padding: 0 8px;
   /* transform: scale(0.8); */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   line-height: 1;
 }
 
@@ -376,7 +395,7 @@ a {
 .ChatTab nav a {
   padding: 4px 8px;
   border-radius: 12px;
-  color: #888;
+  color: #ccc;
   font-size: 10px;
   line-height: 1;
   text-align: center;
@@ -387,6 +406,42 @@ a {
 .ChatTab nav a[active] {
   background: #000;
   color: #fff;
+}
+
+.Notes {
+  padding: 4px;
+  box-sizing: border-box;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+}
+.Notes::-webkit-scrollbar {
+  display: none;
+}
+.Notes .inner {
+  display: flex;
+}
+
+.Note {
+  padding: 4px;
+  border-radius: 2px;
+  background: #fff;
+}
+.Note + .Note {
+  margin-left: 2px;
+}
+
+.Note p {
+  width: 40px;
+  height: 10px;
+  overflow: hidden;
+  line-height: 10px;
+  font-size: 10px;
+  word-break: break-all;
+  /* white-space: nowrap; */
+  /* text-overflow: ellipsis; */
+  color: #222;
 }
 
 .Messages {
@@ -409,34 +464,70 @@ a {
 }
 .Message {
   margin-bottom: 8px;
-  padding: 4px 8px;
-  border-radius: 0 8px 8px 8px;
-  background: #112;
-  color: #fff;
   max-width: 90%;
   align-self: flex-start;
   /* border: 2px solid #4ff; */
 }
-
+.Message .body {
+  padding: 4px 8px;
+  border-radius: 0 8px 8px 8px;
+  background: #fff;
+  color: #222;
+}
 .Message h1 {
+  margin-bottom: 2px;
   font-size: 10px;
   font-weight: 800;
 }
 .Message p {
   font-size: 12px;
   line-height: 1.6;
+  word-wrap: break-word;
+  /* word-break: break-all; */
+  /* white-space: wrap; */
 }
 .Message p.dice {
   margin: 4px 0;
   /* border: 2px solid #eee; */
   border-radius: 4px;
   padding: 4px 8px;
-  background: #fff;
-  color: #222;
+  background: #444;
+  color: #fff;
 }
 .Message p.dice::before {
   margin-right: 4px;
   content: "🎲";
+}
+.Message p.note {
+  margin: 4px 0;
+  padding: 4px 8px;
+  position: relative;
+  border-radius: 4px;
+  max-width: 128px;
+  max-height: 64px;
+  line-height: 1.4;
+  overflow: hidden;
+  background: #eee;
+  color: #222;
+  font-size: 10px;
+}
+.Message p.note::before {
+  margin-right: 4px;
+  content: "🗒";
+}
+.Message p.note::after {
+  content: ">>";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px;
+  height: 1em;
+  line-height: 1em;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  text-align: right;
+  color: #888;
 }
 .Message figure {
   margin: 4px 0;
@@ -453,13 +544,16 @@ a {
 }
 
 .Message[from="me"] {
-  border-radius: 8px 0 8px 8px;
   align-self: flex-end;
-  background: #488;
+}
+.Message[from="me"] .body {
+  border-radius: 8px 0 8px 8px;
+  background: #fff;
 }
 
 .Message[from="me"] h1 {
   /* display: none; */
+  text-align: right;
 }
 
 .Message[from="sys"] {
@@ -504,7 +598,6 @@ a {
   resize: none;
   height: 2.4em;
 }
-
 .ChatBox form button {
   border: none;
   /* outline: none; */
@@ -512,14 +605,21 @@ a {
   background: #444;
   color: #fff;
 }
-
 .ChatBox form input[type=text] {
   padding: 4px;
   border: none;
   border-right: 4px solid #eee;
   width: 15%;
 }
-
+.ChatBox form select {
+  outline: none;
+  margin-right: 4px;
+  border: none;
+  border-radius: none;
+  text-align: center;
+  text-indent: -9999px;
+  width: 8px;
+}
 .ChatBox nav {
   display: flex;
 }
