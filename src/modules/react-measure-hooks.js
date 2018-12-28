@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { findDOMNode } from 'react-dom'
+import ResizeObserver from 'resize-observer-polyfill';
 
 const useMeasure = () => {
   const [state, setState] = useState([0, 0])

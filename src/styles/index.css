@@ -69,7 +69,7 @@ a {
   position: relative;
   flex: 1;
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
   flex-direction: column;
 }
 .AreaScreenHead {
@@ -82,10 +82,16 @@ a {
 }
 
 .AreaChat {
+  position: relative;
+  z-index: 1;
   height: 45%;
   display: flex;
   flex-direction: column;
   background: rgba(0, 0, 0, 0.1);
+}
+
+.Screen img:hover {
+  outline: 1px solid #fff;
 }
 
 @media(min-width: 720px) {
@@ -95,8 +101,10 @@ a {
   .AreaChat {
     width: 30%;
     max-width: 375px;
-    min-width: 320px;
     height: 100%;
+  }
+  .AreaScreen {
+    width: 70%;
   }
 }
 

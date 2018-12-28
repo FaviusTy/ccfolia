@@ -8,6 +8,7 @@ const initialState = {
     muted: true,
     volume: 0.1
   },
+  field: { url: '', baseSize: 30, col: 15, row: 12 },
   objects: {}
 }
 

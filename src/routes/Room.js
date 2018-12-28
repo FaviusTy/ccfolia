@@ -48,10 +48,9 @@ const commands = {
   },
   'field': {
     url: String,
-    x: Number,
-    y: Number,
     row: Number,
-    col: Number
+    col: Number,
+    baseSize: Number
   },
   'sheet': {
     key: String,
@@ -66,12 +65,13 @@ const useExecFunc = ({ $table, $messages }) => {
     const cmd = text.split(/\s/)[0]
     if (commands[cmd]) {
       const detail = parse(text, commands[cmd])
-      console.log(detail)
       switch (cmd) {
         case 'clear':
           return $table.reset()
         case 'bg':
           return $table.set({ background: detail.data })
+        case 'field':
+          return $table.set({ field: detail.data })
         case 'media':
           return $table.set({ media: detail.data })
         case 'obj':
@@ -132,11 +132,13 @@ const Room = ({ id }) => {
         <Media media={table.media} />
       </div>
       <div ref={screenWrapRef} className="AreaScreenBody">
-        <Screen objects={table.objects} w={1280} h={720} onChangeObject={console.log} />
-        {/* <div>{Object.keys(table.objects).map((id) => {
-          const { url, x, y, w, h } = table.objects[id]
-          return <img key={id} src={url} width={w} height={h} style={{transform: `translate(${x}px, ${y}px)`}} />
-        })}</div> */}
+        <Screen
+          field={table.field}
+          objects={table.objects}
+          width={screenWidth}
+          height={screenHeight}
+          onChangeObject={console.log}
+        />
         <div className="Buttons">
           <a onClick={() => setDialog('fuga')}><span>🖋</span></a>
           <a onClick={() => setDialog(null)}><span>+</span></a>
