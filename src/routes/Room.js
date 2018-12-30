@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import * as minimist from 'minimist'
+// import * as minimist from 'minimist'
 import { parse } from '../modules/command-parser'
-import useMeasure from '../modules/react-measure-hooks'
+import { useMeasure } from '../modules/react-measure-hooks'
+// import innerHeight from 'ios-inner-height'
 
 // Stores
 import { useMessagesStore, useMessagesAction } from '../stores/messages'
@@ -33,6 +34,7 @@ const commands = {
     url: String
   },
   'media': {
+    name: String,
     url: String,
     muted: Boolean,
     loop: Boolean,
@@ -50,24 +52,35 @@ const commands = {
     url: String,
     row: Number,
     col: Number,
-    baseSize: Number
+    baseSize: Number,
+    grid: Boolean,
+    rotate: Boolean
   },
   'sheet': {
     key: String,
     value: Number
   },
-  'clear': {}
+  'clear_table': {},
+  'clear_msg': {},
 }
 
-const useExecFunc = ({ $table, $messages }) => {
+const useExecFunc = ({
+  $table,
+  $messages,
+}, {
+  table,
+  messages
+}) => {
   return useCallback((text) => {
     if (!text) return false
     const cmd = text.split(/\s/)[0]
     if (commands[cmd]) {
       const detail = parse(text, commands[cmd])
       switch (cmd) {
-        case 'clear':
+        case 'clear_table':
           return $table.reset()
+        case 'clear_msg':
+          return $messages.deleteAll(messages)
         case 'bg':
           return $table.set({ background: detail.data })
         case 'field':
@@ -81,13 +94,15 @@ const useExecFunc = ({ $table, $messages }) => {
       }
     }
     return false
-  }, [$table, $messages])
+  }, [$table, $messages, table, messages])
 }
 
 const Room = ({ id }) => {
   // state
+  const [scale, setScale] = useState(1)
   const [dialog, setDialog] = useState(null)
   const [input, setInput] = useState(initialInputState())
+  const [t, setTime] = useState(0)
 
   // store
   const [messages, $messages] = useMessagesStore({ params: [id], order: ['timestamp'] })
@@ -95,7 +110,7 @@ const Room = ({ id }) => {
   const datasheets = useMemo(() => [...Array(4)].map(() => ({})), [])
 
   // callbacks
-  const exec = useExecFunc({ $table })
+  const exec = useExecFunc({ $table, $messages }, { table, messages })
   const onSubmitMessage = useCallback((data) => {
     if (!data.text) return
     const lines = data.text.split('\n')
@@ -115,17 +130,6 @@ const Room = ({ id }) => {
   // render
   return (<div className="Room">
     <Background url={table.background.url} />
-    {dialog === 'hoge' ? <TableEditor table={table} onSubmit={$table.set} /> : null}
-    {dialog === 'fuga' ? (<div className="MacroBuilder">
-      <div className="controls">
-        <select name="cmd">
-          <option value="bg">bg</option>
-          <option value="media">media</option>
-          <option value="obj">obj</option>
-        </select>
-        <button>+</button>
-      </div>
-    </div>) : null}
     <div className="AreaScreen">
       {/* <div className="Background" style={{ backgroundImage: `url(${table.background.url})` }}></div> */}
       <div className="AreaScreenHead">
@@ -137,14 +141,21 @@ const Room = ({ id }) => {
           objects={table.objects}
           width={screenWidth}
           height={screenHeight}
+          scale={scale}
+          t={t}
           onChangeObject={console.log}
         />
         <div className="Buttons">
-          <a onClick={() => setDialog('fuga')}><span>🖋</span></a>
-          <a onClick={() => setDialog(null)}><span>+</span></a>
+          {/* <a onClick={() => setDialog('fuga')}><span>🖋</span></a> */}
+          <a onClick={() => setTime(Date.now())}><span>*</span></a>
+          <a onClick={() => $table.set({ field: { rotate: !table.field.rotate } })}><span>3d</span></a>
+          <a onClick={() => $table.set({ field: { grid: !table.field.grid } })}><span>#</span></a>
+          <a onClick={() => setScale((prev) => prev + 0.1)}><span>+</span></a>
+          <a onClick={() => setScale((prev) => prev - 0.1)}><span>-</span></a>
+
         </div>
         <div className="Players">
-          <Link to="/">Logout</Link>
+          <Link to="/">Lobby</Link>
           <p>4 players</p>
         </div>
         <DataSheets datasheets={datasheets} />

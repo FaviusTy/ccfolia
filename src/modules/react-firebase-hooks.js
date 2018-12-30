@@ -1,6 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
-// import 'firebase/auth'
+import 'firebase/auth'
 import 'firebase/storage'
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
@@ -8,12 +8,13 @@ import config from '../config/firebase'
 
 firebase.initializeApp(config)
 
-const db = firebase.firestore()
+export const db = firebase.firestore()
+export const auth = firebase.auth()
 // const storage = firebase.storage()
 
 // Common Functions
 const changesReduce = (state, changes) => {
-  return changes.reduce((currentState, { type, doc }) => {
+  return [...changes].reduce((currentState, { type, doc }) => {
     if (type === 'removed') {
       return currentState.filter((item) => {
         return item.id !== doc.id
@@ -47,14 +48,14 @@ export const createCollectionStore = (select, actions) => {
     }, [...params])
     useEffect(() => {
       const queryRef = limitRef(orderByRef(whereRef(ref, where), order), limit)
-      return queryRef.onSnapshot(({ docChanges }) => {
+      return queryRef.onSnapshot((snapshot) => {
         setState((prevState) => {
-          return changesReduce(prevState, docChanges)
+          return changesReduce(prevState, snapshot.docChanges())
         })
       })
     }, [ref])
     const _actions = useMemo(() => {
-      return actions(ref)
+      return actions(ref, db)
     }, [ref])
     return [state, _actions]
   }
@@ -63,7 +64,7 @@ export const createCollectionStore = (select, actions) => {
       return select(...params)(db)
     }, [...params])
     const _actions = useMemo(() => {
-      return actions(ref)
+      return actions(ref, db)
     }, [ref])
     return _actions
   }
@@ -87,7 +88,7 @@ export const createDocStore = (select, actions, initialState) => {
       })
     }, [ref])
     const _actions = useMemo(() => {
-      return actions(ref)
+      return actions(ref, db)
     }, [ref])
     return [state, _actions]
   }
@@ -96,7 +97,7 @@ export const createDocStore = (select, actions, initialState) => {
       return select(...params)(db)
     }, [...params])
     const _actions = useMemo(() => {
-      return actions(ref)
+      return actions(ref, db)
     }, [ref])
     return _actions
   }

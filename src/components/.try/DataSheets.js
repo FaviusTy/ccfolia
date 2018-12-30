@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import ReactDataSheet from 'react-datasheet'
+// import ReactDataSheet from 'react-datasheet'
 
-import 'react-datasheet/lib/react-datasheet.css'
+// import 'react-datasheet/lib/react-datasheet.css'
 import styles from './styles/DataSheets.module.css'
 
 const renderSheet = ({ className, children }, columns) => (

@@ -1,4 +1,5 @@
-import React, { useState, useLayoutEffect, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useLayoutEffect, useCallback, useRef, useEffect, memo } from 'react'
+import { useNoScrollRef } from '../modules/react-noscroll-ref-hooks'
 
 function toLetters(num) {
   let mod = num % 26
@@ -7,9 +8,9 @@ function toLetters(num) {
   return pow ? toLetters(pow) + out : out
 }
 
-const Field = ({ col, row, size: _size, span, url }) => {
-  const pixelRatio = window.devicePixelRatio || 1
-  const size = _size * pixelRatio + 1
+const _Field = ({ col, row, size: _size, span, url, grid }) => {
+  const pixelRatio = 1
+  const size = _size * pixelRatio
   const canvasRef = useRef()
   const width = col * size
   const height = row * size
@@ -17,44 +18,67 @@ const Field = ({ col, row, size: _size, span, url }) => {
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
     const renderRect = () => {
-      const len = row * col
-      const rectSize = size - span
-      let i = 0
-      while (len > i) {
-        const pad = 2
-        const x = i % col
-        const y = Math.floor(i / col)
-        const xName = toLetters(x+1)
-        const yName = String(y+1)
-        const posX = x * size
-        const posY = y * size
-        const alpha = Math.random() > 1 ? 1 : 0.2
-        ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`
-        ctx.fillRect(posX, posY, rectSize, rectSize)
-        ctx.textBaseline = 'top'
-        ctx.font = `normal ${8 * pixelRatio} sans-serif`
-        ctx.fillStyle = 'rgba(255, 255, 255, 1)'
-        ctx.fillText(`${xName}${yName}`, posX + pad, posY + pad, rectSize - pad * 2)
-        i++
+      if (grid) {
+        const len = row * col
+        const rectSize = size - span
+        let i = 0
+        while (len > i) {
+          const pad = 2
+          const x = i % col
+          const y = Math.floor(i / col)
+          const xName = toLetters(x+1)
+          const yName = String(y+1)
+          const posX = x * size
+          const posY = y * size
+          const alpha = Math.random() > 1 ? 1 : 0.1
+          ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`
+          ctx.fillRect(posX, posY, rectSize, rectSize)
+          ctx.textBaseline = 'top'
+          ctx.font = `normal ${~~(10 * (_size / 50) * pixelRatio)}px sans-serif`
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'
+          ctx.fillText(`${xName}${yName}`, posX + pad, posY + pad, rectSize - pad * 2)
+          i++
+        }
+      } else {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
+        ctx.lineWidth = 4
+        ctx.strokeRect(0, 0, width, height)
       }
     }
-    const image = new Image()
-    image.src = url
-    image.onload = () => {
-      ctx.drawImage(image, 0, 0, width, height)
+    if (!url) {
+      ctx.clearRect(0, 0, width, height)
       renderRect()
+    } else {
+      const image = new Image()
+      image.src = url
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, width, height)
+        renderRect()
+      }
+      image.onerror = () => {
+        ctx.clearRect(0, 0, width, height)
+        renderRect()
+      }
     }
-    image.onerror = () => {
-      renderRect()
-    }
-  }, [row, col, size, span, url, width, height])
-  return <canvas ref={canvasRef} width={width * pixelRatio} height={height * pixelRatio} style={{ width: width, height: height }} />
+  }, [row, col, size, span, url, grid, width, height])
+  return <canvas
+    ref={canvasRef}
+    width={width * pixelRatio}
+    height={height * pixelRatio}
+    style={{
+      width: width,
+      height: height
+    }}
+  />
 }
 
-const transformProp = ({ x, y, z, rotateX, rotateY, rotateZ }) => {
+const Field = memo(_Field)
+
+const transformProp = ({ x, y, z, rotateX, scale }) => {
   return `
     rotateX(${rotateX}deg)
     translate3d(${x}px, ${y}px, ${z}px)
+    scale(${scale})
   `
 }
 
@@ -66,6 +90,7 @@ const useDraggable = (ref, initialPos) => {
     touchX: 0,
     touchY: 0,
     rotateX: 0,
+    scale: 1,
     ...initialPos,
     isTarget: false,
     handled: false,
@@ -74,8 +99,8 @@ const useDraggable = (ref, initialPos) => {
   const handleStart = useCallback((e) => {
     setPos({
       ...pos,
-      touchX: (e.clientX || e.touches[0].screenX),
-      touchY: (e.clientY || e.touches[0].screenY),
+      touchX: (e.clientX || e.touches[0].clientX),
+      touchY: (e.clientY || e.touches[0].clientY),
       isTarget: e.target === e.currentTarget,
       handled: true,
       prev: {
@@ -85,14 +110,16 @@ const useDraggable = (ref, initialPos) => {
   }, [pos, setPos])
   const handleMove = useCallback((e) => {
     if (pos.handled) {
-      const diffX = (e.clientX || e.touches[0].screenX) - pos.touchX
-      const diffY = (e.clientY || e.touches[0].screenY) - pos.touchY
+      const diffX = (e.clientX || e.touches[0].clientX) - pos.touchX
+      const diffY = (e.clientY || e.touches[0].clientY) - pos.touchY
+
       ref.current.x = pos.prev.x + diffX
-      ref.current.y = pos.prev.y + diffY
+      ref.current.y = pos.prev.y + diffY * (1 + pos.rotateX / 90)
+
       ref.current.style.transform = transformProp({
         ...pos,
-        x: pos.prev.x + diffX,
-        y: pos.prev.y + diffY
+        x: ref.current.x,
+        y: ref.current.y
       })
     }
   }, [ref.current, pos])
@@ -115,10 +142,14 @@ const Screen = ({
   field,
   objects,
   width,
-  height
+  height,
+  scale,
+  t
 }) => {
   if (!width || !height) return null
   const stageRef = useRef()
+  const screenRef = useNoScrollRef()
+  const rotateX = field.rotate ? 70 : 0
   const [
     fieldPos,
     setPos,
@@ -128,7 +159,8 @@ const Screen = ({
   ] = useDraggable(stageRef, {
     x: width / 2 - field.col * field.baseSize / 2,
     y: height - field.row * field.baseSize / 2,
-    rotateX: 70
+    rotateX: rotateX,
+    scale
   })
   // resize
   useLayoutEffect(() => {
@@ -136,23 +168,36 @@ const Screen = ({
       return {
         ...prev,
         x: width / 2 - field.col * field.baseSize / 2,
-        y: height - field.row * field.baseSize / 2,
+        y: height / 2 - (rotateX / 90) - field.row * field.baseSize / 2
       }
     })
-  }, [width, height])
+  }, [width, height, t])
+  // update
+  useLayoutEffect(() => {
+    setPos((prev) => {
+      return {
+        ...prev,
+        scale: scale,
+        rotateX: rotateX
+      }
+    })
+  }, [scale, rotateX])
 
   return <div
+    className="Screen"
+    ref={screenRef}
     onMouseDown={handleFieldStart}
     onMouseMove={handleFieldMove}
     onMouseUp={handleFieldEnd}
-    onTouchStart={handleFieldStart}
-    onTouchMove={handleFieldMove}
-    onTouchEnd={handleFieldEnd}
+    onTouchStartCapture={handleFieldStart}
+    onTouchMoveCapture={handleFieldMove}
+    onTouchEndCapture={handleFieldEnd}
     style={{
       transformStyle: 'preserve-3d',
-      perspective: '1000px',
+      perspective: '1200px',
       width: width + 'px',
-      height: height + 'px'
+      height: height + 'px',
+      touchAction: 'none'
     }}
   >
     <div ref={stageRef} style={{
@@ -162,20 +207,24 @@ const Screen = ({
       width: field.col * field.baseSize,
       height: field.row * field.baseSize
     }}>
-      {[objects].map(({ id }, i) => {
-        console.log(id, i);
-        return <img key={id + i} width={field.baseSize} height={field.baseSize} src="/bg.jpg" style={{
+      {Object.keys(objects).map((id, i) => {
+        const { x = 0, y = 0, w = 1, h = 1, url } = objects[id]
+        const width = w * field.baseSize
+        const height = h * field.baseSize // scaling
+        const posX = x * field.baseSize
+        const posY = y * field.baseSize
+        return <img key={id} id={id} width={width} height={height} src={url} style={{
           transformOrigin: 'bottom',
           transform: `
-            translate3d(${Math.random() * 420}px, ${Math.random() * 420 - 30}px, 0)
-            rotateX(${-fieldPos.rotateX}deg)
+            translate3d(${posX}px, ${posY-height}px, 0)
+            rotateX(${-fieldPos.rotateX - 5 * scale}deg)
           `,
           position: 'absolute',
           top: 0,
           left: 0
-        }} />
+        }} draggable="false" />
       })}
-      <Field size={field.baseSize} col={field.col} row={field.row} span={2} url={field.url} />
+      <Field size={field.baseSize} col={field.col} row={field.row} span={2} url={field.url} grid={field.grid} />
     </div>
   </div>
 }

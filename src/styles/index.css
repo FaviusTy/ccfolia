@@ -6,6 +6,13 @@
   overflow: hidden;
 } */
 
+/* html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+} */
+
 body {
   background: #222;
   color: #fff;
@@ -15,6 +22,8 @@ body {
 
 img {
   vertical-align: middle;
+  /* touch-action: none;
+  user-select: none; */
 }
 
 a {
@@ -25,7 +34,7 @@ a {
   height: 100vh;
   /* height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); */
   width: 100vw;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -69,7 +78,6 @@ a {
   position: relative;
   flex: 1;
   display: flex;
-  /* overflow: hidden; */
   flex-direction: column;
 }
 .AreaScreenHead {
@@ -78,6 +86,7 @@ a {
 }
 .AreaScreenBody {
   position: relative;
+  overflow: hidden;
   flex: 1;
 }
 
@@ -91,7 +100,9 @@ a {
 }
 
 .Screen img:hover {
-  outline: 1px solid #fff;
+  /* outline: 2px solid #fff; */
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.4);
 }
 
 @media(min-width: 720px) {
@@ -294,12 +305,12 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   line-height: 1;
-  background: rgba(255, 255, 255, 0.2);
-  color: #222;
-  font-size: 14px;
+  background: rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font-size: 10px;
   font-weight: 800;
 }
 

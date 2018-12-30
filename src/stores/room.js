@@ -1,14 +1,12 @@
 import { createStore } from 'redux'
 import { createReactReduxHooks } from '../modules/react-redux-hooks'
 
-function reducer(state = 0, action) {
+const initialState = {}
+
+function reducer(state = initialState, action) {
   switch (action.type) {
     case 'INIT':
-      console.log(state)
-    case 'INCREMENT':
-      return state + 1
-    case 'DECREMENT':
-      return state - 1
+      return initialState
     default:
       return state
   }
