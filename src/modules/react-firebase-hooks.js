@@ -10,10 +10,12 @@ firebase.initializeApp(config)
 
 export const db = firebase.firestore()
 export const auth = firebase.auth()
-// const storage = firebase.storage()
+export const storage = firebase.storage()
+
+db.settings({ timestampsInSnapshots: true })
 
 // Common Functions
-const changesReduce = (state, changes) => {
+export const changesReduce = (state, changes) => {
   return [...changes].reduce((currentState, { type, doc }) => {
     if (type === 'removed') {
       return currentState.filter((item) => {

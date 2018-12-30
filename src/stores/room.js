@@ -12,7 +12,7 @@ function reducer(state = initialState, action) {
   }
 }
 
-const actions = (dispatch) => ({
+const actions = ({ dispatch }) => ({
   increment: (item) => {
     dispatch({ type: 'INCREMENT' })
   }

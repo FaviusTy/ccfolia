@@ -1,23 +1,24 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 // import * as minimist from 'minimist'
 import { parse } from '../modules/command-parser'
-import { useMeasure } from '../modules/react-measure-hooks'
+import { useMeasure } from '../hooks/react-measure-hooks'
 // import innerHeight from 'ios-inner-height'
 
 // Stores
 import { useMessagesStore, useMessagesAction } from '../stores/messages'
 import { useTableStore, useTableAction } from '../stores/table'
+import { useGetter, useDispatcher, useObserver } from '../stores/index'
 
 // Components
-// import { SubRoute, SubLink, BackLink } from '../modules/react-router-hooks'
 import { Link } from 'react-router-dom'
 import Messages from '../components/Messages'
 import Chat from '../components/Chat'
 import Media from '../components/Media'
 import DataSheets from '../components/DataSheets'
-import TableEditor from '../components/TableEditor'
 import Background from '../components/Background'
 import Screen from '../components/Screen'
+import Dropzone from 'react-dropzone'
+import { useEffectsAction } from '../stores/effects';
 
 const initialInputState = () => ({
   name: '',
@@ -64,13 +65,7 @@ const commands = {
   'clear_msg': {},
 }
 
-const useExecFunc = ({
-  $table,
-  $messages,
-}, {
-  table,
-  messages
-}) => {
+const useExecFunc = (dispatch, context) => {
   return useCallback((text) => {
     if (!text) return false
     const cmd = text.split(/\s/)[0]
@@ -78,39 +73,53 @@ const useExecFunc = ({
       const detail = parse(text, commands[cmd])
       switch (cmd) {
         case 'clear_table':
-          return $table.reset()
+          return dispatch('table:clear', context)
         case 'clear_msg':
-          return $messages.deleteAll(messages)
+          return dispatch('messages:clear', context)
         case 'bg':
-          return $table.set({ background: detail.data })
+          return dispatch('table:set', context, { background: detail.data })
         case 'field':
-          return $table.set({ field: detail.data })
+          return dispatch('table:set', context, { field: detail.data })
         case 'media':
-          return $table.set({ media: detail.data })
+          return dispatch('table:set', context, { media: detail.data })
         case 'obj':
-          return $table.setObj(detail.data)
+          return dispatch('table:obj:set', context, detail.data)
         default:
           return false
       }
     }
     return false
-  }, [$table, $messages, table, messages])
+  }, [dispatch, context])
 }
 
-const Room = ({ id }) => {
+const Room = ({ rid }) => {
   // state
   const [scale, setScale] = useState(1)
-  const [dialog, setDialog] = useState(null)
-  const [input, setInput] = useState(initialInputState())
   const [t, setTime] = useState(0)
 
   // store
-  const [messages, $messages] = useMessagesStore({ params: [id], order: ['timestamp'] })
-  const [table, $table] = useTableStore({ params: [id, 'default'] })
+  const user = useGetter('user')
+  const messages = useGetter('messages')
+  const table = useGetter('table')
+  const images = useGetter('images')
+
+  // observers
+  useObserver('messages', rid)
+  useObserver('table', rid)
+
+  // actions
+  const { commit, dispatch } = useDispatcher()
+
+  // init
+  useEffect(() => {
+    commit('room:init')
+  }, [rid])
+
+  // const [table, $table] = useTableStore({ params: [id, 'default'] })
   const datasheets = useMemo(() => [...Array(4)].map(() => ({})), [])
 
   // callbacks
-  const exec = useExecFunc({ $table, $messages }, { table, messages })
+  const exec = useExecFunc(dispatch, rid)
   const onSubmitMessage = useCallback((data) => {
     if (!data.text) return
     const lines = data.text.split('\n')
@@ -118,12 +127,17 @@ const Room = ({ id }) => {
       return !exec(line)
     }).join('\n')
     if (pureText) {
-      $messages.add({
+      dispatch('messages:add', rid, {
         ...data,
         text: pureText
       })
     }
-  }, [exec, $messages])
+  }, [exec, dispatch])
+  const onDrop = useCallback((files) => {
+    files.map((file) => {
+      return dispatch('images:add', { uid: user.uid, oid: 'default' }, file)
+    })
+  }, [dispatch, user])
 
   const [[screenWidth, screenHeight], screenWrapRef] = useMeasure()
 
@@ -136,6 +150,18 @@ const Room = ({ id }) => {
         <Media media={table.media} />
       </div>
       <div ref={screenWrapRef} className="AreaScreenBody">
+        <div className="Uploader">
+          <p>aaaaaaaaaaaaaa</p>
+          <Dropzone onDrop={onDrop}>{({ getRootProps, getInputProps }) => (
+            <div {...getRootProps()}>
+              aaaaaaaaaaaaaaa
+              <input {...getInputProps()} />
+            </div>
+          )}</Dropzone>
+          {images.map(({ id, url }) => {
+            return <img onClick={() => dispatch('table:set', rid, { background: { url } })} key={id} src={url} width="100" height="100" />
+          })}
+        </div>
         <Screen
           field={table.field}
           objects={table.objects}
@@ -148,8 +174,8 @@ const Room = ({ id }) => {
         <div className="Buttons">
           {/* <a onClick={() => setDialog('fuga')}><span>🖋</span></a> */}
           <a onClick={() => setTime(Date.now())}><span>*</span></a>
-          <a onClick={() => $table.set({ field: { rotate: !table.field.rotate } })}><span>3d</span></a>
-          <a onClick={() => $table.set({ field: { grid: !table.field.grid } })}><span>#</span></a>
+          <a onClick={() => dispatch('table:set', rid, { field: { rotate: !table.field.rotate } })}><span>3d</span></a>
+          <a onClick={() => dispatch('table:set', rid, { field: { grid: !table.field.grid } })}><span>#</span></a>
           <a onClick={() => setScale((prev) => prev + 0.1)}><span>+</span></a>
           <a onClick={() => setScale((prev) => prev - 0.1)}><span>-</span></a>
 
@@ -158,7 +184,7 @@ const Room = ({ id }) => {
           <Link to="/">Lobby</Link>
           <p>4 players</p>
         </div>
-        <DataSheets datasheets={datasheets} />
+        {/* <DataSheets datasheets={datasheets} /> */}
         <div className="Panels">
           <figure><img src="/man.png" alt=""/></figure>
           <figure><img src="/man.png" alt=""/></figure>
@@ -173,7 +199,7 @@ const Room = ({ id }) => {
 }
 
 const RouteRoom = ({ match: { params: { id } } }) => {
-  return <Room id={id} />
+  return <Room rid={id} />
 }
 
 export default RouteRoom

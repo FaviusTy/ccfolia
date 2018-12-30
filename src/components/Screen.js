@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback, useRef, useEffect, memo } from 'react'
-import { useNoScrollRef } from '../modules/react-noscroll-ref-hooks'
+import { useNoScrollRef } from '../hooks/react-noscroll-ref-hooks'
 
 function toLetters(num) {
   let mod = num % 26
