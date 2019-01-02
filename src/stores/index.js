@@ -1,41 +1,27 @@
 import { createReactReduxHooks, mutationsToReducer } from '../modules/react-redux-hooks'
 import { auth, db, storage, changesReduce } from '../modules/react-firebase-hooks'
 
+import messages from './room/messages'
+import table from './room/table'
+
 const getInitialState = () => ({
   user: {
-    images: []
+    images: [],
+    objects: []
   },
   room: {
     input: '',
     popup: null,
-    table: {
-      background: { url: '' },
-      media: {
-        url: '',
-        loop: true,
-        muted: true,
-        volume: 0.1
-      },
-      field: {
-        url: '',
-        baseSize: 60,
-        col: 15,
-        row: 12,
-        grid: true,
-        rotate: false
-      },
-      objects: {},
-    },
-    messages: []
+    table: table.initialState(),
+    messages: messages.initialState()
   }
 })
 
 const reducer = mutationsToReducer({
+  ...messages.mutations,
+  ...table.mutations,
   'room:init': (state) => {
     state.room = getInitialState().room
-  },
-  'table:set': (state, table) => {
-    Object.assign(state.room.table, table)
   },
   'user:set': (state, user) => {
     Object.assign(state.user, {
@@ -47,58 +33,19 @@ const reducer = mutationsToReducer({
   'user:reset': (state, user) => {
     state.user = getInitialState().user
   },
-  'room:in': (state, id) => {
-    state.room = getInitialState().room
-  },
-  'room:in': (state, name) => {
-    state.room.popup = name
-  },
-  'messages:set': (state, messages) => {
-    state.room.messages = messages
-  },
   'images:set': (state, images) => {
     state.user.images = images
+  },
+  'objects:set': (state, objects) => {
+    state.user.objects = objects
   }
 })
 
 const actions = {
-  'messages:add': (_, rid, item) => {
-    if (!rid) return
-    const ref = db.collection(`rooms/${rid}/messages`)
-    item.timestamp = Date.now()
-    ref.add(item)
-  },
-  'messages:clear': async ({ select }, rid, item) => {
-    if (!rid) return
-    const messages = select('messages')
-    const targets = [...messages]
-    const ref = db.collection(`rooms/${rid}/messages`)
-    while (targets.length > 0) {
-      const t = targets.splice(-500)
-      const batch = db.batch()
-      t.forEach(({ id }) => {
-        batch.delete(ref.doc(id))
-      })
-      await batch.commit()
-    }
-  },
-  'table:set': (_, rid, item) => {
-    if (!rid) return
-    const ref = db.doc(`rooms/${rid}/tables/default`)
-    ref.set(item, { merge: true })
-  },
-  'table:clear': (_, rid) => {
-    if (!rid) return
-    const ref = db.doc(`rooms/${rid}/tables/default`)
-    ref.set(getInitialState().table)
-  },
-  'table:obj:set': (_, rid, item) => {
-    if (!rid || !item.id) return
-    const ref = db.doc(`rooms/${rid}/tables/default`)
-    ref.set({ objects: { [item.id]: item } }, { merge: true })
-  },
-  'images:add': async (_, { uid, oid }, file) => {
-    if (!uid || !oid || !file) return
+  ...messages.actions,
+  ...table.actions,
+  'images:add': async ({ db }, uid, file) => {
+    if (!uid || !file) return
     const DEFAULT_CACHE_CONTROL = `public,max-age=${60 * 60 * 24 * 14}`
     const ref = db.collection('images')
     try {
@@ -123,28 +70,58 @@ const actions = {
         size: metadata.size,
         url,
       }, { merge: true })
+      return url
     } catch(err) {
       alert(err.toString())
+      return
+    }
+  },
+  'assets:objects:add': ({ db }, uid, item) => {
+    if (!uid) return
+    const ref = db.collection(`assets/${uid}/objects`)
+    return ref.add(item)
+  },
+  'assets:objects:set': ({ db }, uid, item) => {
+    if (!uid) return
+    const ref = db.collection(`assets/${uid}/objects`)
+    return ref.set(item, { merge: true })
+  },
+  'assets:objects:clear': async ({ db, select }, uid) => {
+    if (!uid) return
+    const objects = select('objects')
+    const ref = db.collection(`assets/${uid}/objects`)
+    const targets = [...objects]
+    while (targets.length > 0) {
+      const t = targets.splice(-500)
+      const batch = db.batch()
+      t.forEach(({ id }) => {
+        batch.delete(ref.doc(id))
+      })
+      await batch.commit()
     }
   }
 }
 
 const getters = {
+  ...messages.getters,
+  ...table.getters,
   'user': (state) => {
     return state.user
-  },
-  'messages': (state) => {
-    return state.room.messages
   },
   'table': (state) => {
     return state.room.table
   },
   'images': (state) => {
     return state.user.images
+  },
+  'objects': (state) => {
+    return state.user.objects
   }
 }
 
 const observers = {
+  ...messages.observers,
+  ...table.observers,
   'user': ({ commit }) => {
     return auth.onAuthStateChanged((user) => {
       if (user) {
@@ -154,26 +131,20 @@ const observers = {
       }
     })
   },
-  'messages': ({ commit, select }, rid) => {
-    if (!rid) return
-    return db.collection(`rooms/${rid}/messages`).onSnapshot((snapshot) => {
-      const prev = select('messages')
-      const messages = changesReduce(prev, snapshot.docChanges())
-      commit('messages:set', messages)
-    })
-  },
-  'table': ({ commit }, rid) => {
-    if (!rid) return
-    return db.doc(`rooms/${rid}/tables/default`).onSnapshot((doc) => {
-      commit('table:set', doc.data())
-    })
-  },
   'images': ({ commit, select }, uid) => {
     if (!uid) return
     return db.collection('images').where('owner', '==', uid).onSnapshot((snapshot) => {
       const prev = select('images')
       const images = changesReduce(prev, snapshot.docChanges())
       commit('images:set', images)
+    })
+  },
+  'objects': ({ commit, select }, uid) => {
+    if (!uid) return
+    return db.collection(`assets/${uid}/objects`).onSnapshot((snapshot) => {
+      const prev = select('objects')
+      const objects = changesReduce(prev, snapshot.docChanges())
+      commit('objects:set', objects)
     })
   }
 }
@@ -187,6 +158,6 @@ export const {
   actions,
   observers,
   getters,
-  initialState:
-  getInitialState()
+  context: { db, storage, auth, changesReduce },
+  initialState: getInitialState()
 })

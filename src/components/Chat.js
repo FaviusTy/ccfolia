@@ -49,6 +49,7 @@ const Chat = ({ onSubmit }) => {
         <button>send</button>
       </form>
       <nav>
+        <a href="#a">🎲</a>
         <a href="#a">+</a>
       </nav>
     </div>

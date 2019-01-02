@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
-// import innerHeight from 'ios-inner-height'
 
 export const useMeasure = () => {
   const [state, setState] = useState([0, 0])
@@ -26,22 +25,3 @@ export const useMeasure = () => {
   }, [update])
   return [state, ref]
 }
-
-// export const useWindowMeasure = () => {
-//   const [state, setState] = useState([0, 0])
-//   const ref = useRef()
-//   const update = useCallback(() => {
-//     document.body.style.height = innerHeight()
-//     setState([
-//       document.documentElement.clientWidth,
-//       innerHeight()
-//     ])
-//   }, [ref.current, setState])
-//   useEffect(() => {
-//     let timer = null
-//     const updator = () => timer = setTimeout(() => { update() }, 100)
-//     window.addEventListener('scroll', updator)
-//     return () => window.removeEventListener('scroll', updator)
-//   }, [update])
-//   return [state, ref]
-// }

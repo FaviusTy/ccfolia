@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-// import * as minimist from 'minimist'
-import { parse } from '../modules/command-parser'
-import { useMeasure } from '../hooks/react-measure-hooks'
-// import innerHeight from 'ios-inner-height'
+
+import { useMeasure } from '../hooks/measure'
+import { useCommand } from '../hooks/command'
 
 // Stores
-import { useMessagesStore, useMessagesAction } from '../stores/messages'
-import { useTableStore, useTableAction } from '../stores/table'
 import { useGetter, useDispatcher, useObserver } from '../stores/index'
 
 // Components
@@ -17,80 +14,9 @@ import Media from '../components/Media'
 import DataSheets from '../components/DataSheets'
 import Background from '../components/Background'
 import Screen from '../components/Screen'
-import Dropzone from 'react-dropzone'
-import { useEffectsAction } from '../stores/effects';
-
-const initialInputState = () => ({
-  name: '',
-  type: 'text',
-  text: '',
-  images: [],
-  color: 'default',
-  from: 'TEST_USER',
-  to: []
-})
-
-const commands = {
-  'bg': {
-    url: String
-  },
-  'media': {
-    name: String,
-    url: String,
-    muted: Boolean,
-    loop: Boolean,
-    volume: Number
-  },
-  'obj': {
-    id: String,
-    url: String,
-    x: Number,
-    y: Number,
-    w: Number,
-    h: Number
-  },
-  'field': {
-    url: String,
-    row: Number,
-    col: Number,
-    baseSize: Number,
-    grid: Boolean,
-    rotate: Boolean
-  },
-  'sheet': {
-    key: String,
-    value: Number
-  },
-  'clear_table': {},
-  'clear_msg': {},
-}
-
-const useExecFunc = (dispatch, context) => {
-  return useCallback((text) => {
-    if (!text) return false
-    const cmd = text.split(/\s/)[0]
-    if (commands[cmd]) {
-      const detail = parse(text, commands[cmd])
-      switch (cmd) {
-        case 'clear_table':
-          return dispatch('table:clear', context)
-        case 'clear_msg':
-          return dispatch('messages:clear', context)
-        case 'bg':
-          return dispatch('table:set', context, { background: detail.data })
-        case 'field':
-          return dispatch('table:set', context, { field: detail.data })
-        case 'media':
-          return dispatch('table:set', context, { media: detail.data })
-        case 'obj':
-          return dispatch('table:obj:set', context, detail.data)
-        default:
-          return false
-      }
-    }
-    return false
-  }, [dispatch, context])
-}
+import Assets from '../components/Assets'
+import Uploader from '../components/Uploader'
+import MacroEditor from '../components/MacroEditor'
 
 const Room = ({ rid }) => {
   // state
@@ -99,13 +25,14 @@ const Room = ({ rid }) => {
 
   // store
   const user = useGetter('user')
-  const messages = useGetter('messages')
-  const table = useGetter('table')
-  const images = useGetter('images')
+  const messages = useGetter('room:messages')
+  const table = useGetter('room:table')
+  const objects = useGetter('objects')
 
   // observers
-  useObserver('messages', rid)
-  useObserver('table', rid)
+  useObserver('room:messages', rid)
+  useObserver('room:table', rid)
+  useObserver('objects', user.uid)
 
   // actions
   const { commit, dispatch } = useDispatcher()
@@ -119,7 +46,7 @@ const Room = ({ rid }) => {
   const datasheets = useMemo(() => [...Array(4)].map(() => ({})), [])
 
   // callbacks
-  const exec = useExecFunc(dispatch, rid)
+  const exec = useCommand(dispatch, rid, user.uid)
   const onSubmitMessage = useCallback((data) => {
     if (!data.text) return
     const lines = data.text.split('\n')
@@ -133,10 +60,16 @@ const Room = ({ rid }) => {
       })
     }
   }, [exec, dispatch])
-  const onDrop = useCallback((files) => {
-    files.map((file) => {
-      return dispatch('images:add', { uid: user.uid, oid: 'default' }, file)
-    })
+  const onDrop = useCallback(async (files) => {
+    try {
+      const tasks = files.map((file) => {
+        return dispatch('images:add', user.uid, file)
+      })
+      const urls = await Promise.all(tasks)
+      urls.forEach((url) => window.open(url))
+    } catch(err) {
+      console.error(err)
+    }
   }, [dispatch, user])
 
   const [[screenWidth, screenHeight], screenWrapRef] = useMeasure()
@@ -150,18 +83,6 @@ const Room = ({ rid }) => {
         <Media media={table.media} />
       </div>
       <div ref={screenWrapRef} className="AreaScreenBody">
-        <div className="Uploader">
-          <p>aaaaaaaaaaaaaa</p>
-          <Dropzone onDrop={onDrop}>{({ getRootProps, getInputProps }) => (
-            <div {...getRootProps()}>
-              aaaaaaaaaaaaaaa
-              <input {...getInputProps()} />
-            </div>
-          )}</Dropzone>
-          {images.map(({ id, url }) => {
-            return <img onClick={() => dispatch('table:set', rid, { background: { url } })} key={id} src={url} width="100" height="100" />
-          })}
-        </div>
         <Screen
           field={table.field}
           objects={table.objects}
@@ -174,12 +95,12 @@ const Room = ({ rid }) => {
         <div className="Buttons">
           {/* <a onClick={() => setDialog('fuga')}><span>🖋</span></a> */}
           <a onClick={() => setTime(Date.now())}><span>*</span></a>
-          <a onClick={() => dispatch('table:set', rid, { field: { rotate: !table.field.rotate } })}><span>3d</span></a>
-          <a onClick={() => dispatch('table:set', rid, { field: { grid: !table.field.grid } })}><span>#</span></a>
+          <a onClick={() => dispatch('room:table:set', rid, { field: { rotate: !table.field.rotate } })}><span>3d</span></a>
+          <a onClick={() => dispatch('room:table:set', rid, { field: { grid: !table.field.grid } })}><span>#</span></a>
           <a onClick={() => setScale((prev) => prev + 0.1)}><span>+</span></a>
           <a onClick={() => setScale((prev) => prev - 0.1)}><span>-</span></a>
-
         </div>
+        <MacroEditor />
         <div className="Players">
           <Link to="/">Lobby</Link>
           <p>4 players</p>
@@ -193,6 +114,11 @@ const Room = ({ rid }) => {
     </div>
     <div className="AreaChat">
       <Messages messages={messages} />
+      <Assets
+        onSubmit={onSubmitMessage}
+        onAdd={() => dispatch('assets:objects:add', user.uid, { name: Date.now().toString(34) })}
+        objects={objects}
+      />
       <Chat onSubmit={onSubmitMessage} />
     </div>
   </div>)

@@ -22,6 +22,7 @@ export const createReactReduxHooks = ({
   actions,
   observers,
   getters,
+  context: _context,
   initialState
 }) => {
 
@@ -30,6 +31,7 @@ export const createReactReduxHooks = ({
   const commit = (type, payload) => store.dispatch({ type, payload })
   const select = (key, ...args) => getters[key](store.getState(), ...args)
   const context = {
+    ..._context,
     commit,
     select
   }
@@ -62,7 +64,7 @@ export const createReactReduxHooks = ({
 
   const useObserver = (key, ...args) => {
     useEffect(() => {
-      return observers[key]({ commit, dispatch, select }, ...args)
+      return observers[key]({ ...context, dispatch }, ...args)
     }, [key, ...args])
   }
 
