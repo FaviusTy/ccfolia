@@ -3,7 +3,7 @@ import firebase from 'firebase/app'
 import firebaseui from 'firebaseui'
 import { auth } from '../modules/react-firebase-hooks'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { useGetter, useObserver } from '../stores/index'
+// import { useGetter, useObserver } from '../stores/index'
 
 import '../styles/Auth.css'
 
@@ -20,9 +20,10 @@ const uiConfig = {
 
 const Auth = () => {
   const [state, setState] = useState(true)
-  const user = useGetter('user')
-  useObserver('user')
-  useObserver('images', user.uid)
+  const user = {}
+  // const user = useGetter('user')
+  // useObserver('user')
+  // useObserver('images', user.uid)
   useEffect(() => {
     return auth.onAuthStateChanged((user) => {
       if (user) {

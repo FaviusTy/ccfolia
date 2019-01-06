@@ -35,6 +35,7 @@ const commands = {
   'clear_table': {},
   'clear_msg': {},
   'clear_obj': {},
+  'clear_assets': {}
 }
 
 export const useCommand = (dispatch, rid, uid) => {
@@ -45,11 +46,11 @@ export const useCommand = (dispatch, rid, uid) => {
       const detail = parse(text, commands[cmd])
       switch (cmd) {
         case 'clear_table':
-          return dispatch('table:clear', rid)
+          return dispatch('room:table:clear', rid)
         case 'clear_msg':
           return dispatch('room:messages:clear', rid)
-        case 'clear_obj':
-          return dispatch('assets:objects:clear', uid)
+        case 'clear_assets':
+          return dispatch('user:assets:clear', uid)
         case 'bg':
           return dispatch('room:table:set', rid, { background: detail.data })
         case 'field':

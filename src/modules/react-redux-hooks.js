@@ -45,16 +45,16 @@ export const createReactReduxHooks = ({
 
   const useGetter = (key, ...args) => {
     if (typeof getters[key] !== 'function') return null
-    const [state, setState] = useState(getters[key](store.getState(), ...args))
+    let [state, setState] = useState(getters[key](store.getState(), ...args))
     useEffect(() => {
       return store.subscribe(() => {
-        const prevState = state
         const nextState = getters[key](store.getState(), ...args)
-        if (prevState !== nextState) {
+        if (state !== nextState) {
+          state = nextState
           setState(nextState)
         }
       })
-    }, [key, ...args])
+    }, []) // todo: state
     return state
   }
 

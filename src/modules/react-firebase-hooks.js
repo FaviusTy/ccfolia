@@ -1,18 +1,11 @@
 import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
-import 'firebase/storage'
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
-import config from '../config/firebase'
+import * as fb from '../firebase/core'
 
-firebase.initializeApp(config)
-
-export const db = firebase.firestore()
-export const auth = firebase.auth()
-export const storage = firebase.storage()
-
-db.settings({ timestampsInSnapshots: true })
+export const db = fb.db
+export const auth = fb.auth
+export const storage = fb.storage
 
 // Common Functions
 export const changesReduce = (state, changes) => {

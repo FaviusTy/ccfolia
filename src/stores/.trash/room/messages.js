@@ -1,30 +1,34 @@
-const name = 'room:messages'
+const MODULE_KEY = 'room:messages'
 
 const initialState = () => {
-  return []
+  return {
+    room: {
+      messages: []
+    }
+  }
 }
 
 const observers = {
-  [name]: ({ commit, select, db, changesReduce }, rid) => {
+  [MODULE_KEY]: ({ commit, select, db, changesReduce }, rid) => {
     if (!rid) return
-    return db.collection(`rooms/${rid}/messages`).onSnapshot((snapshot) => {
-      const prev = select(name)
+    return db.collection(`rooms/${rid}/messages`).orderBy('timestamp').onSnapshot((snapshot) => {
+      const prev = select(MODULE_KEY)
       const messages = changesReduce(prev, snapshot.docChanges())
-      commit(`${name}:set`, messages)
+      commit(`${MODULE_KEY}:set`, messages)
     })
   }
 }
 
 const actions = {
-  [`${name}:add`]: ({ db }, rid, item) => {
+  [`${MODULE_KEY}:add`]: ({ db }, rid, item) => {
     if (!rid) return
     const ref = db.collection(`rooms/${rid}/messages`)
     item.timestamp = Date.now()
     ref.add(item)
   },
-  [`${name}:clear`]: async ({ db, select }, rid, item) => {
+  [`${MODULE_KEY}:clear`]: async ({ db, select }, rid) => {
     if (!rid) return
-    const messages = select(name)
+    const messages = select(MODULE_KEY)
     const targets = [...messages]
     const ref = db.collection(`rooms/${rid}/messages`)
     while (targets.length > 0) {
@@ -39,13 +43,13 @@ const actions = {
 }
 
 const mutations = {
-  [`${name}:set`]: (state, messages) => {
+  [`${MODULE_KEY}:set`]: (state, messages) => {
     state.room.messages = messages
   }
 }
 
 const getters = {
-  [name]: (state) => {
+  [MODULE_KEY]: (state) => {
     return state.room.messages
   }
 }
