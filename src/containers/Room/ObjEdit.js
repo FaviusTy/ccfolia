@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import serialize from 'form-serialize'
 import { LocalForm, Control } from 'react-redux-form'
 
 const ObjForm = ({ obj, onSubmit, onDelete, onClose }) => {
   const { id, url, w, h, z = 0, angle, locked } = obj
+
+  // callbacks
   const handleSubmit = useCallback((data) => {
     if (!id) return
     onSubmit({ id, item: data })
@@ -19,6 +20,8 @@ const ObjForm = ({ obj, onSubmit, onDelete, onClose }) => {
     e.preventDefault()
     onClose()
   }, [id])
+
+  // render
   return (<LocalForm
     onSubmit={handleSubmit}
     onChange={handleSubmit}
@@ -71,7 +74,8 @@ const mapDispatchToProps = {
   },
   close: () => {
     return {
-      type: 'FORM_OBJECT_SET',
+      type: 'FORM_SET',
+      key: 'object',
       item: null
     }
   },

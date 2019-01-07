@@ -39,19 +39,19 @@ const mapDispatchToProps = {
   messageChanges: (changes) => {
     return {
       type: 'MESSAGE_CHANGES',
-      payload: changes
+      changes
     }
   },
   objectChanges: (changes) => {
     return {
       type: 'OBJECT_CHANGES',
-      payload: changes
+      changes
     }
   },
-  tableChange: (data) => {
+  tableChange: (item) => {
     return {
       type: 'TABLE_SET',
-      payload: data
+      item
     }
   },
   init: (id) => {

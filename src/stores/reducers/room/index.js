@@ -9,10 +9,10 @@ const identifyReducer = createReducer(null, {
 const initialFormState = { object: null }
 const formReducer = createReducer(initialFormState, {
   ROOM_INIT: () => initialFormState,
-  FORM_OBJECT_SET: (state, { item }) => {
+  FORM_SET: (state, { key, item }) => {
     return {
       ...state,
-      object: item
+      [key]: item
     }
   }
 })
@@ -46,10 +46,10 @@ const initialTableState = {
 }
 const tableReducer = createReducer(initialTableState, {
   ROOM_INIT: () => initialTableState,
-  TABLE_SET: (state, { payload }) => {
+  TABLE_SET: (state, { item }) => {
     return {
       ...state,
-      ...payload
+      ...item
     }
   }
 })

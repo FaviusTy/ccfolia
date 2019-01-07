@@ -5,13 +5,13 @@ import { store } from './stores/'
 
 import Room from './routes/Room'
 import Home from './routes/Home'
-import Auth from './routes/Auth'
+import User from './routes/User'
 
 const App = () => (
   <Router initialEntries={[{ pathname: '/' }]}>
     <Provider store={store}>
       <div className="App">
-        <Route path="/" component={Auth} />
+        <Route path="/" component={User} />
         <Route exact path="/" component={Home} />
         <Route exact path="/room/:id" component={Room} />
       </div>

@@ -22,7 +22,8 @@ const objAdd = function* ({ item }) {
   const roomId = yield select(selectRoomId)
   if (!roomId) return
   yield put({
-    type: 'FORM_OBJECT_SET',
+    type: 'FORM_SET',
+    key: 'object',
     item: {
       ...item,
       id: Date.now().toString(34)
@@ -37,7 +38,7 @@ const objSet = function* ({ id, item }) {
 const objDelete = function* ({ id }) {
   const roomId = yield select(selectRoomId)
   if (!roomId || !id) return
-  yield put({ type: 'FORM_OBJECT_SET', item: null })
+  yield put({ type: 'FORM_SET', key: 'object', item: null })
   yield call(() => db.collection(`/rooms/${roomId}/objects`).doc(id).delete())
 }
 

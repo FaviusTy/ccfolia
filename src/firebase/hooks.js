@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
 
-import { db } from './core'
+import { db, auth } from './core'
 
-// Common Functions
-export const useFirestore = (select, action) => {
+export const useFirestore = (select, action, watches = []) => {
   useEffect(() => {
     const ref = select(db)
     return ref.onSnapshot((snapshot) => {
@@ -13,10 +12,14 @@ export const useFirestore = (select, action) => {
         action(snapshot.data())
       }
     })
-  }, [])
+  }, watches)
 }
 
 export const useAuth = (action) => {
   useEffect(() => {
+    return auth.onAuthStateChanged((user) => {
+      action(user)
+    })
   }, [])
+  return auth
 }

@@ -1,6 +1,6 @@
 
-export const collectionReducer = (state, { payload }) => {
-  return [...payload].reduce((currentState, { type, doc }) => {
+export const collectionReducer = (state, { changes }) => {
+  return [...changes].reduce((currentState, { type, doc }) => {
     switch (type) {
       case 'removed': {
         return currentState.filter((item) => {

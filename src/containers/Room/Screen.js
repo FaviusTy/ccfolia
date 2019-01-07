@@ -94,7 +94,6 @@ const mapDispatchToProps = {
   addObj: () => {
     return {
       type: '@OBJECT_ADD',
-      roomId: '0',
       item: {
         x: 0,
         y: 0,
@@ -109,7 +108,6 @@ const mapDispatchToProps = {
   setObjPos: ({ id, position }) => {
     return {
       type: '@OBJECT_SET',
-      roomId: '0',
       itemId: id,
       item: {
         x: position.x,
@@ -119,8 +117,8 @@ const mapDispatchToProps = {
   },
   setObjForm: (item) => {
     return {
-      type: 'FORM_OBJECT_SET',
-      roomId: '0',
+      type: 'FORM_SET',
+      key: 'object',
       item
     }
   }
