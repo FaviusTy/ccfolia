@@ -1,20 +1,32 @@
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Formik, Form, Field } from 'formik'
 
 import Files from './Files'
 
-const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
-  // if (!obj) return null
-  const _obj = obj || { id: 'test', url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
-  const { id, w, h, z, angle, locked } = _obj
+const Z_INDEX_RANGE_ARRAY = [...Array(12)].map((_, i) => i - 1)
+const SIZE_RANGE_ARRAY = [...Array(36)].map((_, i) => i + 1)
+const ANGLE_RANGE_ARRAY = [...Array(12)].map((_, i) => i * 30)
 
+const defaultObj = { id: 'test', url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
+const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
+  if (!obj) return null
+  const { id, url, w, h, z, angle, locked } = {
+    ...defaultObj,
+    ...obj
+  }
+  const [formObj, setFormObj] = useState({ url, w, h, z, angle, locked })
+  useEffect(() => {
+    setFormObj({ url, w, h, z, angle, locked })
+  }, [id])
 
   // callbacks
   const handleSubmit = useCallback((data) => {
     if (!id) return
+    console.log(data)
     setObj({ id, item: data })
+    setFormObj(data)
   }, [id])
   const handleDelete = useCallback((e) => {
     e.preventDefault()
@@ -26,15 +38,21 @@ const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
     close()
   }, [id])
   const handleSelect = useCallback(({ url }) => {
-    setObj({ id, item: { url } })
+    const data = {
+      ...formObj,
+      url
+    }
+    setObj({ id, item: data })
+    setFormObj(data)
   }, [id])
 
   return (<StyledContainer>
     <Formik
       key={id}
-      initialValues={{ w, h, z, angle, locked }}
+      initialValues={formObj}
       onSubmit={handleSubmit}
-    >{() => (
+      enableReinitialize={true}
+    >{({ dirty }) => (
       <Form>
         <Files
           tags={['object', id]}
@@ -44,29 +62,42 @@ const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
         />
         <StyledItems>
           <StyledItem>
-            <label for={id + '-w'}>size</label>
-            <Field id={id + '-w'} type="number" name="w" />
-            <span>×</span>
-            <Field type="number" name="h" />
+            <label htmlFor={id + '-w'}>size</label>
+            <StyledItemGroup>
+              <Field id={id + '-w'} component="select" name="w">
+                {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+              </Field>
+              <span>×</span>
+              <Field component="select" name="h">
+                {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+              </Field>
+            </StyledItemGroup>
           </StyledItem>
           <StyledItem>
-            <label for={id + '-z'}>z-index</label>
-            <Field id="id-z" type="number" name="z" />
+            <label htmlFor={id + '-z'}>z-index</label>
+            <StyledItemGroup>
+              <Field id={id + '-z'} component="select" name="z">
+                {Z_INDEX_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+              </Field>
+            </StyledItemGroup>
           </StyledItem>
           <StyledItem>
-            <label for={id + '-angle'}>angle</label>
-            <Field type="number" name="angle" />
+            <label htmlFor={id + '-angle'}>angle</label>
+            <StyledItemGroup>
+              <Field id={id + '-angle'} component="select" name="angle">
+                {ANGLE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+              </Field>
+            </StyledItemGroup>
           </StyledItem>
           <StyledItem>
-            <label for={id + '-locked'}>locked</label>
-            <Field id={id + '-locked'} type="checkbox" name="locked" defaultChecked={locked} />
+            <label htmlFor={id + '-locked'}>locked</label>
+            <StyledItemGroup>
+              <Field id={id + '-locked'} type="checkbox" name="locked" defaultChecked={locked} />
+            </StyledItemGroup>
           </StyledItem>
-          <StyledActions>
-            <span>actions</span>
-            <button type="submit">SET</button>
-            <a onClick={handleDelete}>DELETE</a>
-            <a onClick={handleClose}>CLOSE</a>
-          </StyledActions>
+          <StyledAction>
+            <button disabled={!dirty}>SAVE</button>
+          </StyledAction>
         </StyledItems>
       </Form>
     )}</Formik>
@@ -112,22 +143,28 @@ const StyledContainer = styled.div`
 `
 
 const StyledItems = styled.div`
+  position: relative;
   display: flex;
-  padding: 0 4px 4px 4px;
+  padding: 4px 8px 8px 8px;
   background: #eee;
+`
+
+const StyledItemGroup = styled.div`
+  display: flex;
+  align-items: center;
+  span {
+    margin: 0 2px;
+    color: #444;
+  }
 `
 
 const StyledItem = styled.div`
   label {
     margin-bottom: 2px;
+    min-width: 42px;
     display: block;
     font-size: 10px;
     color: #444;
-  }
-  span {
-    margin: 2px;
-    color: #444;
-    font-size: 10px;
   }
   input[type=number] {
     padding: 4px;
@@ -137,35 +174,45 @@ const StyledItem = styled.div`
     overflow: hidden;
   }
   input[type=checkbox] {
-    margin: 4px auto;
+    width: 20px;
+    height: 20px;
     display: inline-block;
   }
+  select {
+    padding: 4px 8px;
+    appearance: none;
+    border: none;
+    background: #fff;
+    flex: 1;
+    text-align: center;
+  }
   & + & {
-    margin-left: 4px;
+    margin-left: 8px;
   }
 `
 
-const StyledActions = styled.div`
-  display: flex;
-  align-items: flex-end;
-  span {
-    margin-bottom: 2px;
-    display: block;
-    font-size: 10px;
-    color: #444;
-  }
+const StyledAction = styled.div`
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  bottom: 8px;
   a, button {
     box-sizing: border-box;
     display: block;
     padding: 8px;
     border: none;
-    line-height: 1;
+    border-radius: 4px;
+    line-height: 100%;
+    height: 100%
     outline: none;
     background: #444;
     color: #fff;
-    font-size: 10px;
+    font-size: 12px;
     text-align: center;
     appearance: none;
+  }
+  button:disabled {
+    background: #ccc;
   }
 `
 

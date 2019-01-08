@@ -15,7 +15,7 @@ const File = ({ file, size, onClick }) => {
   const fileType = getTypeFromContentType(file.contentType)
   switch (fileType) {
     case 'image':
-      return <img onClick={handleClick} src={file.url} draggable={false} />
+      return <img onClick={handleClick} src={file.url} width={size} height={size} draggable={false} />
     case 'audio':
       return <audio src={file.url} controls />
     default:
@@ -40,16 +40,18 @@ const Files = ({ files, accept, tags, size, onSelect, fileAdd, fileDeleteAll }) 
     <Dropzone onDrop={handleDrop} accept={accept}>
       {({ getRootProps, getInputProps, isDragActive }) => {
         return (<div {...getRootProps()} className="container" data-active={isDragActive}>
-          <input {...getInputProps()} />
+          <input id="fileInput" {...getInputProps()} />
           {isDragActive ? <StyledDropCover>
             <div><span>Please drop</span></div>
           </StyledDropCover> : null}
-          <div className="body" onClick={(e) => e.stopPropagation()}>
-            <StyledFileItem size={size}>+</StyledFileItem>
-            {files.map((file) => <StyledFileItem size={size}>
-              <File onClick={onSelect} key={file.id} file={file} size={size} />
-            </StyledFileItem>)}
-          </div>
+          <StyledBody onClick={(e) => e.stopPropagation()}>
+            <div className="inner">
+              <StyledFileItem size={size}><label for="fileInput">+</label></StyledFileItem>
+              {files.map((file) => <StyledFileItem size={size}>
+                <File onClick={onSelect} key={file.id} file={file} size={size} />
+              </StyledFileItem>)}
+            </div>
+          </StyledBody>
         </div>)
       }}
     </Dropzone>
@@ -66,7 +68,11 @@ const mapStateToProps = (state, {
     files: state.user.files.filter((file) => {
       const isAcceptedFile = accept.includes(file.contentType)
       const isTaggedFile = tags.every((tag) => {
-        return file.tags.includes(tag)
+        if (file.tags) {
+          return file.tags.includes(tag)
+        } else {
+          return true
+        }
       })
       return isAcceptedFile && isTaggedFile
     }),
@@ -93,6 +99,7 @@ const mapDispatchToProps = {
 }
 
 const StyledContainer = styled.div`
+  box-sizing: border-box;
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -103,23 +110,26 @@ const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
   }
-  .body {
+`
+
+const StyledBody = styled.div`
+  /* padding-bottom: 4px; */
+  /* flex-wrap: wrap; */
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .inner {
     display: flex;
-    padding-bottom: 4px;
-    /* flex-wrap: wrap; */
-    flex: 1;
-    align-content: flex-start;
-    justify-content: flex-start;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    ::-webkit-scrollbar {
-      display: none;
-    }
+    /* align-content: flex-start; */
+    /* justify-content: flex-start; */
   }
 `
 
 const StyledDropCover = styled.div`
-  padding: 8px;
+  padding: 4px;
   position: absolute;
   top: 0;
   left: 0;
@@ -140,16 +150,22 @@ const StyledDropCover = styled.div`
 `
 
 const StyledFileItem = styled.div`
-  margin-right: 4px;
+  margin-right: 8px;
   padding: 4px;
   border-radius: 4px;
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   background: #eee;
   img {
-    width: 100%;
-    height: 100%;
     object-fit: contain;
+  }
+  label {
+    display: block;
+    width: 42px;
+    height: 42px;
+    line-height: 40px;
+    text-align: center;
+    background: #222;
   }
 `
 
