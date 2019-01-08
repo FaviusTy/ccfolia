@@ -17,9 +17,11 @@ const uiConfig = {
 
 const Auth = ({ user }) => {
   const auth = useAuth(() => {})
-  if (user.uid || !user.initialized) return (<LogoutButton onClick={() => auth.signOut()}>
-    {user.isGuest ? `guest:${user.uid.slice(0, 8)}...` : user.displayName}
-  </LogoutButton>)
+  if (user.uid || !user.initialized) {
+    return (<LogoutButton onClick={() => auth.signOut()}>
+      {user.isGuest ? `guest:${user.uid.slice(0, 8)}...` : user.displayName}
+    </LogoutButton>)
+  }
   return (<Container>
     <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
   </Container>)
