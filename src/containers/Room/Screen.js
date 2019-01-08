@@ -46,9 +46,9 @@ const _Obj = ({ obj, size, onDragEnd, onClick }) => {
     onStart={handleDragStart}
     onStop={handleDragEnd}
   >
-    <Item width={width} height={height} z={z} onClick={handleClick}>
-      <Image id={id} width={width} height={height} angle={angle} src={url} draggable="false" />
-    </Item>
+    <StyledItem width={width} height={height} z={z} onClick={handleClick}>
+      <StyledRotateImage id={id} width={width} height={height} angle={angle} src={url} draggable="false" />
+    </StyledItem>
   </Draggable>)
 }
 
@@ -59,14 +59,14 @@ const Screen = ({ field, objects, addObj, setObjPos, setObjForm }) => {
   const height = field.row * field.baseSize
 
   return (<Container>
-    <Draggable><Board width={width} height={height}>
+    <Draggable><StyledBoard width={width} height={height}>
     <GridCanvasImage
       url={field.url}
       size={field.baseSize}
       col={field.col}
       row={field.row}
       span={0}
-      alpha={1}
+      alpha={0.1}
     />
     {objects.map((obj) => <Obj
       key={obj.id}
@@ -75,10 +75,10 @@ const Screen = ({ field, objects, addObj, setObjPos, setObjForm }) => {
       onDragEnd={setObjPos}
       onClick={setObjForm}
     />)}
-    </Board></Draggable>
-    <Controls>
+    </StyledBoard></Draggable>
+    <StyledControls>
       <button onClick={addObj}>New</button>
-    </Controls>
+    </StyledControls>
 
   </Container>)
 }
@@ -108,7 +108,7 @@ const mapDispatchToProps = {
   setObjPos: ({ id, position }) => {
     return {
       type: '@OBJECT_SET',
-      itemId: id,
+      id: id,
       item: {
         x: position.x,
         y: position.y
@@ -126,18 +126,18 @@ const mapDispatchToProps = {
 
 const Container = styled.div``
 
-const Board = styled.div`
+const StyledBoard = styled.div`
   width: ${({ width }) => `${width}px`};
   height: ${({ height }) => `${height}px`};
 `
 
-const Controls = styled.div`
+const StyledControls = styled.div`
   position: absolute;
   bottom: 8px;
   right: 8px;
 `
 
-const Item = styled.figure`
+const StyledItem = styled.figure`
   position: absolute;
   top: 0;
   left: 0;
@@ -148,7 +148,7 @@ const Item = styled.figure`
     background: rgba(255, 255, 255, 0.5);
   }
 `
-const Image = styled.img`
+const StyledRotateImage = styled.img`
   transform: ${({ angle }) => `rotateZ(${angle}deg)`};
 `
 

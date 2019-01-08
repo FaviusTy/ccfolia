@@ -25,12 +25,12 @@ const renderGrid = (ctx, col, row, size, span, alpha) => {
     // ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`
     // ctx.fillRect(posX, posY, rectSize, rectSize)
 
-    ctx.strokeStyle = `rgba(255, 255, 255, 1)`
+    ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`
     ctx.strokeRect(posX, posY, rectSize, rectSize)
 
     ctx.textBaseline = 'top'
     ctx.font = `normal ${~~(size / 4)}px sans-serif`
-    ctx.fillStyle = 'rgba(255, 255, 255, 1)'
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`
     ctx.fillText(`${xName}${yName}`, posX + pad, posY + pad, rectSize - pad * 2)
     i++
   }

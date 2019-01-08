@@ -1,7 +1,7 @@
 import { takeEvery, put, call, fork, select, all } from 'redux-saga/effects'
 import { db, storage } from '../../../firebase/core'
 
-const fileAdd = function* ({ file }) {
+const fileAdd = function* ({ file, tags = [] }) {
   const user = yield select((state) => state.user.auth)
 
   if (!user.uid || !file) return
@@ -13,9 +13,10 @@ const fileAdd = function* ({ file }) {
     name: file.name,
     uploaded: false,
     url: null,
-    contentType: null,
+    contentType: file.type,
     owner: user.uid,
     size: 0,
+    tags,
     t: Date.now()
   }))
 

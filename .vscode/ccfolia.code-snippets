@@ -1,0 +1,40 @@
+{
+	"React Container Component": {
+		"scope": "javascript,typescript",
+		"prefix": "rcc",
+		"body": [
+			"import React, { useEffect } from 'react'",
+			"import { connect } from 'react-redux'",
+			"import styled from 'styled-components'",
+			"",
+			"const ${TM_FILENAME/(.*)\\..+$/$1/} = () => {",
+			"  return (<Container>",
+			"  </Container>)",
+			"}",
+			"",
+			"const mapStateToProps = (state) => {",
+			"  return {}",
+			"}",
+			"",
+			"const mapDispatchToProps = {",
+			"}",
+			"",
+			"const Container = styled.div``",
+			"",
+			"export default connect(",
+			"  mapStateToProps,",
+			"  mapDispatchToProps",
+			")(${TM_FILENAME/(.*)\\..+$/$1/})",
+		],
+		"description": ""
+	},
+	"Print to console": {
+		"scope": "javascript,typescript",
+		"prefix": "log",
+		"body": [
+			"console.log($1)",
+			"$2"
+		],
+		"description": "Log output to console"
+	}
+}

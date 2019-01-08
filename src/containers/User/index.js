@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { useFirestore, useAuth } from '../../firebase/hooks'
 
 import Auth from './Auth'
-import Files from './Files'
 
 const selectFiles = (uid) => (db) => db.collection(`users/${uid}/files`).orderBy('t')
 
@@ -15,7 +14,6 @@ const User = ({ user, fileChanges, initUser }) => {
 
   return (<Container>
     <Auth />
-    <Files />
   </Container>)
 }
 
