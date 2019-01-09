@@ -6,7 +6,9 @@ import { useFirestore } from '../../firebase/hooks'
 
 import Messages from './Messages'
 import Screen from './Screen'
-import ObjEdit from './ObjEdit'
+import EditObj from './EditObj'
+import ChatBox from './ChatBox'
+import Controls from './Controls'
 
 const selectMessages = (id) => (db) => db.collection(`rooms/${id}/messages`).orderBy('t')
 const selectTable = (id) => (db) => db.collection(`rooms/${id}/tables`).doc('default')
@@ -23,8 +25,10 @@ const Room = ({ id, init, messageChanges, objectChanges, tableChange }) => {
   }, [id])
 
   return (<Container>
-    <ObjEdit />
+    <Controls />
+    <EditObj />
     <Screen />
+    <ChatBox />
     <Messages />
   </Container>)
 }
@@ -64,6 +68,10 @@ const mapDispatchToProps = {
 
 const Container = styled.div``
 
+const ChatArea = styled.div`
+  position: absolute;
+`
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
@@ -75,7 +83,7 @@ export default connect(
 // import Messages from './Messages'
 // import Assets from './Assets'
 // import Screen from './Screen'
-// import ObjEdit from './ObjEdit'
+// import EditObj from './EditObj'
 
 // import Blur from 'react-blur'
 
@@ -101,7 +109,7 @@ export default connect(
 //     <ChatArea />
 //     <AssetsArea />
 //     <ScreenArea />
-//     <ObjEdit />
+//     <EditObj />
 //     {/* <Layer></Layer> */}
 //   </Content>)
 // }

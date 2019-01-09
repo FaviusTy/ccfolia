@@ -20,6 +20,7 @@ const _Obj = ({ obj, size, onDragEnd, onClick }) => {
   const width = w * size
   const height = h * size
 
+  const [dragging, setDragging] = useState(false)
   const [pos, setPos] = useState({ x, y })
   useEffect(() => {
     setPos({ x, y })
@@ -29,21 +30,31 @@ const _Obj = ({ obj, size, onDragEnd, onClick }) => {
     e.stopPropagation()
   }, [])
 
-  const handleDragEnd = useCallback((_, position) => {
+  const handleDragMove = useCallback((e) => {
+    if (dragging) return
+    setDragging(true)
+  }, [])
+
+  const handleDragEnd = useCallback((e, position) => {
     setPos(position)
     if (position.x !== pos.x || position.y !== pos.y) {
       onDragEnd({ id, position })
     }
-  }, [pos.x, pos.y])
+  }, [pos.x, pos.y, dragging])
 
-  const handleClick = useCallback(() => {
-    onClick(obj)
-  }, [obj])
+  const handleClick = useCallback((e) => {
+    if (dragging) {
+      setDragging(false)
+    } else {
+      onClick(obj)
+    }
+  }, [dragging])
 
   return (<Draggable
     position={pos}
     disabled={locked}
     onStart={handleDragStart}
+    onDrag={handleDragMove}
     onStop={handleDragEnd}
   >
     <StyledItem width={width} height={height} z={z} onClick={handleClick}>

@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Formik, Form, Field } from 'formik'
+import Effect from '../../modules/formik-effect'
 
 import Files from './Files'
 
@@ -9,24 +10,20 @@ const Z_INDEX_RANGE_ARRAY = [...Array(12)].map((_, i) => i - 1)
 const SIZE_RANGE_ARRAY = [...Array(36)].map((_, i) => i + 1)
 const ANGLE_RANGE_ARRAY = [...Array(12)].map((_, i) => i * 30)
 
-const defaultObj = { id: 'test', url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
-const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
-  if (!obj) return null
-  const { id, url, w, h, z, angle, locked } = {
+const defaultObj = { url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
+const EditObj = ({ obj, setObj, deleteObj, close }) => {
+  // state
+  const formObj = {
     ...defaultObj,
     ...obj
   }
-  const [formObj, setFormObj] = useState({ url, w, h, z, angle, locked })
-  useEffect(() => {
-    setFormObj({ url, w, h, z, angle, locked })
-  }, [id])
+  const { id, url, w, h, z, angle, locked } = formObj
+  const formDataObj = { url, w, h, z, angle, locked }
 
   // callbacks
-  const handleSubmit = useCallback((data) => {
+  const handleSubmit = useCallback((item) => {
     if (!id) return
-    console.log(data)
-    setObj({ id, item: data })
-    setFormObj(data)
+    setObj({ id, item })
   }, [id])
   const handleDelete = useCallback((e) => {
     e.preventDefault()
@@ -37,27 +34,20 @@ const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
     e.preventDefault()
     close()
   }, [id])
-  const handleSelect = useCallback(({ url }) => {
-    const data = {
-      ...formObj,
-      url
-    }
-    setObj({ id, item: data })
-    setFormObj(data)
-  }, [id])
 
+  if (!id) return null
   return (<StyledContainer>
     <Formik
       key={id}
-      initialValues={formObj}
+      initialValues={formDataObj}
       onSubmit={handleSubmit}
-      enableReinitialize={true}
-    >{({ dirty }) => (
+    >{({ setFieldValue }) => (
       <Form>
+        <Effect onChange={handleSubmit}/>
         <Files
           tags={['object', id]}
           accept={['image/png', 'image/jpeg', 'image/gif']}
-          onSelect={handleSelect}
+          onSelect={(file) => setFieldValue('url', file.url)}
           size={42}
         />
         <StyledItems>
@@ -82,10 +72,10 @@ const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
             </StyledItemGroup>
           </StyledItem>
           <StyledItem>
-            <label htmlFor={id + '-angle'}>angle</label>
+            <label htmlFor={id + '-angle'}>rotate</label>
             <StyledItemGroup>
               <Field id={id + '-angle'} component="select" name="angle">
-                {ANGLE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+                {ANGLE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}&deg;</option>)}
               </Field>
             </StyledItemGroup>
           </StyledItem>
@@ -96,7 +86,8 @@ const ObjEdit = ({ obj, setObj, deleteObj, close }) => {
             </StyledItemGroup>
           </StyledItem>
           <StyledAction>
-            <button disabled={!dirty}>SAVE</button>
+            <button onClick={() => deleteObj({ id })} className="del" type="button">Delete</button>
+            {/* <a className="close" href="">CLOSE</a> */}
           </StyledAction>
         </StyledItems>
       </Form>
@@ -115,7 +106,7 @@ const mapDispatchToProps = {
     return {
       type: '@OBJECT_SET',
       id,
-      item: item
+      item
     }
   },
   deleteObj: ({ id }) => {
@@ -134,11 +125,11 @@ const mapDispatchToProps = {
 }
 
 const StyledContainer = styled.div`
-  position: absolute;
+  /* position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 100; */
   background: rgba(0, 0, 0, 0.5);
 `
 
@@ -196,24 +187,31 @@ const StyledAction = styled.div`
   right: 8px;
   top: 8px;
   bottom: 8px;
-  a, button {
+  display: flex;
+  button {
     box-sizing: border-box;
     display: block;
     padding: 8px;
     border: none;
-    border-radius: 4px;
-    line-height: 100%;
-    height: 100%
+    border-radius: 2px;
     outline: none;
-    background: #444;
-    color: #fff;
+    background: #ccc;
+    color: #444;
     font-size: 12px;
     text-align: center;
+    justify-content: center;
     appearance: none;
+  }
+  button.del {
+    background: #844;
+    color: #fff;
+  }
+  button + button {
+    margin-left: 4px;
   }
   button:disabled {
     background: #ccc;
   }
 `
 
-export default connect(mapStateToProps, mapDispatchToProps)(ObjEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(EditObj)

@@ -3,12 +3,19 @@ import { db } from '../../../firebase/core'
 
 // selector
 const selectRoomId = (state) => state.room.id
+const selectUserId = (state) => state.user.auth.uid
 
 // messages
 const messageAdd = function* ({ item }) {
   const roomId = yield select(selectRoomId)
+  const owner = yield select(selectUserId)
+  const t = Date.now()
   if (!roomId) return
-  yield call(() => db.collection(`/rooms/${roomId}/messages`).add(item))
+  yield call(() => db.collection(`/rooms/${roomId}/messages`).add({
+    ...item,
+    owner,
+    t
+  }))
 }
 
 const messageDeleteAll = function* ({ items }) {

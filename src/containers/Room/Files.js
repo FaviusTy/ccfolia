@@ -39,16 +39,16 @@ const Files = ({ files, accept, tags, size, onSelect, fileAdd, fileDeleteAll }) 
     {/* <div className=""><input type="text" /></div> */}
     <Dropzone onDrop={handleDrop} accept={accept}>
       {({ getRootProps, getInputProps, isDragActive }) => {
-        return (<div {...getRootProps()} className="container" data-active={isDragActive}>
+        return (<div {...getRootProps()} className="body" data-active={isDragActive}>
           <input id="fileInput" {...getInputProps()} />
           {isDragActive ? <StyledDropCover>
             <div><span>Please drop</span></div>
           </StyledDropCover> : null}
           <StyledBody onClick={(e) => e.stopPropagation()}>
             <div className="inner">
-              <StyledFileItem size={size}><label for="fileInput">+</label></StyledFileItem>
-              {files.map((file) => <StyledFileItem size={size}>
-                <File onClick={onSelect} key={file.id} file={file} size={size} />
+              <StyledFileItem size={size}><label htmlFor="fileInput">+</label></StyledFileItem>
+              {files.map((file) => <StyledFileItem size={size} key={file.id}>
+                <File onClick={onSelect} file={file} size={size} />
               </StyledFileItem>)}
             </div>
           </StyledBody>
@@ -105,7 +105,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
   position: relative;
   width: 100%;
-  .container {
+  .body {
     outline: none;
     display: flex;
     flex-direction: column;

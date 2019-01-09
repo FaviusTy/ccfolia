@@ -1,8 +1,8 @@
 import React, { memo, useState, useCallback, useRef, useMemo } from 'react'
 import styled from 'styled-components'
 
-import ObjEdit from './ObjEdit'
-import FieldEdit from './FieldEdit'
+import ObjEdit from './EditObj'
+import FieldEdit from './EditField'
 
 import { useGetter, useDispatcher, useObserver } from '../../stores/index'
 
