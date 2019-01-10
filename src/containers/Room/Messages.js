@@ -2,7 +2,7 @@ import React, { memo, useRef, useLayoutEffect } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-const Messages = ({ messages }) => {
+const Messages = ({ messages, uid }) => {
   const wrapRef = useRef(null)
   useLayoutEffect(() => {
     if (wrapRef.current) {
@@ -12,14 +12,14 @@ const Messages = ({ messages }) => {
   return (
     <Container ref={wrapRef}>
       <div className="inner">
-        {messages.map(message => <Message key={message.id} {...message} />)}
+        {messages.map(message => <Message key={message.id} fromMe={uid === message.owner} {...message} />)}
       </div>
     </Container>
   )
 }
 
-const _Message = ({ name, type, text, images, color }) => (
-  <div className="item" from={name === 'KP' ? 'me' : null}>
+const _Message = ({ fromMe, name, type, text, images, color }) => (
+  <div className="item" from={fromMe ? 'me' : null}>
     <h1>{name}</h1>
     <div className="body" style={{ backgroundColor: color }}>
       <p className={type}>{text}</p>
@@ -33,7 +33,8 @@ const Message = memo(_Message)
 
 const mapStateToProps = (state) => {
   return {
-    messages: state.room.messages
+    messages: state.room.messages,
+    uid: state.user.auth.uid
   }
 }
 

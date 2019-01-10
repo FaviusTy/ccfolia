@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import GridCanvasImage from '../../components/GridCanvasImage'
 import Draggable from 'react-draggable'
 
+import { useNoScrollRef } from '../../hooks/no-scroll-ref'
+
 const _Obj = ({ obj, size, onDragEnd, onClick }) => {
   const {
     id,
@@ -68,8 +70,9 @@ const Obj = memo(_Obj)
 const Screen = ({ field, objects, addObj, setObjPos, setObjForm }) => {
   const width = field.col * field.baseSize
   const height = field.row * field.baseSize
+  const containerRef = useNoScrollRef()
 
-  return (<Container>
+  return (<Container ref={containerRef}>
     <Draggable><StyledBoard width={width} height={height}>
     <GridCanvasImage
       url={field.url}

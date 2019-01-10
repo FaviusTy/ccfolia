@@ -87,7 +87,7 @@ const EditObj = ({ obj, setObj, deleteObj, close }) => {
           </StyledItem>
           <StyledAction>
             <button onClick={() => deleteObj({ id })} className="del" type="button">Delete</button>
-            {/* <a className="close" href="">CLOSE</a> */}
+            <button onClick={close} type="button">CLOSE</button>
           </StyledAction>
         </StyledItems>
       </Form>

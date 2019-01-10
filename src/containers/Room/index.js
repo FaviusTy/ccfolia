@@ -4,6 +4,8 @@ import styled from 'styled-components'
 
 import { useFirestore } from '../../firebase/hooks'
 
+import { FaBeer, FaComment, FaDiceD20 } from 'react-icons/fa';
+
 import Messages from './Messages'
 import Screen from './Screen'
 import EditObj from './EditObj'
@@ -25,11 +27,21 @@ const Room = ({ id, init, messageChanges, objectChanges, tableChange }) => {
   }, [id])
 
   return (<Container>
-    <Controls />
-    <EditObj />
-    <Screen />
-    <ChatBox />
-    <Messages />
+    <StyledScreenArea>
+      <Screen />
+    </StyledScreenArea>
+    <StyledChatArea>
+      <Messages />
+      <EditObj />
+      <ChatBox />
+    </StyledChatArea>
+      <StyledMenu>
+        <button type="button"><FaBeer /></button>
+        <button type="button"><FaComment /></button>
+        <button type="button"><FaDiceD20 /></button>
+        <button type="button">D</button>
+        <button type="button">E</button>
+      </StyledMenu>
   </Container>)
 }
 
@@ -66,114 +78,64 @@ const mapDispatchToProps = {
   }
 }
 
-const Container = styled.div``
+const Container = styled.div`
+  /* :before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    filter: blur(8px);
+    background: url(/bg.jpg);
+    background-size: cover;
+  } */
+`
 
-const ChatArea = styled.div`
+const StyledMenu = styled.div`
+  display: flex;
+  flex-direction: column;
   position: absolute;
+  right: 8px;
+  bottom: 42%;
+  button {
+    border: none;
+    border-radius: 50%;
+    outline: none;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.4);
+    color: #eee;
+    font-size: 14px;
+  }
+  button + button {
+    margin-top: 8px;
+  }
+`
+
+const StyledChatArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.2);
+`
+
+const StyledScreenArea = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
 `
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Room)
-
-// import { useGetter, useDispatcher, useObserver } from '../../stores/index'
-
-// import Chat from './Chat'
-// import Messages from './Messages'
-// import Assets from './Assets'
-// import Screen from './Screen'
-// import EditObj from './EditObj'
-
-// import Blur from 'react-blur'
-
-// const Room = ({ id }) => {
-//   const uid = useGetter('user:id')
-//   const table = useGetter('room:table', id)
-
-//   useObserver('room:messages', id)
-//   useObserver('room:table', id)
-//   useObserver('user:assets', uid)
-
-//   const { commit } = useDispatcher()
-
-//   // init
-//   useEffect(() => {
-//     commit('room:init', id)
-//     return () => commit('room:init', null)
-//   }, [id])
-
-//   return (<Content>
-//     {/* <Background key={table.background.url} img={table.background.url} blurRadius={8} /> */}
-//     <MessagesArea />
-//     <ChatArea />
-//     <AssetsArea />
-//     <ScreenArea />
-//     <EditObj />
-//     {/* <Layer></Layer> */}
-//   </Content>)
-// }
-
-// const Content = styled.div`
-//   display: grid;
-//   grid-template-rows: 60px 1fr 42px;
-//   grid-template-columns: 1fr 30%;
-//   grid-template-areas:
-//     "header side"
-//     "main side"
-//     "main bottom"
-//   ;
-//   height: 100vh;
-//   overflow: hidden;
-//   @media (max-width: 720px) {
-//     grid-template-rows: 60px 1fr 40% 42px;
-//     grid-template-columns: 1fr;
-//     grid-template-areas:
-//       "header"
-//       "main"
-//       "side"
-//       "bottom"
-//     ;
-//   }
-// `
-
-// const AssetsArea = styled(Assets)`
-//   grid-area: 1 / 1 / 99 / 99;
-//   background: rgba(0, 0, 0, 0.8) !important;
-//   z-index: 100;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `
-
-// const Background = styled(Blur)`
-//   grid-area: 1 / 1 / 99 / 99;
-//   z-index: -1;
-//   object-fit: cover;
-// `
-
-// const MessagesArea = styled(Messages)`
-//   grid-area: side;
-//   background: rgba(0, 0, 0, 0.2);
-//   z-index: 10;
-// `
-
-// const ChatArea = styled(Chat)`
-//   grid-area: bottom;
-//   background: #eee;
-//   z-index: 10;
-// `
-
-// const ScreenArea = styled(Screen)`
-//   grid-area: main;
-//   overflow: hidden;
-//   z-index: 1;
-// `
-
-// const Popup = styled.div`
-//   width: 80%;
-//   height: 80%;
-//   background: #fff;
-// `
-
-// export default Room

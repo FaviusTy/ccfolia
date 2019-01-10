@@ -126,6 +126,7 @@ export default compose(
   ),
   withFormik({
     mapPropsToValues,
-    handleSubmit
+    handleSubmit,
+    enableReinitialize: true
   })
 )(ChatBox)
