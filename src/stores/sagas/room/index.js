@@ -39,6 +39,8 @@ const objAdd = function* ({ item }) {
 }
 const objSet = function* ({ id, item }) {
   const roomId = yield select(selectRoomId)
+  console.log(!roomId)
+
   if (!roomId || !id) return
   yield call(() => db.collection(`/rooms/${roomId}/objects`).doc(id).set(item, { merge: true }))
 }
@@ -53,7 +55,7 @@ const objDelete = function* ({ id }) {
 const tableSet = function* ({ item }) {
   const roomId = yield select(selectRoomId)
   if (!roomId) return
-  yield call(() => db.collection(`/rooms/${roomId}/table`).doc('default').set(item, { merge: true }))
+  yield call(() => db.collection(`/rooms/${roomId}/tables`).doc('default').set(item, { merge: true }))
 }
 
 // watcher

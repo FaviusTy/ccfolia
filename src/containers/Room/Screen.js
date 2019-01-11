@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import GridCanvasImage from '../../components/GridCanvasImage'
 import Draggable from 'react-draggable'
+import Blur from 'react-blur'
 
 import { useNoScrollRef } from '../../hooks/no-scroll-ref'
 
@@ -50,7 +51,7 @@ const _Obj = ({ obj, size, onDragEnd, onClick }) => {
     } else {
       onClick(obj)
     }
-  }, [dragging])
+  }, [dragging, obj])
 
   return (<Draggable
     position={pos}
@@ -67,12 +68,13 @@ const _Obj = ({ obj, size, onDragEnd, onClick }) => {
 
 const Obj = memo(_Obj)
 
-const Screen = ({ field, objects, addObj, setObjPos, setObjForm }) => {
+const Screen = ({ background, field, objects, addObj, setObjPos, setObjForm }) => {
   const width = field.col * field.baseSize
   const height = field.row * field.baseSize
   const containerRef = useNoScrollRef()
 
   return (<Container ref={containerRef}>
+    <StyledBlur img={background.url} blurRadius={8} />
     <Draggable><StyledBoard width={width} height={height}>
     <GridCanvasImage
       url={field.url}
@@ -98,8 +100,11 @@ const Screen = ({ field, objects, addObj, setObjPos, setObjForm }) => {
 }
 
 const mapStateToProps = (state) => {
+  console.log(state.room.table.field)
+
   return {
     field: state.room.table.field,
+    background: state.room.table.background,
     objects: state.room.objects
   }
 }
@@ -139,6 +144,15 @@ const mapDispatchToProps = {
 }
 
 const Container = styled.div``
+
+const StyledBlur = styled(Blur)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+`
 
 const StyledBoard = styled.div`
   width: ${({ width }) => `${width}px`};

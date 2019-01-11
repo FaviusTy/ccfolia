@@ -4,11 +4,11 @@ import styled from 'styled-components'
 
 import { useFirestore } from '../../firebase/hooks'
 
-import { FaBeer, FaComment, FaDiceD20 } from 'react-icons/fa';
-
 import Messages from './Messages'
 import Screen from './Screen'
 import EditObj from './EditObj'
+import EditField from './EditField'
+import EditBG from './EditBG'
 import ChatBox from './ChatBox'
 import Controls from './Controls'
 
@@ -32,16 +32,16 @@ const Room = ({ id, init, messageChanges, objectChanges, tableChange }) => {
     </StyledScreenArea>
     <StyledChatArea>
       <Messages />
-      <EditObj />
       <ChatBox />
+      <StyledInputArea>
+        <EditField />
+        <EditObj />
+        <EditBG />
+      </StyledInputArea>
     </StyledChatArea>
-      <StyledMenu>
-        <button type="button"><FaBeer /></button>
-        <button type="button"><FaComment /></button>
-        <button type="button"><FaDiceD20 /></button>
-        <button type="button">D</button>
-        <button type="button">E</button>
-      </StyledMenu>
+    <StyledMenu>
+      <Controls />
+    </StyledMenu>
   </Container>)
 }
 
@@ -94,24 +94,18 @@ const Container = styled.div`
 `
 
 const StyledMenu = styled.div`
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 12px;
   position: absolute;
-  right: 8px;
-  bottom: 42%;
-  button {
-    border: none;
-    border-radius: 50%;
-    outline: none;
-    width: 36px;
-    height: 36px;
-    background: rgba(0, 0, 0, 0.4);
-    color: #eee;
-    font-size: 14px;
-  }
-  button + button {
-    margin-top: 8px;
-  }
+  right: 0;
+  bottom: 40%;
+`
+
+const StyledInputArea = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* top: 0; */
 `
 
 const StyledChatArea = styled.div`

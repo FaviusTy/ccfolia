@@ -105,6 +105,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
   position: relative;
   width: 100%;
+  flex: 1;
   .body {
     outline: none;
     display: flex;
@@ -114,7 +115,7 @@ const StyledContainer = styled.div`
 
 const StyledBody = styled.div`
   /* padding-bottom: 4px; */
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
   flex: 1;
   overflow: auto;
   -webkit-overflow-scrolling: touch;

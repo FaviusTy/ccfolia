@@ -1,8 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react'
+import { compose } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Formik, Form, Field } from 'formik'
-import Effect from '../../modules/formik-effect'
+import { withFormik, Form, Field } from 'formik'
+import { FormikEffect } from '../../modules/formik-effect'
 
 import Files from './Files'
 
@@ -10,94 +11,72 @@ const Z_INDEX_RANGE_ARRAY = [...Array(12)].map((_, i) => i - 1)
 const SIZE_RANGE_ARRAY = [...Array(36)].map((_, i) => i + 1)
 const ANGLE_RANGE_ARRAY = [...Array(12)].map((_, i) => i * 30)
 
-const defaultObj = { url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
-const EditObj = ({ obj, setObj, deleteObj, close }) => {
-  // state
-  const formObj = {
-    ...defaultObj,
-    ...obj
-  }
-  const { id, url, w, h, z, angle, locked } = formObj
-  const formDataObj = { url, w, h, z, angle, locked }
+const EditObj = ({ obj, deleteObj, setFieldValue, submitForm, values }) => {
 
   // callbacks
-  const handleSubmit = useCallback((item) => {
-    if (!id) return
-    setObj({ id, item })
-  }, [id])
-  const handleDelete = useCallback((e) => {
-    e.preventDefault()
-    if (!id) return
-    deleteObj({ id })
-  }, [id])
-  const handleClose = useCallback((e) => {
-    e.preventDefault()
-    close()
+  const handleChange = useCallback((item) => {
+    submitForm()
   }, [id])
 
-  if (!id) return null
+  if (!obj || !obj.id) return null
+  const id = obj.id
   return (<StyledContainer>
-    <Formik
-      key={id}
-      initialValues={formDataObj}
-      onSubmit={handleSubmit}
-    >{({ setFieldValue }) => (
-      <Form>
-        <Effect onChange={handleSubmit}/>
-        <Files
-          tags={['object', id]}
-          accept={['image/png', 'image/jpeg', 'image/gif']}
-          onSelect={(file) => setFieldValue('url', file.url)}
-          size={42}
-        />
-        <StyledItems>
-          <StyledItem>
-            <label htmlFor={id + '-w'}>size</label>
-            <StyledItemGroup>
-              <Field id={id + '-w'} component="select" name="w">
-                {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
-              </Field>
-              <span>×</span>
-              <Field component="select" name="h">
-                {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
-              </Field>
-            </StyledItemGroup>
-          </StyledItem>
-          <StyledItem>
-            <label htmlFor={id + '-z'}>z-index</label>
-            <StyledItemGroup>
-              <Field id={id + '-z'} component="select" name="z">
-                {Z_INDEX_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
-              </Field>
-            </StyledItemGroup>
-          </StyledItem>
-          <StyledItem>
-            <label htmlFor={id + '-angle'}>rotate</label>
-            <StyledItemGroup>
-              <Field id={id + '-angle'} component="select" name="angle">
-                {ANGLE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}&deg;</option>)}
-              </Field>
-            </StyledItemGroup>
-          </StyledItem>
-          <StyledItem>
-            <label htmlFor={id + '-locked'}>locked</label>
-            <StyledItemGroup>
-              <Field id={id + '-locked'} type="checkbox" name="locked" defaultChecked={locked} />
-            </StyledItemGroup>
-          </StyledItem>
-          <StyledAction>
-            <button onClick={() => deleteObj({ id })} className="del" type="button">Delete</button>
-            <button onClick={close} type="button">CLOSE</button>
-          </StyledAction>
-        </StyledItems>
-      </Form>
-    )}</Formik>
+    <Files
+      tags={['object', id]}
+      accept={['image/png', 'image/jpeg', 'image/gif']}
+      onSelect={(file) => setFieldValue('url', file.url)}
+      size={42}
+    />
+    <Form>
+      <FormikEffect onChange={handleChange} />
+      <StyledItems>
+        <StyledItem>
+          <label htmlFor={id + '-w'}>size</label>
+          <StyledItemGroup>
+            <Field id={id + '-w'} component="select" name="w">
+              {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+            </Field>
+            <span>×</span>
+            <Field component="select" name="h">
+              {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+            </Field>
+          </StyledItemGroup>
+        </StyledItem>
+        <StyledItem>
+          <label htmlFor={id + '-z'}>z-index</label>
+          <StyledItemGroup>
+            <Field id={id + '-z'} component="select" name="z">
+              {Z_INDEX_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+            </Field>
+          </StyledItemGroup>
+        </StyledItem>
+        <StyledItem>
+          <label htmlFor={id + '-angle'}>rotate</label>
+          <StyledItemGroup>
+            <Field id={id + '-angle'} component="select" name="angle">
+              {ANGLE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}&deg;</option>)}
+            </Field>
+          </StyledItemGroup>
+        </StyledItem>
+        <StyledItem>
+          <label htmlFor={id + '-locked'}>locked</label>
+          <StyledItemGroup>
+            <Field id={id + '-locked'} type="checkbox" name="locked" defaultChecked={values.locked} />
+          </StyledItemGroup>
+        </StyledItem>
+        <StyledAction>
+          <button onClick={() => deleteObj({ id })} className="del" type="button">Delete</button>
+          {/* <button onClick={close} type="button">CLOSE</button> */}
+        </StyledAction>
+      </StyledItems>
+    </Form>
   </StyledContainer>)
 }
 
 const mapStateToProps = (state) => {
+  const { object } = state.room.form
   return {
-    obj: state.room.form.object
+    obj: object
   }
 }
 
@@ -124,13 +103,38 @@ const mapDispatchToProps = {
   },
 }
 
+const mapPropsToValues = ({ obj }) => {
+  const defaultObj = { url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
+  const formObj = {
+    ...defaultObj,
+    ...obj
+  }
+  const { url, w, h, z, angle, locked } = formObj
+
+  return { url, w, h, z, angle, locked }
+}
+
+const handleSubmit = (values, { props }) => {
+  const { setObj, obj } = props
+  setObj({ id: obj.id, item: values })
+}
+
 const StyledContainer = styled.div`
   /* position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 100; */
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+`
+
+const StyledBody = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const StyledItems = styled.div`
@@ -214,4 +218,14 @@ const StyledAction = styled.div`
   }
 `
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditObj)
+export default compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withFormik({
+    mapPropsToValues,
+    handleSubmit,
+    enableReinitialize: true
+  })
+)(EditObj)

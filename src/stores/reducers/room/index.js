@@ -14,6 +14,11 @@ const formReducer = createReducer(initialFormState, {
       ...state,
       [key]: item
     }
+  },
+  FORM_RESET: () => {
+    return {
+      ...initialFormState
+    }
   }
 })
 

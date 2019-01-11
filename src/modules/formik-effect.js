@@ -1,6 +1,6 @@
 // https://github.com/jaredpalmer/formik-effect/issues/4
 
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import { connect } from 'formik'
 
 const compareValues = (values, nextValues) => {
@@ -8,7 +8,7 @@ const compareValues = (values, nextValues) => {
   const nextKeys = Object.keys(nextValues)
   // compare keys
   if (keys.join(',') !== nextKeys.join(',')) {
-    return false
+    return true
   }
   // compare values
   return keys.some((key) => {
@@ -16,21 +16,15 @@ const compareValues = (values, nextValues) => {
   })
 }
 
-class Effect extends Component {
-  componentWillReceiveProps(nextProps) {
-    const { values } = this.props.formik
-    const {
-      values: nextValues
-    } = nextProps.formik
-    if (compareValues(values, nextValues)) {
-      this.props.onChange(nextValues)
+export const _FormikEffect = ({ onChange, formik }) => {
+  const [values, setValues] = useState(formik.values)
+  useEffect(() => {
+    if (compareValues(values, formik.values)) {
+      onChange(formik.values)
+      setValues(formik.values)
     }
-  }
-
-  // eslint-disable-next-line
-  render() {
-    return null
-  }
+  })
+  return null
 }
 
-export default connect(Effect)
+export const FormikEffect = connect(_FormikEffect)

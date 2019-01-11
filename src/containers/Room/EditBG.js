@@ -11,7 +11,7 @@ import Files from './Files'
 const EditField = ({ values, setFieldValue, submitForm }) => {
   return (<StyledContainer>
     <Files
-      tags={['field']}
+      tags={['bg']}
       accept={['image/png', 'image/jpeg', 'image/gif']}
       onSelect={(file) => setFieldValue('url', file.url)}
       size={42}
@@ -24,28 +24,28 @@ const EditField = ({ values, setFieldValue, submitForm }) => {
 
 const mapStateToProps = (state) => {
   return {
-    field: state.room.table.field
+    background: state.room.table.background
   }
 }
 
 const mapDispatchToProps = {
-  setField: (field) => {
+  setBG: (background) => {
     return {
       type: '@TABLE_SET',
       item: {
-        field
+        background
       }
     }
   }
 }
 
-const mapPropsToValues = ({ field }) => {
-  return field
+const mapPropsToValues = ({ background }) => {
+  return background
 }
 
 const handleSubmit = (values, { props }) => {
-  const { setField } = props
-  setField(values)
+  const { setBG } = props
+  setBG(values)
 }
 
 const StyledContainer = styled.div``

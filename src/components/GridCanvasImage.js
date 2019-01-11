@@ -31,7 +31,7 @@ const renderGrid = (ctx, col, row, size, span, alpha) => {
     ctx.textBaseline = 'top'
     ctx.font = `normal ${~~(size / 4)}px sans-serif`
     ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`
-    ctx.fillText(`${xName}${yName}`, posX + pad, posY + pad, rectSize - pad * 2)
+    // ctx.fillText(`${xName}${yName}`, posX + pad, posY + pad, rectSize - pad * 2)
     i++
   }
 }
