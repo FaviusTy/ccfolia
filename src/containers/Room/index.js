@@ -6,9 +6,13 @@ import { useFirestore } from '../../firebase/hooks'
 
 import Messages from './Messages'
 import Screen from './Screen'
+import Table from './Table'
 import EditObj from './EditObj'
 import EditField from './EditField'
 import EditBG from './EditBG'
+import EditMedia from './EditMedia'
+import EditTable from './EditTable'
+import Media from './Media'
 import ChatBox from './ChatBox'
 import Controls from './Controls'
 
@@ -27,18 +31,27 @@ const Room = ({ id, init, messageChanges, objectChanges, tableChange }) => {
   }, [id])
 
   return (<Container>
+    <StyledHeaderArea>
+      <Media />
+    </StyledHeaderArea>
     <StyledScreenArea>
-      <Screen />
+      {/* <Screen /> */}
+      <Table />
     </StyledScreenArea>
     <StyledChatArea>
-      <Messages />
+      {/* <Messages /> */}
       <ChatBox />
       <StyledInputArea>
+        {/* <EditMedia />
         <EditField />
+        <EditBG /> */}
+        <EditTable />
         <EditObj />
-        <EditBG />
       </StyledInputArea>
     </StyledChatArea>
+    <StyledMessagesArea>
+      <Messages />
+    </StyledMessagesArea>
     <StyledMenu>
       <Controls />
     </StyledMenu>
@@ -108,6 +121,13 @@ const StyledInputArea = styled.div`
   /* top: 0; */
 `
 
+const StyledMessagesArea = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 60px;
+  height: 40%;
+`
+
 const StyledChatArea = styled.div`
   display: flex;
   flex-direction: column;
@@ -115,9 +135,16 @@ const StyledChatArea = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40%;
   z-index: 1;
   background: rgba(0, 0, 0, 0.2);
+`
+
+const StyledHeaderArea = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 `
 
 const StyledScreenArea = styled.div`

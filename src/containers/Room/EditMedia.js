@@ -8,12 +8,17 @@ import { FormikEffect } from '../../modules/formik-effect'
 import Files from './Files'
 
 
-const EditBG = ({ values, setFieldValue, submitForm }) => {
+const EditMedia = ({ media, values, setValues, submitForm }) => {
   return (<StyledContainer>
     <Files
       tags={['bg']}
-      accept={['image/png', 'image/jpeg', 'image/gif']}
-      onSelect={(file) => setFieldValue('url', file.url)}
+      accept={['audio/mp3', 'audio/wav']}
+      onSelect={(file) => setValues({
+        name: file.name,
+        url: file.url,
+        volume: 0.1,
+        loop: true
+      })}
       size={42}
     />
     <Form>
@@ -24,16 +29,19 @@ const EditBG = ({ values, setFieldValue, submitForm }) => {
 
 const mapStateToProps = (state) => {
   return {
-    background: state.room.table.background
+    media: state.room.table.media
   }
 }
 
 const mapDispatchToProps = {
-  setBG: (background) => {
+  setMedia: (media) => {
     return {
       type: '@TABLE_SET',
       item: {
-        background
+        media: {
+          ...media,
+          muted: false
+        }
       }
     }
   }
@@ -44,8 +52,8 @@ const mapPropsToValues = ({ background }) => {
 }
 
 const handleSubmit = (values, { props }) => {
-  const { setBG } = props
-  setBG(values)
+  const { setMedia } = props
+  setMedia(values)
 }
 
 const StyledContainer = styled.div``
@@ -60,4 +68,4 @@ export default compose(
     handleSubmit,
     enableReinitialize: true
   })
-)(EditBG)
+)(EditMedia)

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -7,65 +7,104 @@ import { FormikEffect } from '../../modules/formik-effect'
 
 import Files from './Files'
 
-const Z_INDEX_RANGE_ARRAY = [...Array(12)].map((_, i) => i - 1)
 const SIZE_RANGE_ARRAY = [...Array(36)].map((_, i) => i + 1)
-const ANGLE_RANGE_ARRAY = [...Array(12)].map((_, i) => i * 30)
+const BLURSIZE_RANGE_ARRAY = [...Array(24)].map((_, i) => i * 4)
+const BASESIZE_RANGE_ARRAY = [...Array(9)].map((_, i) => (i + 1) * 15)
 
-const EditObj = ({ obj, deleteObj, setFieldValue, submitForm, values }) => {
-
-  // callbacks
-  const handleChange = useCallback((item) => {
-    submitForm()
-  }, [id])
-
-  if (!obj || !obj.id) return null
-  const id = obj.id
+const EditTable = ({ visible, values, submitForm, setFieldValue }) => {
+  if (!visible) return null
   return (<StyledContainer>
+    <h1>BGM</h1>
     <Files
-      tags={['object', id]}
-      accept={['image/png', 'image/jpeg', 'image/gif']}
-      onSelect={(file) => setFieldValue('url', file.url)}
+      tags={['bgm']}
+      accept={['audio/mp3', 'audio/wav']}
+      onSelect={(file) => setFieldValue('media', {
+        name: file.name,
+        url: file.url,
+        volume: 0.1,
+        loop: true
+      })}
       size={42}
     />
+    <Files
+      tags={['bgm']}
+      accept={['audio/mp3', 'audio/wav']}
+      onSelect={(file) => setFieldValue('media', {
+        name: file.name,
+        url: file.url,
+        volume: 0.1,
+        loop: true
+      })}
+      size={42}
+    />
+
+    <h1>Field</h1>
+    <Files
+      tags={['field']}
+      accept={['image/png', 'image/jpeg', 'image/gif']}
+      onSelect={(file) => setFieldValue('field.url', file.url)}
+      size={42}
+    />
+    <Files
+      tags={['field']}
+      accept={['image/png', 'image/jpeg', 'image/gif']}
+      onSelect={(file) => setFieldValue('field.url', file.url)}
+      size={42}
+    />
+
+    <h1>Background</h1>
+    <Files
+      tags={['background']}
+      accept={['image/png', 'image/jpeg', 'image/gif']}
+      onSelect={(file) => setFieldValue('background.url', file.url)}
+      size={42}
+    />
+    <Files
+      tags={['background']}
+      accept={['image/png', 'image/jpeg', 'image/gif']}
+      onSelect={(file) => setFieldValue('background.url', file.url)}
+      size={42}
+    />
+
     <Form>
-      <FormikEffect onChange={handleChange} />
+      <FormikEffect onChange={() => submitForm()} />
       <StyledItems>
         <StyledItem>
-          <label htmlFor={id + '-w'}>size</label>
+          <label>Panel size</label>
           <StyledItemGroup>
-            <Field id={id + '-w'} component="select" name="w">
+            <Field component="select" name="field.col">
               {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
             </Field>
             <span>×</span>
-            <Field component="select" name="h">
+            <Field component="select" name="field.row">
               {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
             </Field>
           </StyledItemGroup>
         </StyledItem>
         <StyledItem>
-          <label htmlFor={id + '-z'}>z-index</label>
+          <label>Cell size</label>
           <StyledItemGroup>
-            <Field id={id + '-z'} component="select" name="z">
-              {Z_INDEX_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+            <Field component="select" name="field.baseSize">
+              {BASESIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
             </Field>
           </StyledItemGroup>
         </StyledItem>
         <StyledItem>
-          <label htmlFor={id + '-angle'}>rotate</label>
+          <label>Hide</label>
           <StyledItemGroup>
-            <Field id={id + '-angle'} component="select" name="angle">
-              {ANGLE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}&deg;</option>)}
-            </Field>
+            <Field type="checkbox" name="field.hidden" checked={values.field.hidden} />
           </StyledItemGroup>
         </StyledItem>
         <StyledItem>
-          <label htmlFor={id + '-locked'}>locked</label>
+          <label>Blur size</label>
           <StyledItemGroup>
-            <Field id={id + '-locked'} type="checkbox" name="locked" checked={values.locked} />
+            <Field component="select" name="background.blur">
+              {BLURSIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
+            </Field>
           </StyledItemGroup>
         </StyledItem>
         <StyledAction>
-          <button onClick={() => deleteObj({ id })} className="del" type="button">Delete</button>
+          {/* <button onClick={() => deleteObj({ id })} className="del" type="button">Delete</button> */}
           {/* <button onClick={close} type="button">CLOSE</button> */}
         </StyledAction>
       </StyledItems>
@@ -74,63 +113,52 @@ const EditObj = ({ obj, deleteObj, setFieldValue, submitForm, values }) => {
 }
 
 const mapStateToProps = (state) => {
-  const { object } = state.room.form
   return {
-    obj: object
+    table: {
+      field: state.room.table.field,
+      media: state.room.table.media,
+      background: state.room.table.background,
+    },
+    visible: state.room.form.table
   }
 }
 
 const mapDispatchToProps = {
-  setObj: ({ id, item }) => {
+  setTable: (item) => {
     return {
-      type: '@OBJECT_SET',
-      id,
+      type: '@TABLE_SET',
       item
     }
-  },
-  deleteObj: ({ id }) => {
-    return {
-      type: '@OBJECT_DELETE',
-      id
-    }
-  },
-  close: () => {
-    return {
-      type: 'FORM_SET',
-      key: 'object',
-      item: null
-    }
-  },
+  }
 }
 
-const mapPropsToValues = ({ obj }) => {
-  const defaultObj = { url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
-  const formObj = {
-    ...defaultObj,
-    ...obj
-  }
-  const { url, w, h, z, angle, locked } = formObj
-
-  return { url, w, h, z, angle, locked }
+const mapPropsToValues = ({ table }) => {
+  return table
 }
 
 const handleSubmit = (values, { props }) => {
-  const { setObj, obj } = props
-  setObj({ id: obj.id, item: values })
+  const { setTable } = props
+  setTable(values)
 }
 
 const StyledContainer = styled.div`
-  /* position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100; */
-  /* background: rgba(0, 0, 0, 0.5); */
-  /* height: 100%; */
   padding-top: 8px;
-  display: flex;
-  flex-direction: column;
   background: #fff;
+  color: #111;
+  h1 {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 0 8px;
+    color: #888;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  h1:first-child {
+    margin-top: 0;
+  }
+  > div {
+    margin-top: 8px;
+  }
 `
 
 const StyledItems = styled.div`
@@ -225,4 +253,4 @@ export default compose(
     handleSubmit,
     enableReinitialize: true
   })
-)(EditObj)
+)(EditTable)

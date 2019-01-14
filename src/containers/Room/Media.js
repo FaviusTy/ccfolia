@@ -1,6 +1,8 @@
-import React, { memo, useState } from 'react'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import ReactHowler from 'react-howler'
+import ReactPlayer from 'react-player'
 import { FaPlay, FaPause } from 'react-icons/fa'
 
 // import ReactPlayer from 'react-player' // todo: support youtube
@@ -19,7 +21,6 @@ const Media = ({ media: { name, url, loop, muted, volume } }) => {
         onStop={() => setPlaying(false)}
       /> : null}
       {/* <ReactPlayer
-        ref={audio}
         className="player"
         url={url}
         playing={playing}
@@ -40,17 +41,27 @@ const Media = ({ media: { name, url, loop, muted, volume } }) => {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    media: state.room.table.media
+  }
+}
+
+const mapDispatchToProps = {
+}
+
 const StyledContainer = styled.div`
   padding: 8px;
   display: flex;
   background: rgba(0, 0, 0, 0.4);
 
   button {
-    color: #fff;
+    border: 1px solid #fff;
     border-radius: 50%;
     width: 36px;
     height: 36px;
     background: rgba(0, 0, 0, 0.4);
+    color: #fff;
     line-height: 1;
     svg {
       vertical-align: middle;
@@ -78,6 +89,7 @@ const StyledContainer = styled.div`
   }
 `
 
-
-
-export default memo(Media)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Media)

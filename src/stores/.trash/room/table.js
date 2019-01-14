@@ -7,7 +7,10 @@ const initialState = () => {
         obj: null
       },
       table: {
-        background: { url: '' },
+        background: {
+          url: '',
+          blur: 8
+        },
         media: {
           url: '',
           loop: true,
@@ -20,9 +23,10 @@ const initialState = () => {
           col: 16,
           row: 9,
           grid: 0,
-          rotate: false
+          rotate: false,
+          hidden: false
         },
-        objects: {},
+        images: {},
       }
     }
   }

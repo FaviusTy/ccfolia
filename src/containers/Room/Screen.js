@@ -74,16 +74,21 @@ const Screen = ({ background, field, objects, addObj, setObjPos, setObjForm }) =
   const containerRef = useNoScrollRef()
 
   return (<Container ref={containerRef}>
-    <StyledBlur img={background.url} blurRadius={8} />
+    <StyledBlur img={background.url} blurRadius={~~background.blur} />
     <Draggable><StyledBoard width={width} height={height}>
-    <GridCanvasImage
+    {!field.hidden ? <GridCanvasImage
       url={field.url}
       size={field.baseSize}
       col={field.col}
       row={field.row}
       span={0}
       alpha={0.1}
-    />
+    /> : <div style={{
+      width: field.col * field.baseSize + 'px',
+      height: field.row * field.baseSize + 'px',
+      background: 'rgba(255, 255, 255, 0.1)',
+      // border: '2px solid rgba(255, 255, 255, 0.2)'
+    }}></div>}
     {objects.map((obj) => <Obj
       key={obj.id}
       obj={obj}
@@ -100,8 +105,6 @@ const Screen = ({ background, field, objects, addObj, setObjPos, setObjForm }) =
 }
 
 const mapStateToProps = (state) => {
-  console.log(state.room.table.field)
-
   return {
     field: state.room.table.field,
     background: state.room.table.background,

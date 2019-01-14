@@ -6,7 +6,7 @@ const identifyReducer = createReducer(null, {
   ROOM_INIT: (_, { id }) => id
 })
 
-const initialFormState = { object: null }
+const initialFormState = { object: null, table: false }
 const formReducer = createReducer(initialFormState, {
   ROOM_INIT: () => initialFormState,
   FORM_SET: (state, { key, item }) => {
@@ -17,7 +17,8 @@ const formReducer = createReducer(initialFormState, {
   },
   FORM_RESET: () => {
     return {
-      ...initialFormState
+      ...initialFormState,
+      table: false
     }
   }
 })
@@ -30,6 +31,14 @@ const messagesReducer = createReducer([], {
 const objectsReducer = createReducer([], {
   ROOM_INIT: () => [],
   OBJECT_CHANGES: collectionReducer,
+})
+
+const imagesReducer = createReducer([], {
+  ROOM_INIT: () => [],
+  TABLE_ADD_TEST: (state, { url }) => {
+    return [...state, url]
+  },
+  IMAGES_CHANGES: collectionReducer,
 })
 
 const initialTableState = {
@@ -65,4 +74,5 @@ export default combineReducers({
   messages: messagesReducer,
   table: tableReducer,
   objects: objectsReducer,
+  images: imagesReducer
 })

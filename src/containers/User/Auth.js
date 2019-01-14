@@ -12,7 +12,10 @@ const uiConfig = {
     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
     firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
   ],
-  callbacks: {}
+  callbacks: {
+    signInFailure: window.alert,
+    // signInSuccess: window.alert
+  }
 }
 
 const Auth = ({ user }) => {

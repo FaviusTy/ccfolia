@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import styled from 'styled-components'
 import { withFormik, Form, Field } from 'formik'
 
-const ChatBox = ({ addMessage, submitForm }) => {
+const ChatBox = ({ submitForm, values }) => {
   const handleKeyPress = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -13,8 +13,8 @@ const ChatBox = ({ addMessage, submitForm }) => {
   }, [handleSubmit])
   return (<StyledContainer>
     <Form>
-      <Field component="select" name="color">
-        <option>-</option>
+      <Field component="select" name="color" style={{ background: values.color }}>
+        <option value="">-</option>
         <option value="#ffcccc">Red</option>
         <option value="#ccccff">Blue</option>
         <option value="#ccffcc">Green</option>
@@ -49,7 +49,7 @@ const mapDispatchToProps = {
 const mapPropsToValues = ({ name }) => {
   return {
     type: 'text',
-    color: null,
+    color: '',
     name: name || 'guest',
     text: ''
   }
@@ -101,7 +101,8 @@ const StyledContainer = styled.div`
     text-align: center;
     text-indent: -9999px;
     width: 8px;
-    appearance: normal;
+    appearance: none;
+    background: #fff;
   }
   nav {
     display: flex;

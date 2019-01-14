@@ -25,6 +25,9 @@ const fileAdd = function* ({ file, tags = [] }) {
     cacheControl: `public,max-age=${60 * 60 * 24 * 30}`, // 30days
   }))
 
+  console.log(metadata)
+
+
   const downloadURL = yield call(() => ref.getDownloadURL())
 
   yield call(() => doc.set({
