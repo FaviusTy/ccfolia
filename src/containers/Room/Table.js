@@ -68,9 +68,8 @@ const mapDispatchToProps = {
 
 const StyledContainer = styled.div`
   height: 100%;
-  .body {
-    height: 100%;
-  }
+  transform-style: preserve-3d;
+  perspective: 3000px;
   button {
     position: absolute;
     top: 60px;
@@ -80,7 +79,9 @@ const StyledContainer = styled.div`
     outline: 1px solid #fff;
   }
 `
-const StyledBody = styled.div``
+const StyledBody = styled.div`
+  height: 100%;
+`
 const StyledDropCover = styled.div`
   padding: 4px;
   position: absolute;

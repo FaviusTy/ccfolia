@@ -22,7 +22,7 @@ const EditObj = ({ obj, deleteObj, setFieldValue, submitForm, values }) => {
   const id = obj.id
   return (<StyledContainer>
     <Files
-      tags={['object', id]}
+      tags={['object']}
       accept={['image/png', 'image/jpeg', 'image/gif']}
       onSelect={(file) => setFieldValue('url', file.url)}
       size={42}

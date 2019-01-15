@@ -35,8 +35,8 @@ const Room = ({ id, init, messageChanges, objectChanges, tableChange }) => {
       <Media />
     </StyledHeaderArea>
     <StyledScreenArea>
-      {/* <Screen /> */}
-      <Table />
+      <Screen />
+      {/* <Table /> */}
     </StyledScreenArea>
     <StyledChatArea>
       {/* <Messages /> */}

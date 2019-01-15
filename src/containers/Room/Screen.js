@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import GridCanvasImage from '../../components/GridCanvasImage'
 import Draggable from 'react-draggable'
+import { Rnd } from 'react-rnd'
 import Blur from 'react-blur'
 
 import { useNoScrollRef } from '../../hooks/no-scroll-ref'
@@ -24,26 +25,32 @@ const _Obj = ({ obj, size, onDragEnd, onClick }) => {
   const height = h * size
 
   const [dragging, setDragging] = useState(false)
-  const [pos, setPos] = useState({ x, y })
+  const [pos, setPos] = useState({ x, y, width, height })
   useEffect(() => {
-    setPos({ x, y })
+    setPos({ x, y, width, height })
   }, [x, y])
 
   const handleDragStart = useCallback((e) => {
     e.stopPropagation()
   }, [])
 
-  const handleDragMove = useCallback((e) => {
+  const handleDragMove = useCallback((_) => {
     if (dragging) return
     setDragging(true)
   }, [])
 
-  const handleDragEnd = useCallback((e, position) => {
+  const handleDragEnd = useCallback((_, data) => {
+    const { lastX: x, lastY: y } = data
+    const position = { x, y }
     setPos(position)
-    if (position.x !== pos.x || position.y !== pos.y) {
+    if (x !== pos.x || y !== pos.y) {
       onDragEnd({ id, position })
     }
   }, [pos.x, pos.y, dragging])
+
+  const handleResizeStop = useCallback((_a, _b, _c, delta) => {
+    setPos(delta)
+  })
 
   const handleClick = useCallback((e) => {
     if (dragging) {
@@ -53,17 +60,20 @@ const _Obj = ({ obj, size, onDragEnd, onClick }) => {
     }
   }, [dragging, obj])
 
-  return (<Draggable
+  return (<Rnd
     position={pos}
     disabled={locked}
-    onStart={handleDragStart}
+    onDragStart={handleDragStart}
     onDrag={handleDragMove}
-    onStop={handleDragEnd}
+    onDragStop={handleDragEnd}
+    onResizeStop={handleResizeStop}
+    resizeGrid={[30, 30]}
+    dragGrid={[30, 30]}
   >
     <StyledItem width={width} height={height} z={z} onClick={handleClick}>
       <StyledRotateImage id={id} width={width} height={height} angle={angle} src={url} draggable="false" />
     </StyledItem>
-  </Draggable>)
+  </Rnd>)
 }
 
 const Obj = memo(_Obj)
@@ -169,9 +179,6 @@ const StyledControls = styled.div`
 `
 
 const StyledItem = styled.figure`
-  position: absolute;
-  top: 0;
-  left: 0;
   z-index: ${({ z }) => z};
   width: ${({ width }) => `${width}px`};
   height: ${({ height }) => `${height}px`};

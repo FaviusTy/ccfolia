@@ -12,7 +12,7 @@ const Messages = ({ messages, uid }) => {
   return (
     <Container ref={wrapRef}>
       <div className="inner">
-        {messages.map(message => <Message key={message.id} fromMe={uid === message.owner} {...message} />)}
+        {messages.slice(-5).map(message => <Message key={message.id} fromMe={uid === message.owner} {...message} />)}
       </div>
     </Container>
   )

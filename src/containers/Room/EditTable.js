@@ -26,25 +26,7 @@ const EditTable = ({ visible, values, submitForm, setFieldValue }) => {
       })}
       size={42}
     />
-    <Files
-      tags={['bgm']}
-      accept={['audio/mp3', 'audio/wav']}
-      onSelect={(file) => setFieldValue('media', {
-        name: file.name,
-        url: file.url,
-        volume: 0.1,
-        loop: true
-      })}
-      size={42}
-    />
-
     <h1>Field</h1>
-    <Files
-      tags={['field']}
-      accept={['image/png', 'image/jpeg', 'image/gif']}
-      onSelect={(file) => setFieldValue('field.url', file.url)}
-      size={42}
-    />
     <Files
       tags={['field']}
       accept={['image/png', 'image/jpeg', 'image/gif']}
@@ -53,12 +35,6 @@ const EditTable = ({ visible, values, submitForm, setFieldValue }) => {
     />
 
     <h1>Background</h1>
-    <Files
-      tags={['background']}
-      accept={['image/png', 'image/jpeg', 'image/gif']}
-      onSelect={(file) => setFieldValue('background.url', file.url)}
-      size={42}
-    />
     <Files
       tags={['background']}
       accept={['image/png', 'image/jpeg', 'image/gif']}
