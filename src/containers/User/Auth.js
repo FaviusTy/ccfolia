@@ -14,32 +14,46 @@ const uiConfig = {
   ],
   callbacks: {
     signInFailure: window.alert,
-    // signInSuccess: window.alert
+    signInSuccess: () => {}
   }
 }
 
-const Auth = ({ user }) => {
-  const auth = useAuth(() => {})
-  if (user.uid || !user.initialized) {
-    return (<LogoutButton onClick={() => auth.signOut()}>
-      {user.isGuest ? `guest:${user.uid.slice(0, 8)}...` : user.displayName}
-    </LogoutButton>)
-  }
-  return (<Container>
+const Auth = ({ user, login }) => {
+  const auth = useAuth(login)
+  // if (user.uid || !user.initialized) {
+  //   return (<LogoutButton onClick={() => auth.signOut()}>
+  //     {user.isGuest ? `guest:${user.uid.slice(0, 8)}...` : user.displayName}
+  //   </LogoutButton>)
+  // }
+  return (<StyledContainer>
+    <button type="button" onClick={() => auth.signOut()}>Logout</button>
     <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-  </Container>)
+  </StyledContainer>)
 }
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.auth
+    user: {}
   }
 }
 
 const mapDispatchToProps = {
+  login: (user) => {
+    if (!user) {
+      return {
+        type: '@USER_INIT',
+        user: null
+      }
+    }
+    const { displayName, isAnonymous, uid } = user
+    return {
+      type: '@USER_INIT',
+      user: { displayName, isAnonymous, uid }
+    }
+  }
 }
 
-const Container = styled.div`
+const StyledContainer = styled.div`
   position: fixed;
   top: 0;
   right: 0;

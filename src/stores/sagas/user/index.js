@@ -6,8 +6,8 @@ const fileAdd = function* ({ file, tags = [] }) {
 
   if (!user.uid || !file) return
 
-  const storageRef = storage.ref(`users/${user.uid}/files`)
-  const collectionRef = db.collection(`/users/${user.uid}/files`)
+  const storageRef = storage.ref(`files`)
+  const collectionRef = db.collection(`files`)
 
   const doc = yield call(() => collectionRef.add({
     name: file.name,
@@ -24,9 +24,6 @@ const fileAdd = function* ({ file, tags = [] }) {
   const metadata = yield call(() => ref.updateMetadata({
     cacheControl: `public,max-age=${60 * 60 * 24 * 30}`, // 30days
   }))
-
-  console.log(metadata)
-
 
   const downloadURL = yield call(() => ref.getDownloadURL())
 
@@ -47,6 +44,7 @@ const fileDelete = function* ({ id }) {
   yield call(() => storageRef.child(id).delete())
   yield call(() => collectionRef.doc('files').delete())
 }
+
 const fileDeleteAll = function* () {
   const user = yield select((state) => state.user.auth)
   const files = yield select((state) => state.user.files)
@@ -73,9 +71,25 @@ const fileDeleteAll = function* () {
 
 // watcher
 const userSaga = function* () {
+  yield takeEvery('@USER_SET', fileAdd)
+
   yield takeEvery('@FILE_ADD', fileAdd)
+  yield takeEvery('@FILE_SET', console.log)
   yield takeEvery('@FILE_DELETE', fileDelete)
-  yield takeEvery('@FILE_DELETE_ALL', fileDeleteAll)
+  // yield takeEvery('@FILE_DELETE_ALL', fileDeleteAll)
+
+  yield takeEvery('@COMMAND_ADD', console.log)
+  yield takeEvery('@COMMAND_SET', console.log)
+  yield takeEvery('@COMMAND_DELETE', console.log)
+
+  yield takeEvery('@CHARACTER_ADD', console.log)
+  yield takeEvery('@CHARACTER_SET', console.log)
+  yield takeEvery('@CHARACTER_DELETE', console.log)
+
+  yield takeEvery('@ROOM_ADD', console.log)
+  yield takeEvery('@ROOM_SET', console.log)
+  yield takeEvery('@ROOM_DELETE', console.log)
+
 }
 
 export default userSaga

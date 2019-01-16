@@ -3,14 +3,14 @@ import { db } from '../../../firebase/core'
 
 // selector
 const selectRoomId = (state) => state.room.id
-const selectUserId = (state) => state.user.auth.uid
+const selectUserId = (state) => state.user.uid
 
 // messages
 const messageAdd = function* ({ item }) {
   const roomId = yield select(selectRoomId)
   const owner = yield select(selectUserId)
   const t = Date.now()
-  if (!roomId) return
+  if (!roomId || !owner) return
   yield call(() => db.collection(`/rooms/${roomId}/messages`).add({
     ...item,
     owner,
@@ -39,8 +39,6 @@ const objAdd = function* ({ item }) {
 }
 const objSet = function* ({ id, item }) {
   const roomId = yield select(selectRoomId)
-  console.log(!roomId)
-
   if (!roomId || !id) return
   yield call(() => db.collection(`/rooms/${roomId}/objects`).doc(id).set(item, { merge: true }))
 }
@@ -61,11 +59,18 @@ const tableSet = function* ({ item }) {
 // watcher
 const roomSaga = function* () {
   yield takeEvery('*', console.log)
+
   yield takeEvery('@MESSAGE_ADD', messageAdd)
   yield takeEvery('@MESSAGE_DELETE_ALL', messageDeleteAll)
-  yield takeEvery('@OBJECT_ADD', objAdd)
-  yield takeEvery('@OBJECT_SET', objSet)
-  yield takeEvery('@OBJECT_DELETE', objDelete)
+
+  yield takeEvery('@TABLE_OBJECT_ADD', console.log)
+  yield takeEvery('@TABLE_OBJECT_SET', console.log)
+  yield takeEvery('@TABLE_OBJECT_DELETE', console.log)
+
+  yield takeEvery('@TABLE_TRACK_ADD', console.log)
+  yield takeEvery('@TABLE_TRACK_SET', console.log)
+  yield takeEvery('@TABLE_TRACK_DELETE', console.log)
+
   yield takeEvery('@TABLE_SET', tableSet)
 }
 
