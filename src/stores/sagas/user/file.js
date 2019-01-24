@@ -1,13 +1,17 @@
 import { takeEvery, call, select, all } from 'redux-saga/effects'
 import { db, storage } from '../../../firebase/core'
 
-const fileAdd = function* ({ file, tags = [] }) {
+export const fileAdd = function* ({ file, tags = [] }) {
   const user = yield select((state) => state.user.auth)
 
   if (!user.uid || !file) return
 
   const storageRef = storage.ref(`files`)
   const collectionRef = db.collection(`files`)
+
+  yield collectionRef.add({
+    t: Date.now()
+  })
 
   const doc = yield call(() => collectionRef.add({
     name: file.name,
@@ -35,7 +39,7 @@ const fileAdd = function* ({ file, tags = [] }) {
   }, { merge: true }))
 }
 
-const fileDelete = function* ({ id }) {
+export const fileDelete = function* ({ id }) {
   const user = yield select((state) => state.user.auth)
   if (!user.uid) return
 
@@ -46,7 +50,7 @@ const fileDelete = function* ({ id }) {
   yield call(() => collectionRef.doc('files').delete())
 }
 
-const fileDeleteAll = function* () {
+export const fileDeleteAll = function* () {
   const user = yield select((state) => state.user.auth)
   const files = yield select((state) => state.user.files)
 

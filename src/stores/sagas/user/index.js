@@ -1,4 +1,4 @@
-import { fork } from 'redux-saga/effects'
+import { take, fork } from 'redux-saga/effects'
 import fileSaga from './file'
 
 // watcher

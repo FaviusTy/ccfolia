@@ -1,4 +1,4 @@
-import { fork } from 'redux-saga/effects'
+import { take, fork } from 'redux-saga/effects'
 
 import roomSaga from './room'
 import userSaga from './user'

@@ -60,18 +60,18 @@ const tableSet = function* ({ item }) {
 const roomSaga = function* () {
   yield takeEvery('*', console.log)
 
-  yield takeEvery('@MESSAGE_ADD', messageAdd)
-  yield takeEvery('@MESSAGE_DELETE_ALL', messageDeleteAll)
+  // yield takeEvery('@MESSAGE_ADD', messageAdd)
+  // yield takeEvery('@MESSAGE_DELETE_ALL', messageDeleteAll)
 
-  yield takeEvery('@TABLE_OBJECT_ADD', console.log)
-  yield takeEvery('@TABLE_OBJECT_SET', console.log)
-  yield takeEvery('@TABLE_OBJECT_DELETE', console.log)
+  // yield takeEvery('@TABLE_OBJECT_ADD', console.log)
+  // yield takeEvery('@TABLE_OBJECT_SET', console.log)
+  // yield takeEvery('@TABLE_OBJECT_DELETE', console.log)
 
-  yield takeEvery('@TABLE_TRACK_ADD', console.log)
-  yield takeEvery('@TABLE_TRACK_SET', console.log)
-  yield takeEvery('@TABLE_TRACK_DELETE', console.log)
+  // yield takeEvery('@TABLE_TRACK_ADD', console.log)
+  // yield takeEvery('@TABLE_TRACK_SET', console.log)
+  // yield takeEvery('@TABLE_TRACK_DELETE', console.log)
 
-  yield takeEvery('@TABLE_SET', tableSet)
+  // yield takeEvery('@TABLE_SET', tableSet)
 }
 
 export default roomSaga
