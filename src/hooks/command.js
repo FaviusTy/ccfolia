@@ -53,11 +53,17 @@ export const useCommand = (dispatch, rid, uid) => {
           case "clear_assets":
             return dispatch("user:assets:clear", uid);
           case "bg":
-            return dispatch("room:table:set", rid, { background: detail.data });
+            return dispatch("room:table:set", rid, {
+              background: detail.data
+            });
           case "field":
-            return dispatch("room:table:set", rid, { field: detail.data });
+            return dispatch("room:table:set", rid, {
+              field: detail.data
+            });
           case "media":
-            return dispatch("room:table:set", rid, { media: detail.data });
+            return dispatch("room:table:set", rid, {
+              media: detail.data
+            });
           case "obj":
             return dispatch("room:table:obj:set", rid, detail.data);
           default:
