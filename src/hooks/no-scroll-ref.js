@@ -1,14 +1,16 @@
-import { useRef, useLayoutEffect } from 'react'
+import { useRef, useLayoutEffect } from "react";
 
-const preventDefault = (e) => e.preventDefault()
+const preventDefault = e => e.preventDefault();
 
 export const useNoScrollRef = () => {
-  const ref = useRef()
+  const ref = useRef();
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.addEventListener('touchmove', preventDefault, { passive: false })
-      return ref.current.removeEventListener('toucmove', preventDefault)
+      ref.current.addEventListener("touchmove", preventDefault, {
+        passive: false
+      });
+      return ref.current.removeEventListener("toucmove", preventDefault);
     }
-  }, [ref.current])
-  return ref
-}
+  }, [ref.current]);
+  return ref;
+};

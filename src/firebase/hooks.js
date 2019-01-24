@@ -1,25 +1,25 @@
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
-import { db, auth } from './core'
+import { db, auth } from "./core";
 
 export const useFirestore = (select, action, watches = []) => {
   useEffect(() => {
-    const ref = select(db)
-    return ref.onSnapshot((snapshot) => {
+    const ref = select(db);
+    return ref.onSnapshot(snapshot => {
       if (snapshot.docs) {
-        action(snapshot.docChanges())
+        action(snapshot.docChanges());
       } else {
-        action(snapshot.data())
+        action(snapshot.data());
       }
-    })
-  }, watches)
-}
+    });
+  }, watches);
+};
 
-export const useAuth = (action) => {
+export const useAuth = action => {
   useEffect(() => {
-    return auth.onAuthStateChanged((user) => {
-      action(user)
-    })
-  }, [])
-  return auth
-}
+    return auth.onAuthStateChanged(user => {
+      action(user);
+    });
+  }, []);
+  return auth;
+};

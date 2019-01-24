@@ -1,23 +1,25 @@
-import React, { memo, useState } from 'react'
-import styled from 'styled-components'
-import ReactHowler from 'react-howler'
-import { FaPlay, FaPause } from 'react-icons/fa'
+import React, { memo, useState } from "react";
+import styled from "styled-components";
+import ReactHowler from "react-howler";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 // import ReactPlayer from 'react-player' // todo: support youtube
 
 const Media = ({ media: { name, url, loop, muted, volume } }) => {
-  const [playing, setPlaying] = useState(true)
+  const [playing, setPlaying] = useState(true);
   return (
     <StyledContainer>
-      {url ? <ReactHowler
-        format={['mp3', 'wav']}
-        src={url}
-        playing={playing}
-        loop={loop}
-        muted={muted}
-        volume={volume}
-        onStop={() => setPlaying(false)}
-      /> : null}
+      {url ? (
+        <ReactHowler
+          format={["mp3", "wav"]}
+          src={url}
+          playing={playing}
+          loop={loop}
+          muted={muted}
+          volume={volume}
+          onStop={() => setPlaying(false)}
+        />
+      ) : null}
       {/* <ReactPlayer
         ref={audio}
         className="player"
@@ -31,14 +33,19 @@ const Media = ({ media: { name, url, loop, muted, volume } }) => {
         width={112}
         height={63}
       /> */}
-      <button onClick={() => setPlaying(!playing)}>{ playing ? <FaPause /> : <FaPlay /> }</button>
+      <button onClick={() => setPlaying(!playing)}>
+        {playing ? <FaPause /> : <FaPlay />}
+      </button>
       <div className="info">
-        <h1>{name || 'NONAME'}</h1>
-        <p>loop:{loop ? 'on' : 'off'} muted:{muted ? 'on' : 'off'} volume:{volume}</p>
+        <h1>{name || "NONAME"}</h1>
+        <p>
+          loop:{loop ? "on" : "off"} muted:{muted ? "on" : "off"} volume:
+          {volume}
+        </p>
       </div>
     </StyledContainer>
-  )
-}
+  );
+};
 
 const StyledContainer = styled.div`
   padding: 8px;
@@ -76,8 +83,6 @@ const StyledContainer = styled.div`
     font-size: 10px;
     color: #eee;
   }
-`
+`;
 
-
-
-export default memo(Media)
+export default memo(Media);
