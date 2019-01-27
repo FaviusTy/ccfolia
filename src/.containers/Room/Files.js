@@ -1,100 +1,142 @@
-import React, { useCallback } from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import Dropzone from 'react-dropzone'
+import React, { useCallback } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import Dropzone from "react-dropzone";
 
-const getTypeFromContentType = (contentType) => {
-  return String(contentType).split('/')[0]
-}
+const getTypeFromContentType = contentType => {
+  return String(contentType).split("/")[0];
+};
 
 const File = ({ file, size, onClick }) => {
   const handleClick = useCallback(() => {
-    onClick(file)
-  }, [file])
-  if (!file.uploaded) return <StyledLoader size={size} />
-  const fileType = getTypeFromContentType(file.contentType)
+    onClick(file);
+  }, [file]);
+  if (!file.uploaded) return <StyledLoader size={size} />;
+  const fileType = getTypeFromContentType(file.contentType);
   switch (fileType) {
-    case 'image':
-      return <img onClick={handleClick} src={file.url} width={size} height={size} draggable={false} />
-    case 'audio':
-      return <button type="button" onClick={handleClick}>{file.name}</button>
+    case "image":
+      return (
+        <img
+          onClick={handleClick}
+          src={file.url}
+          width={size}
+          height={size}
+          draggable={false}
+        />
+      );
+    case "audio":
+      return (
+        <button type="button" onClick={handleClick}>
+          {file.name}
+        </button>
+      );
     default:
-      return <StyledLoader size={size} />
+      return <StyledLoader size={size} />;
   }
-}
+};
 
-const Files = ({ files, accept, tags, size, onSelect, fileAdd, fileDeleteAll }) => {
-  const handleDrop = useCallback((files) => {
-    files.forEach((file) => {
-      fileAdd(file, tags)
-    })
-  }, [...tags])
-  const handleDeleteAllClick = useCallback((e) => {
-    e.preventDefault()
-    fileDeleteAll()
-  }, [])
-
-  return (<StyledContainer>
-    {/* <p><a onClick={handleDeleteAllClick}>DELETE ALL</a></p> */}
-    {/* <div className=""><input type="text" /></div> */}
-    <Dropzone onDrop={handleDrop} disableClick accept={accept}>
-      {({ getRootProps, getInputProps, isDragActive, open }) => {
-        return (<div {...getRootProps()} className="body" data-active={isDragActive}>
-          <input {...getInputProps()} />
-          {isDragActive ? <StyledDropCover>
-            <div><span>Please drop</span></div>
-          </StyledDropCover> : null}
-          <StyledBody>
-            <StyledFileItem size={size}><span onClick={() => open()}>+</span></StyledFileItem>
-            {files.map((file) => <StyledFileItem size={size} key={file.id}>
-              <File onClick={onSelect} file={file} size={size} />
-            </StyledFileItem>)}
-          </StyledBody>
-        </div>)
-      }}
-    </Dropzone>
-  </StyledContainer>)
-}
-
-const mapStateToProps = (state, {
-  accept = ['image/jpeg', 'image/png', 'image/gif'],
-  size = 42,
-  tags = [],
+const Files = ({
+  files,
+  accept,
+  tags,
+  size,
   onSelect,
+  fileAdd,
+  fileDeleteAll
 }) => {
+  const handleDrop = useCallback(
+    files => {
+      files.forEach(file => {
+        fileAdd(file, tags);
+      });
+    },
+    [...tags]
+  );
+  const handleDeleteAllClick = useCallback(e => {
+    e.preventDefault();
+    fileDeleteAll();
+  }, []);
+
+  return (
+    <StyledContainer>
+      {/* <p><a onClick={handleDeleteAllClick}>DELETE ALL</a></p> */}
+      {/* <div className=""><input type="text" /></div> */}
+      <Dropzone onDrop={handleDrop} disableClick accept={accept}>
+        {({ getRootProps, getInputProps, isDragActive, open }) => {
+          return (
+            <div
+              {...getRootProps()}
+              className="body"
+              data-active={isDragActive}
+            >
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <StyledDropCover>
+                  <div>
+                    <span>Please drop</span>
+                  </div>
+                </StyledDropCover>
+              ) : null}
+              <StyledBody>
+                <StyledFileItem size={size}>
+                  <span onClick={() => open()}>+</span>
+                </StyledFileItem>
+                {files.map(file => (
+                  <StyledFileItem size={size} key={file.id}>
+                    <File onClick={onSelect} file={file} size={size} />
+                  </StyledFileItem>
+                ))}
+              </StyledBody>
+            </div>
+          );
+        }}
+      </Dropzone>
+    </StyledContainer>
+  );
+};
+
+const mapStateToProps = (
+  state,
+  {
+    accept = ["image/jpeg", "image/png", "image/gif"],
+    size = 42,
+    tags = [],
+    onSelect
+  }
+) => {
   return {
-    files: state.user.files.filter((file) => {
-      const isAcceptedFile = accept.includes(file.contentType)
-      const isTaggedFile = tags.every((tag) => {
+    files: state.user.files.filter(file => {
+      const isAcceptedFile = accept.includes(file.contentType);
+      const isTaggedFile = tags.every(tag => {
         if (file.tags) {
-          return file.tags.includes(tag)
+          return file.tags.includes(tag);
         } else {
-          return true
+          return true;
         }
-      })
-      return isAcceptedFile && isTaggedFile
+      });
+      return isAcceptedFile && isTaggedFile;
     }),
     size,
     accept,
     tags,
     onSelect
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
   fileAdd: (file, tags) => {
     return {
-      type: '@FILE_ADD',
+      type: "@FILE_ADD",
       file,
       tags
-    }
+    };
   },
   fileDeleteAll: () => {
     return {
-      type: '@FILE_DELETE_ALL'
-    }
+      type: "@FILE_DELETE_ALL"
+    };
   }
-}
+};
 
 const StyledContainer = styled.div`
   padding: 0 8px;
@@ -109,7 +151,7 @@ const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
   }
-`
+`;
 
 const StyledBody = styled.div`
   /* padding-bottom: 4px; */
@@ -120,7 +162,7 @@ const StyledBody = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-`
+`;
 
 const StyledDropCover = styled.div`
   padding: 4px;
@@ -141,7 +183,7 @@ const StyledDropCover = styled.div`
     color: #ccc;
     font-size: 18px;
   }
-`
+`;
 
 const StyledFileItem = styled.div`
   margin-right: 8px;
@@ -182,7 +224,7 @@ const StyledFileItem = styled.div`
       display: none;
     }
   }
-`
+`;
 
 const StyledLoader = styled.div`
   display: inline-block;
@@ -195,9 +237,9 @@ const StyledLoader = styled.div`
     border-radius: 50%;
     width: 0;
     height: 0;
-    margin: ${({ size }) => ~~(6 * size / 64)}px;
+    margin: ${({ size }) => ~~((6 * size) / 64)}px;
     box-sizing: border-box;
-    border: ${({ size }) => ~~(26 * size / 64)}px solid #fff;
+    border: ${({ size }) => ~~((26 * size) / 64)}px solid #fff;
     border-color: #888 transparent #888 transparent;
     animation: lds-hourglass 1.2s infinite;
   }
@@ -214,6 +256,9 @@ const StyledLoader = styled.div`
       transform: rotate(1800deg);
     }
   }
-`
+`;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Files)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Files);

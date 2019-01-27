@@ -1,6 +1,5 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from "react-router-dom";
 
 const MenuBar = () => {
-  <div className="MenuBar">
-  </div>
-}
+  <div className="MenuBar" />;
+};

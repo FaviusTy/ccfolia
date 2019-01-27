@@ -1,13 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import firebase from 'firebase/app'
-import firebaseui from 'firebaseui'
-import { useAuth } from '../../firebase/hooks'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import React from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import firebase from "firebase/app";
+import firebaseui from "firebaseui";
+import { useAuth } from "../../firebase/hooks";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
 const uiConfig = {
-  signInFlow: 'popup',
+  signInFlow: "popup",
   signInOptions: [
     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
     firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
@@ -16,42 +16,46 @@ const uiConfig = {
     signInFailure: window.alert,
     signInSuccess: () => {}
   }
-}
+};
 
 const Auth = ({ user, login }) => {
-  const auth = useAuth(login)
+  const auth = useAuth(login);
   // if (user.uid || !user.initialized) {
   //   return (<LogoutButton onClick={() => auth.signOut()}>
   //     {user.isGuest ? `guest:${user.uid.slice(0, 8)}...` : user.displayName}
   //   </LogoutButton>)
   // }
-  return (<StyledContainer>
-    <button type="button" onClick={() => auth.signOut()}>Logout</button>
-    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-  </StyledContainer>)
-}
+  return (
+    <StyledContainer>
+      <button type="button" onClick={() => auth.signOut()}>
+        Logout
+      </button>
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+    </StyledContainer>
+  );
+};
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     user: {}
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
-  login: (user) => {
+  login: user => {
     if (!user) {
       return {
-        type: '@USER_INIT',
+        type: "@USER_INIT",
         user: null
-      }
+      };
     }
-    const { displayName, isAnonymous, uid } = user
+    const { displayName, isAnonymous, uid } = user;
     return {
-      type: '@USER_INIT',
+      type: "@USER_INIT",
       user: { displayName, isAnonymous, uid }
-    }
+    };
   }
-}
+};
 
 const StyledContainer = styled.div`
   position: fixed;
@@ -63,7 +67,7 @@ const StyledContainer = styled.div`
   padding: 15px;
   background: rgba(0, 0, 0, 0.9);
   text-align: center;
-`
+`;
 
 const LogoutButton = styled.button`
   padding: 2px 4px;
@@ -84,6 +88,9 @@ const LogoutButton = styled.button`
   :hover {
     opacity: 1;
   }
-`
+`;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Auth);

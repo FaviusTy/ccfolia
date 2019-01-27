@@ -1,153 +1,191 @@
-import React, { memo, useState, useCallback, useRef, useMemo } from 'react'
-import styled from 'styled-components'
+import React, { memo, useState, useCallback, useRef, useMemo } from "react";
+import styled from "styled-components";
 
-import ObjEdit from './EditObj'
-import FieldEdit from './EditField'
+import ObjEdit from "./EditObj";
+import FieldEdit from "./EditField";
 
-import { useGetter, useDispatcher, useObserver } from '../../stores/index'
+import { useGetter, useDispatcher, useObserver } from "../../stores/index";
 
-import serialize from 'form-serialize'
+import serialize from "form-serialize";
 
 const Assets = ({ className }) => {
   // states
-  const [currentItem, setCurrentItem] = useState()
+  const [currentItem, setCurrentItem] = useState();
 
   // getters
-  const uid = useGetter('user:id')
-  const rid = useGetter('room:id')
-  const view = useGetter('room:view')
-  const assets = useGetter('user:assets')
+  const uid = useGetter("user:id");
+  const rid = useGetter("room:id");
+  const view = useGetter("room:view");
+  const assets = useGetter("user:assets");
 
   // computed
-  const currentAsset = useMemo(() => assets[0] || { id: 'default' }, [assets])
+  const currentAsset = useMemo(() => assets[0] || { id: "default" }, [assets]);
 
   // callbacks
-  const { dispatch, commit } = useDispatcher()
+  const { dispatch, commit } = useDispatcher();
 
-  const handleClickAdd = useCallback((e) => {
-    e.preventDefault()
-    dispatch('user:assets:add', {
-      name: 'No title',
-      owner: uid
-    })
-  }, [dispatch, uid])
+  const handleClickAdd = useCallback(
+    e => {
+      e.preventDefault();
+      dispatch("user:assets:add", {
+        name: "No title",
+        owner: uid
+      });
+    },
+    [dispatch, uid]
+  );
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault()
-    const target = e.currentTarget
-    const data = serialize(target, { hash: true })
-    dispatch('user:assets:set', currentAsset.id, {
-      owner: uid,
-      items: {
-        [Date.now().toString(34)]: data
-      }
-    })
-    target.url.value = ''
-  }, [dispatch, uid, currentAsset.id])
+  const handleSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      const target = e.currentTarget;
+      const data = serialize(target, { hash: true });
+      dispatch("user:assets:set", currentAsset.id, {
+        owner: uid,
+        items: {
+          [Date.now().toString(34)]: data
+        }
+      });
+      target.url.value = "";
+    },
+    [dispatch, uid, currentAsset.id]
+  );
 
-  const handleFieldSubmit = useCallback((e) => {
-    e.preventDefault()
-    if (!currentItem) return
-    const target = e.currentTarget
-    const data = serialize(target, { hash: true })
-    data.col = ~~data.col
-    data.row = ~~data.row
-    dispatch('room:table:set', rid, {
-      field: {
-        ...data,
-        url: currentItem.url
-      },
-      background: { url: currentItem.url }
-    })
-  }, [dispatch, rid, currentItem])
+  const handleFieldSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      if (!currentItem) return;
+      const target = e.currentTarget;
+      const data = serialize(target, { hash: true });
+      data.col = ~~data.col;
+      data.row = ~~data.row;
+      dispatch("room:table:set", rid, {
+        field: {
+          ...data,
+          url: currentItem.url
+        },
+        background: { url: currentItem.url }
+      });
+    },
+    [dispatch, rid, currentItem]
+  );
 
-  const handleObjDelete = useCallback((id) => {
-    dispatch('room:table:obj:delete', rid, { id })
-  }, [dispatch, rid])
+  const handleObjDelete = useCallback(
+    id => {
+      dispatch("room:table:obj:delete", rid, { id });
+    },
+    [dispatch, rid]
+  );
 
-  const handleObjSubmit = useCallback((e) => {
-    e.preventDefault()
-    if (!currentItem) return
-    const target = e.currentTarget
-    const data = serialize(target, { hash: true })
+  const handleObjSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      if (!currentItem) return;
+      const target = e.currentTarget;
+      const data = serialize(target, { hash: true });
 
-    dispatch('room:table:obj:set', rid, {
-      w: ~~data.width,
-      h: ~~data.height,
-      angle: ~~data.angle,
-      ...currentItem
-    })
-  }, [dispatch, rid, currentItem])
+      dispatch("room:table:obj:set", rid, {
+        w: ~~data.width,
+        h: ~~data.height,
+        angle: ~~data.angle,
+        ...currentItem
+      });
+    },
+    [dispatch, rid, currentItem]
+  );
 
-  const handleChange = useCallback((e) => {
-    e.preventDefault()
-    const target = e.currentTarget
-    const data = target.value
-  }, [])
+  const handleChange = useCallback(e => {
+    e.preventDefault();
+    const target = e.currentTarget;
+    const data = target.value;
+  }, []);
 
-  const handleDelete = useCallback((key) => {
-    // e.preventDefault()
-    const nextItems = { ...currentAsset.items }
-    delete nextItems[key]
-    dispatch('user:assets:items:delete', currentAsset.id, key)
-  }, [currentAsset, dispatch])
+  const handleDelete = useCallback(
+    key => {
+      // e.preventDefault()
+      const nextItems = { ...currentAsset.items };
+      delete nextItems[key];
+      dispatch("user:assets:items:delete", currentAsset.id, key);
+    },
+    [currentAsset, dispatch]
+  );
 
-  const handleSelect = useCallback((item) => {
-    setCurrentItem(item)
-    // dispatch('room:table:obj:set', rid, {
-    //   ...item
-    // })
-    // e.preventDefault()
-    // dispatch('room:messages:add', rid, {
-    //   type: 'images',
-    //   images: [{ url }]
-    // })
-    // dispatch('room:table:set', rid, {
-    //   field: { url },
-    //   background: { url }
-    // })
-  }, [currentAsset, dispatch])
+  const handleSelect = useCallback(
+    item => {
+      setCurrentItem(item);
+      // dispatch('room:table:obj:set', rid, {
+      //   ...item
+      // })
+      // e.preventDefault()
+      // dispatch('room:messages:add', rid, {
+      //   type: 'images',
+      //   images: [{ url }]
+      // })
+      // dispatch('room:table:set', rid, {
+      //   field: { url },
+      //   background: { url }
+      // })
+    },
+    [currentAsset, dispatch]
+  );
 
   // render
-  if (view !== 'assets') return null
-  return (<div className={className}>
-    <div className="container">
-      <header>
-        <button onClick={() => commit('room:view', null)}>close</button>
-      </header>
-      <nav>
-        <button onClick={handleClickAdd}>+</button>
-        {assets.map(({ id, name }) => {
-          return <button key={id}><img src="/bg.jpg" alt=""/></button>
-        })}
-      </nav>
-      <div className="control">
-        <ObjEdit id={'test'} />
-        <FieldEdit />
-        <form onSubmit={handleObjSubmit}>
-          w: <input type="number" name="width" defaultValue={2} />
-          h: <input type="number" name="height" defaultValue={4} />
-          angle: <input type="number" name="angle" defaultValue={0} />
-          <button>OBJECT</button>
-        </form>
+  if (view !== "assets") return null;
+  return (
+    <div className={className}>
+      <div className="container">
+        <header>
+          <button onClick={() => commit("room:view", null)}>close</button>
+        </header>
+        <nav>
+          <button onClick={handleClickAdd}>+</button>
+          {assets.map(({ id, name }) => {
+            return (
+              <button key={id}>
+                <img src="/bg.jpg" alt="" />
+              </button>
+            );
+          })}
+        </nav>
+        <div className="control">
+          <ObjEdit id={"test"} />
+          <FieldEdit />
+          <form onSubmit={handleObjSubmit}>
+            w: <input type="number" name="width" defaultValue={2} />
+            h: <input type="number" name="height" defaultValue={4} />
+            angle: <input type="number" name="angle" defaultValue={0} />
+            <button>OBJECT</button>
+          </form>
 
-        <form onSubmit={handleSubmit}>
-          <input name="url" type="text" />
-          <button>Add</button>
-        </form>
-
-      </div>
-      <div className="main">
-        {currentAsset && currentAsset.items ? Object.keys(currentAsset.items).map((key) => {
-          const { url } = currentAsset.items[key]
-          return <div key={key} className="item" data-current={currentItem && currentItem.url === url}>
-            <img src={url} alt="" onClick={() => handleSelect({ id: currentAsset.id, url })} />
-            <button onClick={() => handleDelete(key)}>del</button>
-          </div>
-        }) : null}
+          <form onSubmit={handleSubmit}>
+            <input name="url" type="text" />
+            <button>Add</button>
+          </form>
+        </div>
+        <div className="main">
+          {currentAsset && currentAsset.items
+            ? Object.keys(currentAsset.items).map(key => {
+                const { url } = currentAsset.items[key];
+                return (
+                  <div
+                    key={key}
+                    className="item"
+                    data-current={currentItem && currentItem.url === url}
+                  >
+                    <img
+                      src={url}
+                      alt=""
+                      onClick={() => handleSelect({ id: currentAsset.id, url })}
+                    />
+                    <button onClick={() => handleDelete(key)}>del</button>
+                  </div>
+                );
+              })
+            : null}
+        </div>
       </div>
     </div>
-  </div>)
+  );
 
   // return (<div className={className}>
   //   <div className="container">
@@ -191,7 +229,7 @@ const Assets = ({ className }) => {
   //     </footer>
   //   </div>
   // </div>)
-}
+};
 
 const StyledAssets = styled(Assets)`
   .container {
@@ -201,8 +239,7 @@ const StyledAssets = styled(Assets)`
     grid-template-areas:
       "head head"
       "side control"
-      "side main"
-    ;
+      "side main";
     width: 90%;
     height: 90%;
   }
@@ -255,10 +292,10 @@ const StyledAssets = styled(Assets)`
       top: 0;
       right: 0;
     }
-    &[data-current=true] {
+    &[data-current="true"] {
       outline: 2px solid #fff;
     }
   }
-`
+`;
 
-export default memo(StyledAssets)
+export default memo(StyledAssets);

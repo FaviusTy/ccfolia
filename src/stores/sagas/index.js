@@ -1,11 +1,15 @@
-import { take, fork } from 'redux-saga/effects'
+import { put, fork } from "redux-saga/effects";
 
-import roomSaga from './room'
-import userSaga from './user'
+import roomSaga from "./room";
+import userSaga from "./user";
 
-const rootSaga = function* () {
-  yield fork(roomSaga)
-  yield fork(userSaga)
-}
+const initialSaga = function*() {
+  yield put({ type: "@APP_INIT" });
+};
 
-export default rootSaga
+const rootSaga = function*() {
+  yield fork(roomSaga);
+  yield fork(userSaga);
+};
+
+export default rootSaga;

@@ -1,44 +1,54 @@
-import React, { memo, useRef, useLayoutEffect } from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
+import React, { memo, useRef, useLayoutEffect } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 
 const Messages = ({ messages, uid }) => {
-  const wrapRef = useRef(null)
+  const wrapRef = useRef(null);
   useLayoutEffect(() => {
     if (wrapRef.current) {
-      wrapRef.current.scrollTop = 99999999
+      wrapRef.current.scrollTop = 99999999;
     }
-  })
+  });
   return (
     <Container ref={wrapRef}>
       <div className="inner">
-        {messages.slice(-5).map(message => <Message key={message.id} fromMe={uid === message.owner} {...message} />)}
+        {messages.slice(-5).map(message => (
+          <Message
+            key={message.id}
+            fromMe={uid === message.owner}
+            {...message}
+          />
+        ))}
       </div>
     </Container>
-  )
-}
+  );
+};
 
 const _Message = ({ fromMe, name, type, text, images, color }) => (
-  <div className="item" from={fromMe ? 'me' : null}>
+  <div className="item" from={fromMe ? "me" : null}>
     <h1>{name}</h1>
     <div className="body" style={{ backgroundColor: color }}>
       <p className={type}>{text}</p>
-      {images ? images.map(({ url }, i) => (
-        <figure key={i}><img src={url} alt="" /></figure>
-      )) : null}
+      {images
+        ? images.map(({ url }, i) => (
+            <figure key={i}>
+              <img src={url} alt="" />
+            </figure>
+          ))
+        : null}
     </div>
   </div>
-)
-const Message = memo(_Message)
+);
+const Message = memo(_Message);
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     messages: state.room.messages,
     uid: state.user.auth.uid
-  }
-}
+  };
+};
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {};
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -114,7 +124,10 @@ const Container = styled.div`
       padding: 4px;
       height: 1em;
       line-height: 1em;
-      background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+      background: linear-gradient(
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 1)
+      );
       text-align: right;
       color: #888;
     }
@@ -143,13 +156,13 @@ const Container = styled.div`
       text-align: right;
     } */
 
-    &[from=me] {
+    &[from="me"] {
     }
-    &[from=me] .body {
+    &[from="me"] .body {
       /* background: #444;
       color: #fff; */
     }
-    &[from=me] h1 {
+    &[from="me"] h1 {
     }
 
     &[from="sys"] {
@@ -168,9 +181,12 @@ const Container = styled.div`
       text-align: center;
     }
   }
-`
+`;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Messages)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Messages);
 
 // import React, { memo, useLayoutEffect, useRef } from 'react'
 // import styled from 'styled-components'

@@ -1,44 +1,54 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
+import React from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 
-import { FaComment, FaDiceD20, FaChessPawn, FaImages } from 'react-icons/fa'
+import { FaComment, FaDiceD20, FaChessPawn, FaImages } from "react-icons/fa";
 
 const Controls = ({ addObj, editTable, close }) => {
-  return (<StyledContainer>
-    <button type="button" onClick={() => editTable()}><FaImages /></button>
-    <button type="button"><FaDiceD20 /></button>
-    <button type="button">E</button>
-    <button type="button" onClick={() => addObj()}><FaChessPawn /></button>
-    <button type="button" onClick={() => close()}><FaComment /></button>
-  </StyledContainer>)
-}
+  return (
+    <StyledContainer>
+      <button type="button" onClick={() => editTable()}>
+        <FaImages />
+      </button>
+      <button type="button">
+        <FaDiceD20 />
+      </button>
+      <button type="button">E</button>
+      <button type="button" onClick={() => addObj()}>
+        <FaChessPawn />
+      </button>
+      <button type="button" onClick={() => close()}>
+        <FaComment />
+      </button>
+    </StyledContainer>
+  );
+};
 
-const mapStateToProps = (state) => {
-  return {}
-}
+const mapStateToProps = state => {
+  return {};
+};
 
 const mapDispatchToProps = {
   addObj: () => {
     return {
-      type: 'FORM_SET',
-      key: 'object',
+      type: "FORM_SET",
+      key: "object",
       item: { id: Date.now().toString(34) }
-    }
+    };
   },
   editTable: () => {
     return {
-      type: 'FORM_SET',
-      key: 'table',
+      type: "FORM_SET",
+      key: "table",
       item: {}
-    }
+    };
   },
   close: () => {
     return {
-      type: 'FORM_RESET'
-    }
-  },
-}
+      type: "FORM_RESET"
+    };
+  }
+};
 
 const StyledContainer = styled.div`
   display: flex;
@@ -60,9 +70,9 @@ const StyledContainer = styled.div`
   button + button {
     margin-top: 8px;
   }
-`
+`;
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Controls)
+)(Controls);

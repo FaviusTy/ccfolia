@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-
 import { db, auth } from "./core";
 
 export const useFirestore = (select, action, watches = []) => {

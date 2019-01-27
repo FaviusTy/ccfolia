@@ -2,11 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-const Login = ({ loginWithTwitter }) => {
-  return <Styled.Container>
-    <button onClick={loginWithTwitter} type="button">Login with Twitter</button>
-    <button type="button">Guest User</button>
-  </Styled.Container>;
+const Login = ({ signInWithTwitter, signInGuest }) => {
+  return (
+    <Styled.Container>
+      <button onClick={signInWithTwitter} type="button">
+        Login with Twitter
+      </button>
+      <button onClick={signInGuest} type="button">
+        Guest User
+      </button>
+    </Styled.Container>
+  );
 };
 
 const Styled = {};
@@ -17,9 +23,14 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  loginWithTwitter: () => {
+  signInWithTwitter: () => {
     return {
-      type: '@hoge'
+      type: "@SIGN_IN_WITH_TWITTER"
+    };
+  },
+  signInGuest: () => {
+    return {
+      type: "@SIGN_IN_GUEST"
     };
   }
 };

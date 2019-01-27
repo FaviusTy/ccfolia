@@ -1,123 +1,161 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import { withFormik, Form, Field } from 'formik'
-import { FormikEffect } from '../../modules/formik-effect'
+import React, { useCallback, useState, useEffect } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import { withFormik, Form, Field } from "formik";
+import { FormikEffect } from "../../modules/formik-effect";
 
-import Files from './Files'
+import Files from "./Files";
 
-const Z_INDEX_RANGE_ARRAY = [...Array(12)].map((_, i) => i - 1)
-const SIZE_RANGE_ARRAY = [...Array(36)].map((_, i) => i + 1)
-const ANGLE_RANGE_ARRAY = [...Array(12)].map((_, i) => i * 30)
+const Z_INDEX_RANGE_ARRAY = [...Array(12)].map((_, i) => i - 1);
+const SIZE_RANGE_ARRAY = [...Array(36)].map((_, i) => i + 1);
+const ANGLE_RANGE_ARRAY = [...Array(12)].map((_, i) => i * 30);
 
 const EditObj = ({ obj, deleteObj, setFieldValue, submitForm, values }) => {
-
   // callbacks
-  const handleChange = useCallback((item) => {
-    submitForm()
-  }, [id])
+  const handleChange = useCallback(
+    item => {
+      submitForm();
+    },
+    [id]
+  );
 
-  if (!obj || !obj.id) return null
-  const id = obj.id
-  return (<StyledContainer>
-    <Files
-      tags={['object']}
-      accept={['image/png', 'image/jpeg', 'image/gif']}
-      onSelect={(file) => setFieldValue('url', file.url)}
-      size={42}
-    />
-    <Form>
-      <FormikEffect onChange={handleChange} />
-      <StyledItems>
-        <StyledItem>
-          <label htmlFor={id + '-w'}>size</label>
-          <StyledItemGroup>
-            <Field id={id + '-w'} component="select" name="w">
-              {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
-            </Field>
-            <span>×</span>
-            <Field component="select" name="h">
-              {SIZE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
-            </Field>
-          </StyledItemGroup>
-        </StyledItem>
-        <StyledItem>
-          <label htmlFor={id + '-z'}>z-index</label>
-          <StyledItemGroup>
-            <Field id={id + '-z'} component="select" name="z">
-              {Z_INDEX_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}</option>)}
-            </Field>
-          </StyledItemGroup>
-        </StyledItem>
-        <StyledItem>
-          <label htmlFor={id + '-angle'}>rotate</label>
-          <StyledItemGroup>
-            <Field id={id + '-angle'} component="select" name="angle">
-              {ANGLE_RANGE_ARRAY.map((i) => <option key={i} value={i}>{i}&deg;</option>)}
-            </Field>
-          </StyledItemGroup>
-        </StyledItem>
-        <StyledItem>
-          <label htmlFor={id + '-locked'}>locked</label>
-          <StyledItemGroup>
-            <Field id={id + '-locked'} type="checkbox" name="locked" checked={values.locked} />
-          </StyledItemGroup>
-        </StyledItem>
-        <StyledAction>
-          <button onClick={() => deleteObj({ id })} className="del" type="button">Delete</button>
-          {/* <button onClick={close} type="button">CLOSE</button> */}
-        </StyledAction>
-      </StyledItems>
-    </Form>
-  </StyledContainer>)
-}
+  if (!obj || !obj.id) return null;
+  const id = obj.id;
+  return (
+    <StyledContainer>
+      <Files
+        tags={["object"]}
+        accept={["image/png", "image/jpeg", "image/gif"]}
+        onSelect={file => setFieldValue("url", file.url)}
+        size={42}
+      />
+      <Form>
+        <FormikEffect onChange={handleChange} />
+        <StyledItems>
+          <StyledItem>
+            <label htmlFor={id + "-w"}>size</label>
+            <StyledItemGroup>
+              <Field id={id + "-w"} component="select" name="w">
+                {SIZE_RANGE_ARRAY.map(i => (
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
+                ))}
+              </Field>
+              <span>×</span>
+              <Field component="select" name="h">
+                {SIZE_RANGE_ARRAY.map(i => (
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
+                ))}
+              </Field>
+            </StyledItemGroup>
+          </StyledItem>
+          <StyledItem>
+            <label htmlFor={id + "-z"}>z-index</label>
+            <StyledItemGroup>
+              <Field id={id + "-z"} component="select" name="z">
+                {Z_INDEX_RANGE_ARRAY.map(i => (
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
+                ))}
+              </Field>
+            </StyledItemGroup>
+          </StyledItem>
+          <StyledItem>
+            <label htmlFor={id + "-angle"}>rotate</label>
+            <StyledItemGroup>
+              <Field id={id + "-angle"} component="select" name="angle">
+                {ANGLE_RANGE_ARRAY.map(i => (
+                  <option key={i} value={i}>
+                    {i}&deg;
+                  </option>
+                ))}
+              </Field>
+            </StyledItemGroup>
+          </StyledItem>
+          <StyledItem>
+            <label htmlFor={id + "-locked"}>locked</label>
+            <StyledItemGroup>
+              <Field
+                id={id + "-locked"}
+                type="checkbox"
+                name="locked"
+                checked={values.locked}
+              />
+            </StyledItemGroup>
+          </StyledItem>
+          <StyledAction>
+            <button
+              onClick={() => deleteObj({ id })}
+              className="del"
+              type="button"
+            >
+              Delete
+            </button>
+            {/* <button onClick={close} type="button">CLOSE</button> */}
+          </StyledAction>
+        </StyledItems>
+      </Form>
+    </StyledContainer>
+  );
+};
 
-const mapStateToProps = (state) => {
-  const { object } = state.room.form
+const mapStateToProps = state => {
+  const { object } = state.room.form;
   return {
     obj: object
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
   setObj: ({ id, item }) => {
     return {
-      type: '@OBJECT_SET',
+      type: "@OBJECT_SET",
       id,
       item
-    }
+    };
   },
   deleteObj: ({ id }) => {
     return {
-      type: '@OBJECT_DELETE',
+      type: "@OBJECT_DELETE",
       id
-    }
+    };
   },
   close: () => {
     return {
-      type: 'FORM_SET',
-      key: 'object',
+      type: "FORM_SET",
+      key: "object",
       item: null
-    }
-  },
-}
+    };
+  }
+};
 
 const mapPropsToValues = ({ obj }) => {
-  const defaultObj = { url: '/bg.jpg', w: 1, h: 1, z: 0, angle: 0, locked: false }
+  const defaultObj = {
+    url: "/bg.jpg",
+    w: 1,
+    h: 1,
+    z: 0,
+    angle: 0,
+    locked: false
+  };
   const formObj = {
     ...defaultObj,
     ...obj
-  }
-  const { url, w, h, z, angle, locked } = formObj
+  };
+  const { url, w, h, z, angle, locked } = formObj;
 
-  return { url, w, h, z, angle, locked }
-}
+  return { url, w, h, z, angle, locked };
+};
 
 const handleSubmit = (values, { props }) => {
-  const { setObj, obj } = props
-  setObj({ id: obj.id, item: values })
-}
+  const { setObj, obj } = props;
+  setObj({ id: obj.id, item: values });
+};
 
 const StyledContainer = styled.div`
   /* position: absolute;
@@ -131,7 +169,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-`
+`;
 
 const StyledItems = styled.div`
   margin-top: 8px;
@@ -139,7 +177,7 @@ const StyledItems = styled.div`
   display: flex;
   padding: 4px 8px 8px 8px;
   background: #eee;
-`
+`;
 
 const StyledItemGroup = styled.div`
   display: flex;
@@ -148,7 +186,7 @@ const StyledItemGroup = styled.div`
     margin: 0 2px;
     color: #444;
   }
-`
+`;
 
 const StyledItem = styled.div`
   label {
@@ -158,14 +196,14 @@ const StyledItem = styled.div`
     font-size: 10px;
     color: #444;
   }
-  input[type=number] {
+  input[type="number"] {
     padding: 4px;
     border: none;
     width: 30px;
     border-radius: 16px;
     overflow: hidden;
   }
-  input[type=checkbox] {
+  input[type="checkbox"] {
     width: 20px;
     height: 20px;
     display: inline-block;
@@ -181,7 +219,7 @@ const StyledItem = styled.div`
   & + & {
     margin-left: 8px;
   }
-`
+`;
 
 const StyledAction = styled.div`
   position: absolute;
@@ -213,7 +251,7 @@ const StyledAction = styled.div`
   button:disabled {
     background: #ccc;
   }
-`
+`;
 
 export default compose(
   connect(
@@ -225,4 +263,4 @@ export default compose(
     handleSubmit,
     enableReinitialize: true
   })
-)(EditObj)
+)(EditObj);

@@ -1,64 +1,77 @@
-import React, { useState, useCallback } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import styled from 'styled-components'
-import { withFormik, Form, Field } from 'formik'
+import React, { useState, useCallback } from "react";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import styled from "styled-components";
+import { withFormik, Form, Field } from "formik";
 
 const ChatBox = ({ submitForm, values }) => {
-  const handleKeyPress = useCallback((e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      submitForm()
-    }
-  }, [handleSubmit])
-  return (<StyledContainer>
-    <Form>
-      <Field component="select" name="color" style={{ background: values.color }}>
-        <option value="">-</option>
-        <option value="#ffcccc">Red</option>
-        <option value="#ccccff">Blue</option>
-        <option value="#ccffcc">Green</option>
-        <option value="#ffffcc">Yellow</option>
-        <option value="#ccffff">Sky</option>
-      </Field>
-      <Field type="text" name="name" />
-      <Field component="textarea" name="text" onKeyPressCapture={handleKeyPress}></Field>
-      <nav>
-        <button type="button">🎲</button>
-        <button type="button">+</button>
-      </nav>
-    </Form>
-  </StyledContainer>)
-}
+  const handleKeyPress = useCallback(
+    e => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        submitForm();
+      }
+    },
+    [handleSubmit]
+  );
+  return (
+    <StyledContainer>
+      <Form>
+        <Field
+          component="select"
+          name="color"
+          style={{ background: values.color }}
+        >
+          <option value="">-</option>
+          <option value="#ffcccc">Red</option>
+          <option value="#ccccff">Blue</option>
+          <option value="#ccffcc">Green</option>
+          <option value="#ffffcc">Yellow</option>
+          <option value="#ccffff">Sky</option>
+        </Field>
+        <Field type="text" name="name" />
+        <Field
+          component="textarea"
+          name="text"
+          onKeyPressCapture={handleKeyPress}
+        />
+        <nav>
+          <button type="button">🎲</button>
+          <button type="button">+</button>
+        </nav>
+      </Form>
+    </StyledContainer>
+  );
+};
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     name: state.user.auth.displayName
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
-  addMessage: (item) => {
+  addMessage: item => {
     return {
-      type: '@MESSAGE_ADD',
+      type: "@MESSAGE_ADD",
       item
-    }
+    };
   }
-}
+};
 
 const mapPropsToValues = ({ name }) => {
   return {
-    type: 'text',
-    color: '',
-    name: name || 'guest',
-    text: ''
-  }
-}
+    type: "text",
+    color: "",
+    name: name || "guest",
+    text: ""
+  };
+};
 
 const handleSubmit = (values, { props, setFieldValue }) => {
-  props.addMessage(values)
-  setFieldValue('text', '')
-}
+  props.addMessage(values);
+  setFieldValue("text", "");
+};
 
 const StyledContainer = styled.div`
   padding: 4px;
@@ -80,14 +93,14 @@ const StyledContainer = styled.div`
     resize: none;
     height: 2.4em;
   }
-  form button[type=submit] {
+  form button[type="submit"] {
     border: none;
     /* outline: none; */
     padding: 4px 8px;
     background: #444;
     color: #fff;
   }
-  form input[type=text] {
+  form input[type="text"] {
     padding: 4px;
     border: none;
     border-right: 4px solid #eee;
@@ -108,7 +121,7 @@ const StyledContainer = styled.div`
     display: flex;
   }
 
-  nav button[type=button] {
+  nav button[type="button"] {
     margin-left: 4px;
     border: none;
     width: 36px;
@@ -118,7 +131,7 @@ const StyledContainer = styled.div`
     color: #444;
     font-size: 16px;
   }
-`
+`;
 
 export default compose(
   connect(
@@ -130,4 +143,4 @@ export default compose(
     handleSubmit,
     enableReinitialize: true
   })
-)(ChatBox)
+)(ChatBox);

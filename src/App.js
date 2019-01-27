@@ -1,22 +1,25 @@
-import React from 'react'
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import { store } from './stores/'
+import React from "react";
+import { Route } from "react-router-dom";
+import { ConnectedRouter as Router } from "connected-react-router";
+import { Provider } from "react-redux";
+import { store, history } from "./stores";
 
-import Login from './containers/Login'
-import Home from './containers/Home'
-import Room from './containers/Room'
+import Login from "./containers/Login";
+import Home from "./containers/Home";
+import Room from "./containers/Room";
 
 const App = () => {
-  return <Router initialEntries={[{ pathname: '/' }]}>
+  return (
     <Provider store={store}>
-      <>
-        <Route exact path="/" component={Login} />
-        <Route exact path="/home" component={Home} />
-        <Route exact path="/room/:id" component={Room} />
-      </>
+      <Router history={history}>
+        <>
+          <Route exact path="/signin" component={Login} />
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/rooms/:id" component={Room} />
+        </>
+      </Router>
     </Provider>
-  </Router>
-}
+  );
+};
 
-export default App
+export default App;
