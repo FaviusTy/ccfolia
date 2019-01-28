@@ -9,45 +9,58 @@ import {
   takeEvery
 } from "redux-saga/effects";
 import { db } from "../../firebase/core";
+import { createStoreSaga } from "../../firebase/saga";
 
-const createMessageChannel = id =>
-  eventChannel(emit => {
-    return db
-      .collection(`rooms/${id}/messages`)
-      .onSnapshot(snapshot => {
-        emit(snapshot.docChanges());
-      });
-  });
-
-const takeMessageChannel = function*({ id }) {
+const listenMessagesChannel = function*({ id }) {
   if (id) {
-    const channel = yield call(createMessageChannel, id);
-    try {
-      while (true) {
-        const changes = yield take(channel);
-        yield put({
-          type: "ROOM_MESSAGE_CHANGES",
-          changes
-        });
-      }
-    } finally {
-      if (yield cancelled()) {
-        channel.close();
-      }
-    }
+    const messagesStoreSaga = createStoreSaga(
+      (db) => db.collection(`rooms/${id}/messages`),
+      "ROOM_MESSAGE_CHANGES"
+    )
+    yield call(messagesStoreSaga)
   }
 };
 
-const messageAdd = function* ({ message }) {
+const messageAdd = function*({ message }) {
   const uid = yield select(state => state.user.uid);
-  console.log(uid)
+  const id = yield select(state => state.room.id);
+  if (uid && id) {
+    yield call(() =>
+      db.collection(`rooms/${id}/messages`).add({
+        ...message,
+        owner: uid
+      })
+    );
+  }
+};
 
-  // const uid = yield select(state => state.user.uid);
+const messageResetAll = function*() {
+  const id = yield select(state => state.room.id);
+  const messages = yield select(state => state.room.messages);
+  const targets = [...messages];
+  const ref = db.collection(`rooms/${id}/messages`);
+  while (targets.length > 0) {
+    const t = targets.splice(-500);
+    const batch = db.batch();
+    t.forEach(({ id }) => {
+      batch.delete(ref.doc(id));
+    });
+    yield call(() => batch.commit());
+  }
+};
+
+const roomInit = function*({ id }) {
+  yield put({
+    type: "ROOM_INIT",
+    id
+  })
 }
 
 const userSaga = function*() {
-  yield takeLatest("@ROOM_INIT", takeMessageChannel);
+  yield takeLatest("@ROOM_INIT", roomInit);
+  yield takeLatest("@ROOM_INIT", listenMessagesChannel);
   yield takeEvery("@ROOM_MESSAGE_ADD", messageAdd);
+  yield takeEvery("@ROOM_MESSAGE_RESET_ALL", messageResetAll);
 };
 
 export default userSaga;

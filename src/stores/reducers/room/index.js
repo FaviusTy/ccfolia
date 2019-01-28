@@ -25,7 +25,7 @@ const formReducer = createReducer(initialFormState, {
 
 const messagesReducer = createReducer([], {
   ROOM_INIT: () => [],
-  MESSAGE_CHANGES: collectionReducer
+  ROOM_MESSAGE_CHANGES: collectionReducer
 });
 
 const objectsReducer = createReducer([], {

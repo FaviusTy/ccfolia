@@ -1,13 +1,27 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import room from "../stores/reducers/room";
 
-const Room = ({ id, addMessage, setTrack, setObject, setField, setCharacter, uploadFile }) => {
+const Room = ({
+  id,
+  messages,
+  addMessage,
+  resetMessageAll,
+  setTrack,
+  setObject,
+  setField,
+  setCharacter,
+  uploadFile
+}) => {
   return (
     <Styled.Container>
       {id}
       <button onClick={addMessage} type="button">
         SEND MESSAGE
+      </button>
+      <button onClick={resetMessageAll} type="button">
+        RESET MESSAGE ALL
       </button>
       <button onClick={setTrack} type="button">
         CHANGE TRACK
@@ -21,7 +35,12 @@ const Room = ({ id, addMessage, setTrack, setObject, setField, setCharacter, upl
       <button onClick={setField} type="button">
         SET FIELD
       </button>
-      <input onChange={(e) => uploadFile(e.target.files)} multiple type="file" />
+      <input onChange={e => uploadFile(e.target.files)} multiple type="file" />
+      {messages.map(({ name, text, id }) => (
+        <p key={id}>
+          {name}: {text}
+        </p>
+      ))}
     </Styled.Container>
   );
 };
@@ -32,7 +51,8 @@ Styled.Container = styled.div``;
 const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
   return {
-    id
+    id,
+    messages: state.room.messages
   };
 };
 
@@ -47,9 +67,14 @@ const mapDispatchToProps = {
     return {
       type: "@ROOM_MESSAGE_ADD",
       message: {
-        name: '',
+        name: "",
         text: "say " + Date.now().toString(16)
       }
+    };
+  },
+  resetMessageAll: () => {
+    return {
+      type: "@ROOM_MESSAGE_RESET_ALL"
     };
   },
   setTrack: () => {
@@ -67,17 +92,19 @@ const mapDispatchToProps = {
     return {
       type: "@ROOM_OBJECT_SET",
       object: {
-        id: 'test',
+        id: "test",
         position: [0, 0],
         size: [1, 1],
-        text: '',
+        text: "",
         hidden: false,
-        status: [{
-          key: 'HP',
-          type: 'number',
-          value: 1,
-          max: 10
-        }]
+        status: [
+          {
+            key: "HP",
+            type: "number",
+            value: 1,
+            max: 10
+          }
+        ]
       }
     };
   },
@@ -85,30 +112,32 @@ const mapDispatchToProps = {
     return {
       type: "ROOM_FIELD_SET",
       field: {
-        images: [{
-          url: '/bg.jpg',
-          size: [1, 1],
-          position: [0, 0]
-        }],
+        images: [
+          {
+            url: "/bg.jpg",
+            size: [1, 1],
+            position: [0, 0]
+          }
+        ],
         background: {
-          url: '/bg.jpg'
+          url: "/bg.jpg"
         }
       }
-    }
+    };
   },
   setCharacter: () => {
     return {
       type: "@CHARACTER_SET",
       character: {
-        name: '',
-        text: '',
+        name: "",
+        text: "",
         status: [],
         params: [],
         tags: []
       }
     };
   },
-  uploadFile: (files) => {
+  uploadFile: files => {
     return {
       type: "@FILE_ADD",
       files
