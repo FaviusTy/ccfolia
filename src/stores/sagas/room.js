@@ -1,23 +1,14 @@
-import { eventChannel } from "redux-saga";
-import {
-  select,
-  call,
-  put,
-  cancelled,
-  take,
-  takeLatest,
-  takeEvery
-} from "redux-saga/effects";
+import { select, call, put, takeLatest, takeEvery } from "redux-saga/effects";
 import { db } from "../../firebase/core";
 import { createStoreSaga } from "../../firebase/saga";
 
 const listenMessagesChannel = function*({ id }) {
   if (id) {
     const messagesStoreSaga = createStoreSaga(
-      (db) => db.collection(`rooms/${id}/messages`),
+      db => db.collection(`rooms/${id}/messages`),
       "ROOM_MESSAGE_CHANGES"
-    )
-    yield call(messagesStoreSaga)
+    );
+    yield call(messagesStoreSaga);
   }
 };
 
@@ -53,8 +44,8 @@ const roomInit = function*({ id }) {
   yield put({
     type: "ROOM_INIT",
     id
-  })
-}
+  });
+};
 
 const userSaga = function*() {
   yield takeLatest("@ROOM_INIT", roomInit);

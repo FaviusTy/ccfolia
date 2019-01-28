@@ -2,13 +2,12 @@ import { select, call, takeLatest, takeEvery } from "redux-saga/effects";
 import { createStoreSaga, authSaga } from "../../firebase/saga";
 import { db } from "../../firebase/core";
 
-
 const listenRoomsChannel = function*({ user }) {
   if (user.uid) {
     const roomsStoreSaga = createStoreSaga(
       db => db.collection("rooms").where("owner", "==", user.uid),
       "ROOM_CHANGES"
-    )
+    );
     yield call(roomsStoreSaga);
   }
 };
