@@ -4,9 +4,9 @@ import { ConnectedRouter as Router } from "connected-react-router";
 import { Provider } from "react-redux";
 import { store, history } from "./stores";
 
-import Login from "./containers/Login";
-import Home from "./containers/Home";
-import Room from "./containers/Room";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Room from "./pages/Room";
 
 const App = () => {
   return (

@@ -30,7 +30,7 @@ export const createStoreSaga = (selector, actionType) =>
 const createAuthChannel = () =>
   eventChannel(emit => {
     return auth.onAuthStateChanged(user => {
-      emit(user);
+      emit(user || { uid: null, displayName: "" });
     });
   });
 
@@ -39,6 +39,5 @@ export const authSaga = function*() {
   while (true) {
     const user = yield take(authChannel);
     yield put({ type: "@SIGN_IN", user });
-    yield put({ type: "SIGN_IN", user });
   }
 };

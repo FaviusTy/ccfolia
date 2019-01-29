@@ -1,4 +1,4 @@
-import { put, fork, call } from "redux-saga/effects";
+import { put, fork, call, takeEvery } from "redux-saga/effects";
 
 import roomSaga from "./room";
 import userSaga from "./user";
@@ -8,6 +8,7 @@ const initialSaga = function*() {
 };
 
 const rootSaga = function*() {
+  yield takeEvery("*", console.log);
   yield call(initialSaga);
   yield fork(roomSaga);
   yield fork(userSaga);

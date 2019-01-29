@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const RoomItem = ({ id, onDelete, i }) => {
+const RoomItem = ({ id, onDelete }) => {
   return (
     <Styled.RoomItem>
       <Link to={`/rooms/${id}`}>ROOM_ID: {id}</Link>
@@ -14,10 +14,10 @@ const RoomItem = ({ id, onDelete, i }) => {
   );
 };
 
-const Home = ({ rooms, addRoom, deleteRoom, user }) => {
+const Home = ({ uid, name, rooms, addRoom, deleteRoom }) => {
   return (
     <Styled.Container>
-      <p>USER_ID: {user.uid}</p>
+      <p>USER_ID: {name || uid}</p>
       <nav>
         {rooms.map(({ id }, i) => {
           return (
@@ -38,8 +38,9 @@ Styled.RoomItem = styled.div``;
 
 const mapStateToProps = state => {
   return {
-    rooms: state.rooms,
-    user: state.user
+    uid: state.user.uid,
+    name: state.user.name,
+    rooms: state.user.rooms
   };
 };
 

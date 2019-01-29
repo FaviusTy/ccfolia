@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import room from "../stores/reducers/room";
+
+import Characters from "../containers/Characters";
 
 const Room = ({
   id,
   messages,
+  tracks,
+  objects,
+  fields,
+  characters,
   addMessage,
   resetMessageAll,
   setTrack,
@@ -29,13 +34,22 @@ const Room = ({
       <button onClick={setObject} type="button">
         SET OBJECT
       </button>
-      <button onClick={setCharacter} type="button">
-        SET CHARACTER
-      </button>
       <button onClick={setField} type="button">
         SET FIELD
       </button>
+      <button onClick={setCharacter} type="button">
+        SET CHARACTER
+      </button>
       <input onChange={e => uploadFile(e.target.files)} multiple type="file" />
+      <hr />
+      <div>{JSON.stringify(tracks)}</div>
+      <hr />
+      <div>{JSON.stringify(objects)}</div>
+      <hr />
+      <div>{JSON.stringify(fields)}</div>
+      <hr />
+      <Characters characters={characters} onSelect={console.log} />
+      <hr />
       {messages.map(({ name, text, id }) => (
         <p key={id}>
           {name}: {text}
@@ -52,7 +66,11 @@ const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
   return {
     id,
-    messages: state.room.messages
+    messages: state.room.messages,
+    objects: state.room.objects,
+    tracks: state.room.tracks,
+    fields: state.room.fields,
+    characters: state.user.characters
   };
 };
 
@@ -67,7 +85,7 @@ const mapDispatchToProps = {
     return {
       type: "@ROOM_MESSAGE_ADD",
       message: {
-        name: "",
+        name: "PL01",
         text: "say " + Date.now().toString(16)
       }
     };
@@ -80,6 +98,7 @@ const mapDispatchToProps = {
   setTrack: () => {
     return {
       type: "@ROOM_TRACK_SET",
+      itemId: "main",
       track: {
         url: "/sample.mp3",
         loop: true,
@@ -91,8 +110,8 @@ const mapDispatchToProps = {
   setObject: () => {
     return {
       type: "@ROOM_OBJECT_SET",
+      itemId: "test",
       object: {
-        id: "test",
         position: [0, 0],
         size: [1, 1],
         text: "",
@@ -110,7 +129,7 @@ const mapDispatchToProps = {
   },
   setField: () => {
     return {
-      type: "ROOM_FIELD_SET",
+      type: "@ROOM_FIELD_SET",
       field: {
         images: [
           {
@@ -128,9 +147,11 @@ const mapDispatchToProps = {
   setCharacter: () => {
     return {
       type: "@CHARACTER_SET",
+      id: "test",
       character: {
-        name: "",
-        text: "",
+        name: "TESTMAN",
+        text: "I am a TESTMAN.",
+        images: [],
         status: [],
         params: [],
         tags: []
