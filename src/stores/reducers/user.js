@@ -25,10 +25,21 @@ const roomsReducer = createReducer([], {
   USER_ROOM_CHANGES: collectionReducer
 });
 
+const formReducer = createReducer(
+  {},
+  {
+    SIGN_IN: () => ({}),
+    USER_FORM_SET: (state, { key, item }) => {
+      state[key] = item;
+    }
+  }
+);
+
 export default combineReducers({
   uid: identifyReducer,
   name: nameReducer,
   files: filesReducer,
   characters: charactersReducer,
-  rooms: roomsReducer
+  rooms: roomsReducer,
+  form: formReducer
 });

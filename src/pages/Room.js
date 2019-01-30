@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-import Characters from "../containers/Characters";
+import CharacterList from "../containers/CharacterList";
+import CharacterForm from "../containers/CharacterForm";
 
 const Room = ({
   id,
@@ -48,7 +49,8 @@ const Room = ({
       <hr />
       <div>{JSON.stringify(fields)}</div>
       <hr />
-      <Characters characters={characters} onSelect={console.log} />
+      <CharacterList />
+      <CharacterForm />
       <hr />
       {messages.map(({ name, text, id }) => (
         <p key={id}>

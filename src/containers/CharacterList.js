@@ -1,11 +1,12 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
+import React from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 
-const Characters = ({ items, add, select, remove }) => {
-  return <Styled.Container>
+const CharacterList = ({ items, add, select, remove }) => {
+  return (
+    <Styled.Container>
       <Styled.List>
-        {items.map((item) => {
+        {items.map(item => {
           return (
             <CharacterItem
               key={item.id}
@@ -19,7 +20,8 @@ const Characters = ({ items, add, select, remove }) => {
         <button onClick={add}>( + )</button>
       </Styled.List>
     </Styled.Container>
-}
+  );
+};
 
 const CharacterItem = ({ name, images, onSelect, onDelete }) => {
   return (
@@ -30,34 +32,38 @@ const CharacterItem = ({ name, images, onSelect, onDelete }) => {
           <img src={images[0].url} />
         </figure>
       ) : null}
-      <button onClick={onDelete} type="button">Delete</button>
-      <button onClick={onSelect} type="button">Add</button>
+      <button onClick={onDelete} type="button">
+        Delete
+      </button>
+      <button onClick={onSelect} type="button">
+        Add
+      </button>
     </Styled.Item>
   );
 };
 
-const Styled = {}
-Styled.Container = styled.div``
+const Styled = {};
+Styled.Container = styled.div``;
 Styled.List = styled.div`
   display: flex;
   flex-wrap: wrap;
-`
+`;
 Styled.Item = styled.div`
   h1 {
     font-size: 12px;
   }
-`
+`;
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     items: state.user.characters
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
   add: () => {
     return {
-      type: '@CHARACTER_SET',
+      type: "@CHARACTER_SET",
       id: Date.now().toString(34),
       character: {
         name: "TESTMAN",
@@ -67,11 +73,11 @@ const mapDispatchToProps = {
         params: [],
         tags: []
       }
-    }
+    };
   },
   select: ({ id }) => {
     return {
-      type: '@ROOM_OBJECT_SET',
+      type: "@ROOM_OBJECT_SET",
       itemId: id,
       object: {
         position: [0, 0],
@@ -87,21 +93,21 @@ const mapDispatchToProps = {
           }
         ]
       }
-    }
+    };
   },
   remove: ({ id }) => {
     return {
-      type: '@CHARACTER_DELETE',
+      type: "@CHARACTER_DELETE",
       id
-    }
+    };
   }
-}
+};
 
-const CharactersContainer = ({ ...props }) => {
-  return <Characters {...props} />
-}
+const CharacterListContainer = ({ ...props }) => {
+  return <CharacterList {...props} />;
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CharactersContainer)
+)(CharacterListContainer);
