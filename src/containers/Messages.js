@@ -7,12 +7,13 @@ const Messages = ({ messages, uid }) => {
   useLayoutEffect(() => {
     if (wrapRef.current) {
       wrapRef.current.scrollTop = 99999999;
+      window.scrollTo(0, 99999999); // for SP
     }
   });
   return (
     <Container ref={wrapRef}>
       <div className="inner">
-        {messages.slice(-5).map(message => (
+        {messages.map(message => (
           <Message
             key={message.id}
             fromMe={uid === message.owner}
@@ -44,7 +45,7 @@ const Message = memo(_Message);
 const mapStateToProps = state => {
   return {
     messages: state.room.messages,
-    uid: state.user.auth.uid
+    uid: state.user.uid
   };
 };
 
@@ -62,6 +63,7 @@ const Container = styled.div`
   }
   .inner {
     margin: 0 auto;
+    padding-bottom: 48px;
     display: flex;
     flex-direction: column;
   }
@@ -73,7 +75,7 @@ const Container = styled.div`
     .body {
       padding: 4px 8px;
       border-radius: 0 8px 8px 8px;
-      background: #fff;
+      background: #eee;
       color: #222;
     }
     h1 {

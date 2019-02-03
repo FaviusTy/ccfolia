@@ -7,10 +7,20 @@ import { FaPlay, FaPause } from "react-icons/fa";
 
 // import ReactPlayer from 'react-player' // todo: support youtube
 
-const Media = ({ media: { name, url, loop, muted, volume } }) => {
+const Tracks = ({ tracks }) => {
+  return (
+    <Styled.Container>
+      {tracks.map(track => (
+        <Track key={track.id} {...track} />
+      ))}
+    </Styled.Container>
+  );
+};
+
+const Track = ({ name, url, loop, muted, volume }) => {
   const [playing, setPlaying] = useState(true);
   return (
-    <StyledContainer>
+    <Styled.Track>
       {url ? (
         <ReactHowler
           format={["mp3", "wav"]}
@@ -22,6 +32,16 @@ const Media = ({ media: { name, url, loop, muted, volume } }) => {
           onStop={() => setPlaying(false)}
         />
       ) : null}
+      <button onClick={() => setPlaying(!playing)}>
+        {playing ? <FaPause /> : <FaPlay />}
+      </button>
+      <div className="info">
+        <h1>{name || "NONAME"}</h1>
+        <p>
+          loop:{loop ? "on" : "off"} muted:{muted ? "on" : "off"} volume:
+          {volume}
+        </p>
+      </div>
       {/* <ReactPlayer
         className="player"
         url={url}
@@ -34,32 +54,24 @@ const Media = ({ media: { name, url, loop, muted, volume } }) => {
         width={112}
         height={63}
       /> */}
-      <button onClick={() => setPlaying(!playing)}>
-        {playing ? <FaPause /> : <FaPlay />}
-      </button>
-      <div className="info">
-        <h1>{name || "NONAME"}</h1>
-        <p>
-          loop:{loop ? "on" : "off"} muted:{muted ? "on" : "off"} volume:
-          {volume}
-        </p>
-      </div>
-    </StyledContainer>
+    </Styled.Track>
   );
 };
 
 const mapStateToProps = state => {
   return {
-    media: state.room.table.media
+    tracks: state.room.tracks
   };
 };
 
 const mapDispatchToProps = {};
 
-const StyledContainer = styled.div`
+const Styled = {};
+Styled.Container = styled.div``;
+Styled.Track = styled.div`
   padding: 8px;
   display: flex;
-  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
 
   button {
     border: 1px solid #fff;
@@ -98,4 +110,4 @@ const StyledContainer = styled.div`
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Media);
+)(Tracks);

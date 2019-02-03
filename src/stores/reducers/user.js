@@ -30,10 +30,20 @@ const formReducer = createReducer(
   {
     SIGN_IN: () => ({}),
     USER_FORM_SET: (state, { key, item }) => {
-      state[key] = item;
+      return {
+        ...state,
+        [key]: item
+      };
     }
   }
 );
+
+const viewReducer = createReducer(null, {
+  SIGN_IN: () => null,
+  USER_VIEW_SET: (_, { key }) => {
+    return key;
+  }
+});
 
 export default combineReducers({
   uid: identifyReducer,
@@ -41,5 +51,6 @@ export default combineReducers({
   files: filesReducer,
   characters: charactersReducer,
   rooms: roomsReducer,
-  form: formReducer
+  form: formReducer,
+  view: viewReducer
 });

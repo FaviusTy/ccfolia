@@ -90,6 +90,29 @@ const setObject = function*({ itemId, object }) {
   );
 };
 
+const updateObject = function*({ itemId, object }) {
+  const id = yield select(state => state.room.id);
+  yield call(() =>
+    db
+      .collection(`rooms/${id}/objects`)
+      .doc(itemId)
+      .set({
+        ...object,
+        t: Date.now()
+      }, { merge: true })
+  );
+};
+
+const deleteObject = function*({ itemId }) {
+  const id = yield select(state => state.room.id);
+  yield call(() =>
+    db
+      .collection(`rooms/${id}/objects`)
+      .doc(itemId)
+      .delete()
+  );
+};
+
 // Fields
 const listenFieldsChannel = function*({ id }) {
   const storeSaga = createStoreSaga(
@@ -130,6 +153,8 @@ const userSaga = function*() {
   yield takeEvery("@ROOM_MESSAGE_RESET_ALL", messageResetAll);
   yield takeEvery("@ROOM_TRACK_SET", setTrack);
   yield takeEvery("@ROOM_OBJECT_SET", setObject);
+  yield takeEvery("@ROOM_OBJECT_UPDATE", updateObject);
+  yield takeEvery("@ROOM_OBJECT_DELETE", deleteObject);
   yield takeEvery("@ROOM_FIELD_SET", setField);
 };
 

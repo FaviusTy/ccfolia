@@ -1,68 +1,148 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+// import { Route } from "react-router-dom";
 
 import CharacterList from "../containers/CharacterList";
 import CharacterForm from "../containers/CharacterForm";
+import Screen from "../containers/Screen";
+import UserMenu from "../containers/UserMenu";
+import ChatBox from "../containers/ChatBox";
+import Messages from "../containers/Messages";
+import Tracks from "../containers/Tracks";
+import RoomMenu from "../containers/RoomMenu";
+import Background from "../containers/Background";
+import ObjectForm from "../containers/ObjectForm";
+import FieldInfo from "../containers/FieldInfo";
 
-const Room = ({
-  id,
-  messages,
-  tracks,
-  objects,
-  fields,
-  characters,
-  addMessage,
-  resetMessageAll,
-  setTrack,
-  setObject,
-  setField,
-  setCharacter,
-  uploadFile
-}) => {
+const Room = () => {
   return (
-    <Styled.Container>
-      {id}
-      <button onClick={addMessage} type="button">
-        SEND MESSAGE
-      </button>
-      <button onClick={resetMessageAll} type="button">
-        RESET MESSAGE ALL
-      </button>
-      <button onClick={setTrack} type="button">
-        CHANGE TRACK
-      </button>
-      <button onClick={setObject} type="button">
-        SET OBJECT
-      </button>
-      <button onClick={setField} type="button">
-        SET FIELD
-      </button>
-      <button onClick={setCharacter} type="button">
-        SET CHARACTER
-      </button>
-      <input onChange={e => uploadFile(e.target.files)} multiple type="file" />
-      <hr />
-      <div>{JSON.stringify(tracks)}</div>
-      <hr />
-      <div>{JSON.stringify(objects)}</div>
-      <hr />
-      <div>{JSON.stringify(fields)}</div>
-      <hr />
+    <>
+      <Styled.Background>
+        <Background />
+      </Styled.Background>
+      <Styled.Container>
+        <Styled.ViewportArea>
+          <Screen />
+          <RoomMenu />
+          <Styled.TopArea>
+            <Tracks />
+          </Styled.TopArea>
+          <FieldInfo />
+          <CharacterList />
+          {/* <Styled.ControlArea>
+            -ChatPalet -ObjectEdit -SceneEdit
+            <CharacterList />
+          </Styled.ControlArea> */}
+        </Styled.ViewportArea>
+        <Styled.ChatArea>
+          <Messages />
+          <Styled.BottomArea>
+            <ChatBox />
+          </Styled.BottomArea>
+        </Styled.ChatArea>
+        {/* <Screen />
+      <UserMenu />
       <CharacterList />
-      <CharacterForm />
-      <hr />
-      {messages.map(({ name, text, id }) => (
-        <p key={id}>
-          {name}: {text}
-        </p>
-      ))}
-    </Styled.Container>
+      <CharacterForm /> */}
+        {/* <ChatBox /> */}
+        <CharacterForm />
+      </Styled.Container>
+    </>
   );
 };
 
 const Styled = {};
-Styled.Container = styled.div``;
+Styled.Container = styled.div`
+  border-radius: 4px;
+  /* overflow: hidden; */
+  display: flex;
+  /* height: 100vh; */
+  min-height: 320px;
+  position: absolute;
+  top: 90px;
+  left: 90px;
+  right: 90px;
+  bottom: 90px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+  @media (max-width: 780px) {
+    border-radius: 0;
+    overflow: visible;
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: none;
+    padding-top: 45vh;
+  }
+`;
+Styled.Background = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  @media (max-width: 780px) {
+    display: none;
+  }
+`;
+Styled.ViewportArea = styled.div`
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  width: calc(100% - 320px);
+  @media (max-width: 780px) {
+    width: auto;
+    height: 50vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+`;
+Styled.TopArea = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.4);
+`;
+Styled.ControlArea = styled.div`
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  background: rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0 12px rgba(0, 0, 0, 0.6); */
+  /* display: none; */
+  @media (max-width: 780px) {
+    bottom: auto;
+    top: 100%;
+  }
+`;
+Styled.ChatArea = styled.div`
+  display: flex;
+  position: relative;
+  min-width: 320px;
+  /* background: rgba(0, 0, 0, 0.6); */
+  background: #fff;
+`;
+Styled.BottomArea = styled.div`
+  /* background: rgba(0, 0, 0, 0.6); */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @media (max-width: 780px) {
+    position: fixed;
+  }
+`;
 
 const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;

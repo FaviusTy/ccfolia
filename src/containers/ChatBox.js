@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import styled from "styled-components";
@@ -46,15 +46,15 @@ const ChatBox = ({ submitForm, values }) => {
 
 const mapStateToProps = state => {
   return {
-    name: state.user.auth.displayName
+    name: state.user.name
   };
 };
 
 const mapDispatchToProps = {
   addMessage: item => {
     return {
-      type: "@MESSAGE_ADD",
-      item
+      type: "@ROOM_MESSAGE_ADD",
+      message: item
     };
   }
 };
