@@ -23,7 +23,7 @@
     "react-player": "^1.7.0",
     "react-redux": "^6.0.0",
     "react-redux-form": "^1.16.12",
-    "react-rnd": "^9.0.4",
+    "react-rnd": "^9.1.1",
     "react-router-dom": "^4.4.0-beta.6",
     "react-scripts": "^2.1.3",
     "react-transition-group": "^2.5.1",

@@ -4,25 +4,37 @@ import styled from "styled-components";
 import { Rnd } from "react-rnd";
 import DraggableObject from "../components/DraggableObject";
 
-const touchmoveHandler = (e) => {
-  e.stopPropagation()
-  e.preventDefault()
-}
+const touchmoveHandler = e => {
+  e.stopPropagation();
+  e.preventDefault();
+};
 
-const Screen = ({ objects, field, remove, update }) => {
-  const ref = useRef(null)
+const Screen = ({ objects, field, setting, remove, update, edit }) => {
+  const ref = useRef(null);
   useEffect(() => {
     if (ref.current) {
-      ref.current.addEventListener('touchmove', touchmoveHandler, { passive: false })
-      return () => ref.current.removeEventListener('touchmove', touchmoveHandler)
+      ref.current.addEventListener("touchmove", touchmoveHandler, {
+        passive: false
+      });
+      return () =>
+        ref.current.removeEventListener("touchmove", touchmoveHandler);
     }
-  }, [ref.current])
+  }, [ref.current]);
   return (
     <Styled.Container ref={ref}>
-      <Styled.Board>
-        <Field {...field}>
+      <Styled.Board style={{ transform: `scale(${setting.scale})` }}>
+        <Field {...field} scale={setting.scale}>
           {objects.map(object => {
-            return <Obj key={object.id} item={object} onDelete={remove} onChange={update} />;
+            return (
+              <Obj
+                key={object.id}
+                item={object}
+                onDelete={remove}
+                onEdit={edit}
+                onChange={update}
+                scale={setting.scale}
+              />
+            );
           })}
         </Field>
       </Styled.Board>
@@ -30,29 +42,30 @@ const Screen = ({ objects, field, remove, update }) => {
   );
 };
 
-const Obj = ({ item, baseSize = 120, onDelete, onChange }) => {
-  const { id, position: positionAxis = [] } = item
-  const [xAxis = 0, yAxis = 0] = positionAxis
-  const x = baseSize * xAxis
-  const y = baseSize * yAxis
-  const [position, setPosition] = useState({ x, y })
-  const onDragStop = useCallback((_, d) => {
-    setPosition({ x: d.lastX, y: d.lastY })
-    const item = {
-      position: [
-        ~~(d.lastX / baseSize),
-        ~~(d.lastY / baseSize)
-      ]
-    }
-    onChange({ id, item })
-  }, [setPosition, onChange, id])
+const Obj = ({ item, baseSize = 120, scale, onDelete, onEdit, onChange }) => {
+  const { id, position: positionAxis = [] } = item;
+  const [xAxis = 0, yAxis = 0] = positionAxis;
+  const x = baseSize * xAxis;
+  const y = baseSize * yAxis;
+  const [position, setPosition] = useState({ x, y });
+  const onDragStop = useCallback(
+    (_, d) => {
+      setPosition({ x: d.lastX, y: d.lastY });
+      const item = {
+        position: [~~(d.lastX / baseSize), ~~(d.lastY / baseSize)]
+      };
+      onChange({ id, item });
+    },
+    [setPosition, onChange, id]
+  );
   useEffect(() => {
-    setPosition({ x, y })
-  }, [x, y])
+    setPosition({ x, y });
+  }, [x, y]);
   return (
     <Styled.Obj
       onDragStart={e => e.stopPropagation()}
       onDragStop={onDragStop}
+      scale={scale}
       position={position}
       resizeGrid={[baseSize, baseSize]}
       dragGrid={[baseSize, baseSize]}
@@ -64,17 +77,19 @@ const Obj = ({ item, baseSize = 120, onDelete, onChange }) => {
         height: baseSize * 1
       }}
     >
-      {/* <Styled.Obj> */}
-        <img
-          draggable={false}
-          width="100%"
-          height="100%"
-          src={item.images[0].url || "/icon-100x100.png"}
-        />
-        <button onClick={() => onDelete({ id: item.id })} type="button">
-          remove
-        </button>
-      {/* </Styled.Obj> */}
+      <img
+        draggable={false}
+        width="100%"
+        height="100%"
+        src={item.images[0].url || "/icon-100x100.png"}
+      />
+      {scale}
+      <button onClick={() => onDelete({ id: item.id })} type="button">
+        remove
+      </button>
+      <button onClick={() => onEdit({ item })} type="button">
+        edit
+      </button>
     </Styled.Obj>
   );
 };
@@ -82,19 +97,18 @@ const Obj = ({ item, baseSize = 120, onDelete, onChange }) => {
 const Field = ({ background, children }) => {
   if (!background) return null;
   return (
-    <Rnd enableResizing={false}>
-      <Styled.Field>
-        <img src={background.url} draggable={false} />
-      </Styled.Field>
+    <Styled.Field>
+      <img src={background.url} draggable={false} />
       {children}
-    </Rnd>
+    </Styled.Field>
   );
 };
 
 const mapStateToProps = state => {
   return {
     field: state.room.fields[0],
-    objects: state.room.objects
+    objects: state.room.objects,
+    setting: state.setting.screen
   };
 };
 
@@ -111,6 +125,13 @@ const mapDispatchToProps = {
       itemId: id,
       object: item
     };
+  },
+  edit: ({ item }) => {
+    return {
+      type: "USER_FORM_SET",
+      key: "character",
+      item: item
+    };
   }
 };
 
@@ -125,14 +146,17 @@ export default connect(
 
 const Styled = {};
 Styled.Container = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
-  background: #eee;
+  /* background: #eee; */
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
 `;
 Styled.Board = styled.div`
   position: relative;
+  width: 100%;
+  height: 100%;
 `;
 Styled.Obj = styled(Rnd)`
   :hover {
@@ -146,11 +170,11 @@ Styled.Obj = styled(Rnd)`
   }
 `;
 Styled.Field = styled.div`
-  width: 1280px;
-  height: 960px;
+  width: 100%;
+  height: 100%;
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* object-fit: cover; */
   }
 `;

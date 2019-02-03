@@ -1,54 +1,65 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
+import React from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 
 const FieldInfo = ({ items }) => {
-  return <Styled.Container>
-    {/* {JSON.stringify(items)} */}
-    {items.map((item) => {
-      return <Item key={item.id} {...item}></Item>
-    })}
-  </Styled.Container>
-}
+  return (
+    <Styled.Container>
+      {/* {JSON.stringify(items)} */}
+      {items.map(item => {
+        return <Item key={item.id} {...item} />;
+      })}
+    </Styled.Container>
+  );
+};
 
 const Item = ({ name, text, status, url }) => {
-  return <Styled.Item>
-    <figure><img src={url}/></figure>
-    <Styled.ItemInfo>
-      <h2>{name}{text}</h2>
-      {status.map((state, i) => {
-        return <Styled.Bar key={i}>
-          <Styled.BarLabel>{state.key}: {state.value}/{state.max}</Styled.BarLabel>
-          <button type="button">-</button>
-          <button type="button">+</button>
-        </Styled.Bar>
-      })}
-    </Styled.ItemInfo>
-  </Styled.Item>
-}
+  return (
+    <Styled.Item>
+      <figure>
+        <img src={url} />
+      </figure>
+      <Styled.ItemInfo>
+        <h2>
+          {name}
+          {text}
+        </h2>
+        {status.map((state, i) => {
+          return (
+            <Styled.Bar key={i}>
+              <Styled.BarLabel>
+                {state.key}: {state.value}/{state.max}
+              </Styled.BarLabel>
+              <button type="button">-</button>
+              <button type="button">+</button>
+            </Styled.Bar>
+          );
+        })}
+      </Styled.ItemInfo>
+    </Styled.Item>
+  );
+};
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    items: state.room.objects.filter((object) => {
-      return object.status.length > 0
+    items: state.room.objects.filter(object => {
+      return object.status.length > 0;
     })
-  }
-}
+  };
+};
 
-const mapDispatchToProps = {
-}
+const mapDispatchToProps = {};
 
 const FieldInfoContainer = ({ ...props }) => {
-  return <FieldInfo {...props} />
-}
+  return <FieldInfo {...props} />;
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FieldInfoContainer)
+)(FieldInfoContainer);
 
-
-const Styled = {}
+const Styled = {};
 Styled.Container = styled.div`
   border-top: 1px solid #222;
   box-sizing: border-box;
@@ -66,7 +77,7 @@ Styled.Container = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-`
+`;
 Styled.Item = styled.div`
   margin-bottom: 8px;
   /* display: flex; */
@@ -99,9 +110,8 @@ Styled.Item = styled.div`
       display: none;
     }
   } */
-`
-Styled.ItemInfo = styled.div`
-`
+`;
+Styled.ItemInfo = styled.div``;
 Styled.Bar = styled.div`
   padding: 2px;
   border-radius: 0 4px 4px 0;
@@ -118,9 +128,9 @@ Styled.Bar = styled.div`
   & + & {
     margin-top: 2px;
   }
-`
+`;
 Styled.BarLabel = styled.div`
   margin-right: 4px;
   flex: 1;
   color: #444;
-`
+`;

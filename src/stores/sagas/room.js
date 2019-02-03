@@ -96,10 +96,13 @@ const updateObject = function*({ itemId, object }) {
     db
       .collection(`rooms/${id}/objects`)
       .doc(itemId)
-      .set({
-        ...object,
-        t: Date.now()
-      }, { merge: true })
+      .set(
+        {
+          ...object,
+          t: Date.now()
+        },
+        { merge: true }
+      )
   );
 };
 

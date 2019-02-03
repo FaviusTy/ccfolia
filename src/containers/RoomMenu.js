@@ -9,7 +9,7 @@ import {
   FaSearchMinus
 } from "react-icons/fa";
 
-const RoomMenu = ({ addObject }) => {
+const RoomMenu = ({ addObject, scaleUp, scaleDown }) => {
   return (
     <Styled.Container>
       <Styled.Item onClick={() => addObject()} type="button">
@@ -24,13 +24,13 @@ const RoomMenu = ({ addObject }) => {
         </i>
         <span>背景・音源変更</span>
       </Styled.Item>
-      <Styled.Item type="button">
+      <Styled.Item onClick={() => scaleDown()} type="button">
         <i>
           <FaSearchMinus />
         </i>
         {/* <span>縮小</span> */}
       </Styled.Item>
-      <Styled.Item type="button">
+      <Styled.Item onClick={() => scaleUp()} type="button">
         <i>
           <FaSearchPlus />
         </i>
@@ -62,13 +62,23 @@ const mapDispatchToProps = {
         status: [
           { key: "HP", value: 0, max: 0 },
           { key: "MP", value: 0, max: 0 },
-          { key: "SAN", value: 0, max: 0 },
+          { key: "SAN", value: 0, max: 0 }
         ],
         params: [{ key: "DEX", value: 0 }],
         tags: []
       }
     };
   },
+  scaleUp: () => {
+    return {
+      type: "SETTING_SCREEN_SCALE_UP"
+    }
+  },
+  scaleDown: () => {
+    return {
+      type: "SETTING_SCREEN_SCALE_DOWN"
+    }
+  }
   // showObjects: () => {
   //   return {
   //     type: "USER_VIEW_SET",

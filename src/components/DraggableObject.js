@@ -2,7 +2,13 @@ import React, { memo, useState, useEffect, useCallback } from "react";
 import { Rnd } from "react-rnd";
 import styled from "styled-components";
 
-const DraggableObject = ({ item, baseSize = 30, scale = 1, onChange, onClick }) => {
+const DraggableObject = ({
+  item,
+  baseSize = 30,
+  scale = 1,
+  onChange,
+  onClick
+}) => {
   const {
     id,
     images = [],
@@ -82,7 +88,7 @@ const DraggableObject = ({ item, baseSize = 30, scale = 1, onChange, onClick }) 
   );
 };
 
-const Styled = {}
+const Styled = {};
 
 Styled.Item = styled.figure`
   z-index: ${({ z }) => z};
@@ -96,4 +102,4 @@ Styled.RotateImage = styled.img`
   transform: ${({ angle }) => `rotateZ(${angle}deg)`};
 `;
 
-export default memo(DraggableObject)
+export default memo(DraggableObject);

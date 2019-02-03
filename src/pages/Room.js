@@ -28,7 +28,7 @@ const Room = () => {
           <Styled.TopArea>
             <Tracks />
           </Styled.TopArea>
-          <FieldInfo />
+          {/* <FieldInfo /> */}
           <CharacterList />
           {/* <Styled.ControlArea>
             -ChatPalet -ObjectEdit -SceneEdit

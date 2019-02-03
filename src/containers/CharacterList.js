@@ -33,9 +33,7 @@ const CharacterItem = ({ name, text, images, onSelect, onEdit, onDelete }) => {
       <figure>
         {images && images.length > 0 ? <img src={images[0].url} /> : null}
       </figure>
-      <p>
-        {name}
-      </p>
+      <p>{name}</p>
       <button className="del" onClick={onDelete} type="button">
         Delete
       </button>

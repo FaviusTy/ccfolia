@@ -60,7 +60,9 @@ const StatusField = ({ form, push, remove }) => {
             <Field name={`status[${i}].key`} type="text" />
             <Field name={`status[${i}].value`} type="number" />
             <Field name={`status[${i}].max`} type="number" />
-            <button onClick={() => remove(i)} type="button">remove</button>
+            <button onClick={() => remove(i)} type="button">
+              remove
+            </button>
           </Styled.State>
         );
       })}
@@ -211,18 +213,17 @@ Styled.Images = styled.div`
     width: 90%;
   }
 `;
-Styled.Status = styled.div`
-
-`
+Styled.Status = styled.div``;
 Styled.State = styled.div`
   display: flex;
   width: 100%;
-  input[type="text"], input[type="number"] {
+  input[type="text"],
+  input[type="number"] {
     border-radius: 0;
     width: 20%;
     flex: 1;
   }
-`
+`;
 
 Styled.CloseButton = styled(FaTimesCircle)`
   width: 16px;
