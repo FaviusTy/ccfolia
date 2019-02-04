@@ -9,7 +9,7 @@ import {
   FaSearchMinus
 } from "react-icons/fa";
 
-const RoomMenu = ({ addObject, scaleUp, scaleDown }) => {
+const RoomMenu = ({ addObject, scaleUp, scaleDown, setField }) => {
   return (
     <Styled.Container>
       <Styled.Item onClick={() => addObject()} type="button">
@@ -18,7 +18,7 @@ const RoomMenu = ({ addObject, scaleUp, scaleDown }) => {
         </i>
         <span>駒追加</span>
       </Styled.Item>
-      <Styled.Item type="button">
+      <Styled.Item onClick={() => setField()} type="button">
         <i>
           <FaImages />
         </i>
@@ -78,7 +78,24 @@ const mapDispatchToProps = {
     return {
       type: "SETTING_SCREEN_SCALE_DOWN"
     }
-  }
+  },
+  setField: () => {
+    return {
+      type: "@ROOM_FIELD_SET",
+      field: {
+        images: [
+          {
+            url: "/bg.jpg",
+            size: [1, 1],
+            position: [0, 0]
+          }
+        ],
+        background: {
+          url: "/bg.jpg"
+        }
+      }
+    };
+  },
   // showObjects: () => {
   //   return {
   //     type: "USER_VIEW_SET",
