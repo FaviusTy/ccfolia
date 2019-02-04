@@ -2,7 +2,7 @@ import { takeEvery, call, select, all } from "redux-saga/effects";
 import { db, storage } from "../../../firebase/core";
 
 export const fileAdd = function*({ file, tags = [] }) {
-  const user = yield select(state => state.user.auth);
+  const user = yield select(state => state.user);
 
   if (!user.uid || !file) return;
 
@@ -49,7 +49,7 @@ export const fileAdd = function*({ file, tags = [] }) {
 };
 
 export const fileDelete = function*({ id }) {
-  const user = yield select(state => state.user.auth);
+  const user = yield select(state => state.user);
   if (!user.uid) return;
 
   const storageRef = storage.ref(`users/${user.uid}/files`);
@@ -60,7 +60,7 @@ export const fileDelete = function*({ id }) {
 };
 
 export const fileDeleteAll = function*() {
-  const user = yield select(state => state.user.auth);
+  const user = yield select(state => state.user);
   const files = yield select(state => state.user.files);
 
   if (!user.uid) return;
@@ -89,7 +89,7 @@ export const fileDeleteAll = function*() {
 };
 
 // watcher
-const fileSaga = function*() {
+const filesSaga = function*() {
   yield takeEvery("@FILE_ADD", fileAdd);
   yield takeEvery("@FILE_DELETE", fileDelete);
   yield takeEvery("@FILE_DELETE_ALL", fileDeleteAll);

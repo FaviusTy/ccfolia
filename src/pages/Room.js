@@ -66,8 +66,12 @@ Styled.Container = styled.div`
   left: 90px;
   right: 90px;
   bottom: 90px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-  /* background: #eee; */
+  /* background: #f5f5f5; */
   @media (max-width: 780px) {
     border-radius: 0;
     overflow: visible;

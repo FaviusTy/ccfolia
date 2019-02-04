@@ -31,6 +31,7 @@ const Screen = ({ objects, field, setting, remove, update, edit }) => {
               <Obj
                 key={object.id}
                 item={object}
+                baseSize={field.baseSize}
                 onDelete={remove}
                 onEdit={edit}
                 onChange={update}
