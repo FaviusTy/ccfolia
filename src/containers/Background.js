@@ -5,14 +5,14 @@ import styled from "styled-components";
 const Background = ({ background }) => {
   return (
     <Styled.Container>
-      {background.url ? <img src={background.url} /> : null}
+      {background ? <img src={background.url} /> : null}
     </Styled.Container>
   );
 };
 
 const Styled = {};
 Styled.Container = styled.div`
-  position: absolute;
+  position: fixed;
   top: -12px;
   left: -12px;
   right: -12px;
@@ -26,11 +26,15 @@ Styled.Container = styled.div`
 `;
 
 const mapStateToProps = state => {
-  return {
-    background: {
-      url: "/bg.jpg"
+  if (state.room.fields[0] && state.room.fields[0].images) {
+    return {
+      background: state.room.fields[0].images[0]
+    };
+  } else {
+    return {
+      background: null
     }
-  };
+  }
 };
 
 const mapDispatchToProps = {};

@@ -26,10 +26,24 @@ const fieldsReducer = createReducer([], {
   ROOM_FIELD_CHANGES: collectionReducer
 });
 
+const formReducer = createReducer(
+  {},
+  {
+    ROOM_INIT: () => ({}),
+    ROOM_FORM_SET: (state, { key, item }) => {
+      return {
+        ...state,
+        [key]: item
+      };
+    }
+  }
+);
+
 export default combineReducers({
   id: identifyReducer,
   messages: messagesReducer,
   fields: fieldsReducer,
   objects: objectsReducer,
-  tracks: tracksReducer
+  tracks: tracksReducer,
+  form: formReducer
 });

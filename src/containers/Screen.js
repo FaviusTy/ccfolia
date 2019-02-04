@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Rnd } from "react-rnd";
-import DraggableObject from "../components/DraggableObject";
+import Draggable from "react-draggable";
+// import DraggableObject from "../components/Draggable";
 
 const touchmoveHandler = e => {
   e.stopPropagation();
@@ -20,6 +21,7 @@ const Screen = ({ objects, field, setting, remove, update, edit }) => {
         ref.current.removeEventListener("touchmove", touchmoveHandler);
     }
   }, [ref.current]);
+  if (!field) return null
   return (
     <Styled.Container ref={ref}>
       <Styled.Board style={{ transform: `scale(${setting.scale})` }}>
@@ -42,19 +44,21 @@ const Screen = ({ objects, field, setting, remove, update, edit }) => {
   );
 };
 
-const Obj = ({ item, baseSize = 120, scale, onDelete, onEdit, onChange }) => {
-  const { id, position: positionAxis = [] } = item;
-  const [xAxis = 0, yAxis = 0] = positionAxis;
+const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
+  const { id, position: positionAxis = [0, 0], size = [1, 1] } = item;
+  const [xAxis, yAxis] = positionAxis;
   const x = baseSize * xAxis;
   const y = baseSize * yAxis;
   const [position, setPosition] = useState({ x, y });
   const onDragStop = useCallback(
     (_, d) => {
-      setPosition({ x: d.lastX, y: d.lastY });
+      const xAxisFromPosition = Math.round(d.x / baseSize)
+      const yAxisFromPosition = Math.round(d.y / baseSize)
+      setPosition({ x: xAxisFromPosition * baseSize, y: yAxisFromPosition * baseSize });
       const item = {
-        position: [~~(d.lastX / baseSize), ~~(d.lastY / baseSize)]
+        position: [xAxisFromPosition, yAxisFromPosition]
       };
-      onChange({ id, item });
+      onChange(id, item);
     },
     [setPosition, onChange, id]
   );
@@ -62,45 +66,40 @@ const Obj = ({ item, baseSize = 120, scale, onDelete, onEdit, onChange }) => {
     setPosition({ x, y });
   }, [x, y]);
   return (
-    <Styled.Obj
-      onDragStart={e => e.stopPropagation()}
-      onDragStop={onDragStop}
+    <Draggable
+      onStart={e => e.stopPropagation()}
+      onStop={onDragStop}
       scale={scale}
       position={position}
-      resizeGrid={[baseSize, baseSize]}
-      dragGrid={[baseSize, baseSize]}
-      enableResizing={false} // todo
-      default={{
-        x: x,
-        y: y,
-        width: baseSize * 1,
-        height: baseSize * 1
-      }}
+      grid={[baseSize * scale, baseSize * scale]}
     >
-      <img
-        draggable={false}
-        width="100%"
-        height="100%"
-        src={item.images[0].url || "/icon-100x100.png"}
-      />
-      {scale}
-      <button onClick={() => onDelete({ id: item.id })} type="button">
-        remove
-      </button>
-      <button onClick={() => onEdit({ item })} type="button">
-        edit
-      </button>
-    </Styled.Obj>
+      <div style={{ position: "absolute", top: 0, left: 0 }}>
+        <img
+          draggable={false}
+          width={baseSize * size[0]}
+          height={baseSize * size[1]}
+          src={item.images[0].url || "/icon-100x100.png"}
+        />
+        <button onClick={() => onDelete(item) } type="button">Delete</button>
+        <button onClick={() => onEdit(item)} type="button">Edit</button>
+      </div>
+    </Draggable>
   );
 };
 
-const Field = ({ background, children }) => {
-  if (!background) return null;
+const Field = ({ images, baseSize, size, scale, children }) => {
   return (
-    <Styled.Field>
-      <img src={background.url} draggable={false} />
-      {children}
-    </Styled.Field>
+    <Draggable scale={scale}>
+      <Styled.Field style={{
+        width: baseSize * size[0] + 'px',
+        height: baseSize * size[1] + 'px'
+      }}>
+        {images.map((image) => {
+          return <Styled.Background src={image.url} draggable={false} />
+        })}
+        {children}
+      </Styled.Field>
+    </Draggable>
   );
 };
 
@@ -119,14 +118,14 @@ const mapDispatchToProps = {
       itemId: id
     };
   },
-  update: ({ id, item }) => {
+  update: (id, item) => {
     return {
       type: "@ROOM_OBJECT_UPDATE",
       itemId: id,
       object: item
     };
   },
-  edit: ({ item }) => {
+  edit: (item) => {
     return {
       type: "USER_FORM_SET",
       key: "character",
@@ -158,23 +157,14 @@ Styled.Board = styled.div`
   width: 100%;
   height: 100%;
 `;
-Styled.Obj = styled(Rnd)`
-  :hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
-  figure {
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-`;
-Styled.Field = styled.div`
+Styled.Background = styled.img`
   width: 100%;
   height: 100%;
-  img {
-    width: 100%;
-    height: 100%;
-    /* object-fit: cover; */
-  }
+  border-radius: 12px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+`;
+Styled.Field = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;

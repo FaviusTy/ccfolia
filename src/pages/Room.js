@@ -14,6 +14,7 @@ import RoomMenu from "../containers/RoomMenu";
 import Background from "../containers/Background";
 import ObjectForm from "../containers/ObjectForm";
 import FieldInfo from "../containers/FieldInfo";
+import FieldEdit from "../containers/FieldEdit";
 
 const Room = () => {
   return (
@@ -38,6 +39,7 @@ const Room = () => {
         <Styled.ChatArea>
           <Messages />
           <Styled.BottomArea>
+            <FieldEdit />
             <ChatBox />
           </Styled.BottomArea>
         </Styled.ChatArea>
@@ -65,6 +67,7 @@ Styled.Container = styled.div`
   right: 90px;
   bottom: 90px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+  /* background: #eee; */
   @media (max-width: 780px) {
     border-radius: 0;
     overflow: visible;
@@ -75,7 +78,7 @@ Styled.Container = styled.div`
     right: 0;
     bottom: 0;
     box-shadow: none;
-    padding-top: 45vh;
+    padding-top: 50vh;
   }
 `;
 Styled.Background = styled.div`
@@ -86,7 +89,7 @@ Styled.Background = styled.div`
   bottom: 0;
   overflow: hidden;
   @media (max-width: 780px) {
-    display: none;
+    /* display: none; */
   }
 `;
 Styled.ViewportArea = styled.div`
@@ -97,6 +100,7 @@ Styled.ViewportArea = styled.div`
   @media (max-width: 780px) {
     width: auto;
     height: 50vh;
+    /* border-bottom: 2px solid #fff; */
     position: fixed;
     top: 0;
     left: 0;
@@ -130,8 +134,9 @@ Styled.ChatArea = styled.div`
   display: flex;
   position: relative;
   min-width: 320px;
+  /* box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.6); */
   /* background: rgba(0, 0, 0, 0.6); */
-  background: #fff;
+  /* background: #fff; */
 `;
 Styled.BottomArea = styled.div`
   /* background: rgba(0, 0, 0, 0.6); */

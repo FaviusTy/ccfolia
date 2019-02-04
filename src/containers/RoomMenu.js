@@ -57,7 +57,7 @@ const mapDispatchToProps = {
         id: Date.now().toString(34),
         name: "TESTMAN",
         text: "I am a TESTMAN.",
-        images: [{ url: "/icon-100x100.png" }],
+        images: [{ url: "/bg.jpg" }],
         initiative: 0,
         status: [
           { key: "HP", value: 0, max: 0 },
@@ -81,20 +81,25 @@ const mapDispatchToProps = {
   },
   setField: () => {
     return {
-      type: "@ROOM_FIELD_SET",
-      field: {
-        images: [
-          {
-            url: "/bg.jpg",
-            size: [1, 1],
-            position: [0, 0]
-          }
-        ],
-        background: {
-          url: "/bg.jpg"
-        }
-      }
-    };
+      type: "ROOM_FORM_SET",
+      key: "field",
+      item: true
+    }
+    // return {
+    //   type: "@ROOM_FIELD_SET",
+    //   field: {
+    //     images: [
+    //       {
+    //         url: "/bg.jpg",
+    //         size: [1, 1],
+    //         position: [0, 0]
+    //       }
+    //     ],
+    //     background: {
+    //       url: "/bg.jpg"
+    //     }
+    //   }
+    // };
   },
   // showObjects: () => {
   //   return {
