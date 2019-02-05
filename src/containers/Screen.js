@@ -21,7 +21,7 @@ const Screen = ({ objects, field, setting, remove, update, edit }) => {
         ref.current.removeEventListener("touchmove", touchmoveHandler);
     }
   }, [ref.current]);
-  if (!field) return null
+  if (!field) return null;
   return (
     <Styled.Container ref={ref}>
       <Styled.Board style={{ transform: `scale(${setting.scale})` }}>
@@ -53,9 +53,12 @@ const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
   const [position, setPosition] = useState({ x, y });
   const onDragStop = useCallback(
     (_, d) => {
-      const xAxisFromPosition = Math.round(d.x / baseSize)
-      const yAxisFromPosition = Math.round(d.y / baseSize)
-      setPosition({ x: xAxisFromPosition * baseSize, y: yAxisFromPosition * baseSize });
+      const xAxisFromPosition = Math.round(d.x / baseSize);
+      const yAxisFromPosition = Math.round(d.y / baseSize);
+      setPosition({
+        x: xAxisFromPosition * baseSize,
+        y: yAxisFromPosition * baseSize
+      });
       const item = {
         position: [xAxisFromPosition, yAxisFromPosition]
       };
@@ -81,8 +84,12 @@ const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
           height={baseSize * size[1]}
           src={item.images[0].url || "/icon-100x100.png"}
         />
-        <button onClick={() => onDelete(item) } type="button">Delete</button>
-        <button onClick={() => onEdit(item)} type="button">Edit</button>
+        <button onClick={() => onDelete(item)} type="button">
+          Delete
+        </button>
+        <button onClick={() => onEdit(item)} type="button">
+          Edit
+        </button>
       </div>
     </Draggable>
   );
@@ -91,12 +98,14 @@ const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
 const Field = ({ images, baseSize, size, scale, children }) => {
   return (
     <Draggable scale={scale}>
-      <Styled.Field style={{
-        width: baseSize * size[0] + 'px',
-        height: baseSize * size[1] + 'px'
-      }}>
-        {images.map((image) => {
-          return <Styled.Background src={image.url} draggable={false} />
+      <Styled.Field
+        style={{
+          width: baseSize * size[0] + "px",
+          height: baseSize * size[1] + "px"
+        }}
+      >
+        {images.map(image => {
+          return <Styled.Background src={image.url} draggable={false} />;
         })}
         {children}
       </Styled.Field>
@@ -126,7 +135,7 @@ const mapDispatchToProps = {
       object: item
     };
   },
-  edit: (item) => {
+  edit: item => {
     return {
       type: "USER_FORM_SET",
       key: "character",

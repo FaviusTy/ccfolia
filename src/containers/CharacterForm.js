@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -17,6 +17,8 @@ const CharacterForm = ({ values, close }) => {
           <Field name="name" type="text" />
           <h2>Status</h2>
           <FieldArray name="status" component={StatusField} />
+          <h2>Size</h2>
+          <Field name="size" component={SizeField} />
           {/* <h2>Profile</h2> */}
           {/* <Field name="text" component="textarea" /> */}
           {/* <Field name="status" component="textarea" /> */}
@@ -30,7 +32,7 @@ const CharacterForm = ({ values, close }) => {
   );
 };
 
-const ImagesField = ({ form, push, remove }) => {
+const ImagesField = ({ form, field }) => {
   const { images } = form.values;
   return (
     <Styled.Images>
@@ -47,6 +49,23 @@ const ImagesField = ({ form, push, remove }) => {
         Add
       </button> */}
     </Styled.Images>
+  );
+};
+
+const SizeField = ({ form: { setFieldValue }, field: { name, value } }) => {
+  const handleChange = useCallback((e) => {
+    setFieldValue(name, e.currentTarget.value.split(',').map((v) => ~~v))
+  })
+  return (
+    <select value={value[0]} onChange={handleChange}>
+      <option value="1,1">x1</option>
+      <option value="2,2">x2</option>
+      <option value="3,3">x3</option>
+      <option value="4,4">x4</option>
+      <option value="5,5">x5</option>
+      <option value="6,6">x6</option>
+      <option value="3,4">3x4 (立ち絵)</option>
+    </select>
   );
 };
 

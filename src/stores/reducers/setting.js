@@ -10,13 +10,13 @@ const screenReducer = createReducer(
         scale
       };
     },
-    SETTING_SCREEN_SCALE_DOWN: (state) => {
+    SETTING_SCREEN_SCALE_DOWN: state => {
       return {
         ...state,
         scale: ~~(state.scale * 10 - 1) / 10
       };
     },
-    SETTING_SCREEN_SCALE_UP: (state) => {
+    SETTING_SCREEN_SCALE_UP: state => {
       return {
         ...state,
         scale: ~~(state.scale * 10 + 1) / 10

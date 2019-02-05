@@ -24,6 +24,12 @@ const RoomMenu = ({ addObject, scaleUp, scaleDown, setField }) => {
         </i>
         <span>背景・音源変更</span>
       </Styled.Item>
+      <Styled.Item className="current" onClick={() => scaleDown()} type="button">
+        <i>
+          <FaComment />
+        </i>
+        {/* <span>縮小</span> */}
+      </Styled.Item>
       <Styled.Item onClick={() => scaleDown()} type="button">
         <i>
           <FaSearchMinus />
@@ -72,19 +78,19 @@ const mapDispatchToProps = {
   scaleUp: () => {
     return {
       type: "SETTING_SCREEN_SCALE_UP"
-    }
+    };
   },
   scaleDown: () => {
     return {
       type: "SETTING_SCREEN_SCALE_DOWN"
-    }
+    };
   },
   setField: () => {
     return {
       type: "ROOM_FORM_SET",
       key: "field",
       item: true
-    }
+    };
     // return {
     //   type: "@ROOM_FIELD_SET",
     //   field: {
@@ -100,7 +106,7 @@ const mapDispatchToProps = {
     //     }
     //   }
     // };
-  },
+  }
   // showObjects: () => {
   //   return {
   //     type: "USER_VIEW_SET",
@@ -120,37 +126,47 @@ export default connect(
 
 const Styled = {};
 Styled.Container = styled.div`
+  padding: 8px;
   display: flex;
-  position: absolute;
+  justify-content: space-between;
+  /* position: absolute;
   right: 8px;
   bottom: -12px;
-  z-index: 10;
+  z-index: 10; */
 `;
 Styled.Item = styled.button`
-  margin-left: 8px;
-  border: 2px solid #fff;
-  border-radius: 14px;
+  margin: 8px;
+  border: none;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  /* width: 42px; */
-  height: 28px;
+  width: 36px;
+  height: 36px;
   background: #fff;
+  overflow: hidden;
   /* position: absolute; */
   /* bottom: -12px; */
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
   color: #222;
-  i {
-    padding: 6px;
-    width: 12px;
-    height: 12px;
-    border-radius: 14px;
-    line-height: 1;
+  &.current {
+    margin-top: 2px;
+    width: 42px;
+    height: 42px;
     background: #222;
+    color: #fff;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  i {
+    box-sizing: border-box;
+    padding: 24%;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+    /* background: #222; */
     svg {
       /* border: 2px solid #ccc; */
-      width: 12px;
-      height: 12px;
-      color: #fff;
+      width: 100%;
+      height: 100%;
+      /* color: #222; */
     }
   }
   span {

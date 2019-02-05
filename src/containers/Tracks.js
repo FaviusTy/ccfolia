@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import ReactHowler from "react-howler";
-import ReactPlayer from "react-player";
+// import ReactPlayer from "react-player";
 import { FaPlay, FaPause } from "react-icons/fa";
 
 // import ReactPlayer from 'react-player' // todo: support youtube
@@ -72,7 +72,7 @@ Styled.Track = styled.div`
   padding: 8px;
   display: flex;
   color: #fff;
-
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
   button {
     border: 1px solid #fff;
     border-radius: 50%;
@@ -103,7 +103,7 @@ Styled.Track = styled.div`
     display: flex;
     border-radius: 12px;
     font-size: 10px;
-    color: #eee;
+    color: #fff;
   }
 `;
 

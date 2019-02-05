@@ -1,10 +1,7 @@
 import React, { memo, useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
-const Draggable = ({
-  scale = 1,
-  children
-}) => {
+const Draggable = ({ scale = 1, children }) => {
   const [dragging, setDragging] = useState(false);
   const [pos, setPos] = useState({ x, y, width, height });
 
@@ -48,12 +45,7 @@ const Draggable = ({
     [dragging, item]
   );
 
-  return (
-    <div>
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 };
-
 
 export default memo(Draggable);

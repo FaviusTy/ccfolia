@@ -45,42 +45,40 @@ const deleteRoom = function*({ id }) {
   yield call(() => doc.delete());
 };
 
-const listenCharactersChannel = function*({ user }) {
-  if (user.uid) {
-    const roomsStoreSaga = createStoreSaga(
-      db => db.collection("characters").where("owner", "==", user.uid),
-      "USER_CHARACTER_CHANGES"
-    );
-    yield call(roomsStoreSaga);
-  }
-};
+// const listenCharactersChannel = function*({ user }) {
+//   if (user.uid) {
+//     const roomsStoreSaga = createStoreSaga(
+//       db => db.collection("characters").where("owner", "==", user.uid),
+//       "USER_CHARACTER_CHANGES"
+//     );
+//     yield call(roomsStoreSaga);
+//   }
+// };
 
-const setCharacter = function*({ id, character }) {
-  const uid = yield select(state => state.user.uid);
-  if (uid) {
-    const doc = db.collection("characters").doc(id);
-    yield call(() =>
-      doc.set({
-        ...character,
-        owner: uid
-      })
-    );
-  }
-};
+// const setCharacter = function*({ id, character }) {
+//   const uid = yield select(state => state.user.uid);
+//   if (uid) {
+//     const doc = db.collection("characters").doc(id);
+//     yield call(() =>
+//       doc.set({
+//         ...character,
+//         owner: uid
+//       })
+//     );
+//   }
+// };
 
-const deleteCharacter = function*({ id }) {
-  const doc = db.collection("characters").doc(id);
-  yield call(() => doc.delete());
-};
+// const deleteCharacter = function*({ id }) {
+//   const doc = db.collection("characters").doc(id);
+//   yield call(() => doc.delete());
+// };
 
 export const fileAdd = function*({ file, tags = [] }) {
   const user = yield select(state => state.user);
-  console.log(user)
-
 
   if (!user.uid || !file) return;
 
-  const storageRef = storage.ref(`files`);
+  const storageRef = storage.ref(`users/${user.uid}/files`);
   const collectionRef = db.collection(`files`);
 
   yield collectionRef.add({
@@ -134,23 +132,23 @@ const listenFilesChannel = function*({ user }) {
 };
 
 const fileDelete = function*({ id }) {
-  // const user = yield select(state => state.user);
-  // if (!user.uid) return;
+  const user = yield select(state => state.user);
+  if (!user.uid) return;
 
-  const storageRef = storage.ref(`files`);
+  const storageRef = storage.ref(`users/${user.uid}/files`);
   const collectionRef = db.collection(`files`);
 
   yield call(() => storageRef.child(id).delete());
-  yield call(() => collectionRef.doc("files").delete());
+  yield call(() => collectionRef.doc(id).delete());
 };
 
 const fileDeleteAll = function*() {
-  // const user = yield select(state => state.user);
+  const user = yield select(state => state.user);
   const files = yield select(state => state.user.files);
 
-  // if (!user.uid) return;
+  if (!user.uid) return;
 
-  const storageRef = storage.ref(`files`);
+  const storageRef = storage.ref(`users/${user.uid}/files`);
   const collectionRef = db.collection(`files`);
 
   yield all(

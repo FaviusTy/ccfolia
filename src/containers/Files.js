@@ -59,7 +59,9 @@ const Files = ({
 
   return (
     <StyledContainer>
-      <p><a onClick={handleDeleteAllClick}>DELETE ALL</a></p>
+      <p>
+        <a onClick={handleDeleteAllClick}>DELETE ALL</a>
+      </p>
       {/* <div className=""><input type="text" /></div> */}
       <Dropzone onDrop={handleDrop} disableClick accept={accept}>
         {({ getRootProps, getInputProps, isDragActive, open }) => {

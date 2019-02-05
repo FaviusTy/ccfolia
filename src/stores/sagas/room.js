@@ -8,6 +8,9 @@ import {
 } from "redux-saga/effects";
 import { db } from "../../firebase/core";
 import { createStoreSaga } from "../../firebase/saga";
+import { DiceRoller } from 'rpg-dice-roller'
+
+const roller = new DiceRoller();
 
 // Messages
 const listenMessagesChannel = function*({ id }) {
@@ -22,6 +25,10 @@ const messageAdd = function*({ message }) {
   const uid = yield select(state => state.user.uid);
   const id = yield select(state => state.room.id);
   if (uid) {
+    const dice = roller.roll(message.text)
+    if (dice.rolls.length > 0) {
+      message.text = dice.toString()
+    }
     yield call(() =>
       db.collection(`rooms/${id}/messages`).add({
         ...message,

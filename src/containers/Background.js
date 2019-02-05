@@ -33,7 +33,7 @@ const mapStateToProps = state => {
   } else {
     return {
       background: null
-    }
+    };
   }
 };
 
