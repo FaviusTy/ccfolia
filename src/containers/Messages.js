@@ -7,7 +7,6 @@ const Messages = ({ messages, uid }) => {
   useLayoutEffect(() => {
     if (wrapRef.current) {
       wrapRef.current.scrollTop = 99999999;
-      window.scrollTo(0, 99999999); // for SP
     }
   });
   return (
@@ -63,7 +62,6 @@ const Container = styled.div`
   }
   .inner {
     margin: 0 auto;
-    padding-bottom: 48px;
     display: flex;
     flex-direction: column;
   }

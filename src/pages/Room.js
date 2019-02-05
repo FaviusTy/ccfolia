@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 // import { Route } from "react-router-dom";
@@ -17,9 +17,10 @@ import FieldInfo from "../containers/FieldInfo";
 import FieldEdit from "../containers/FieldEdit";
 import TrackEdit from "../containers/TrackEdit";
 
-const Room = () => {
+const Room = ({ view }) => {
   return (
     <>
+      <Background />
       <Styled.Container>
         <Styled.InformationArea>
           <Tracks />
@@ -28,8 +29,15 @@ const Room = () => {
           <Screen />
         </Styled.ViewportArea>
         <Styled.ControlArea>
+          <Styled.ControlContentArea>
+            <Messages />
+          </Styled.ControlContentArea>
           <Styled.ControlPanelArea>
-            <ChatBox />
+            {/* {view.controls === "objects" ? <CharacterForm /> : null} */}
+            <CharacterForm />
+            {view.controls === "fields" ? <FieldEdit /> : null}
+            {view.controls === "tracks" ? <TrackEdit /> : null}
+            {view.controls === "messages" ? <ChatBox /> : null}
           </Styled.ControlPanelArea>
           <Styled.ControlNavigationArea>
             <RoomMenu />
@@ -37,7 +45,7 @@ const Room = () => {
         </Styled.ControlArea>
       </Styled.Container>
 
-        {/* <Background /> */}
+      {/* <Background /> */}
       {/* <Styled.Container>
         <Styled.ViewportArea>
           <Screen />
@@ -69,6 +77,7 @@ const mapStateToProps = (state, ownProps) => {
     objects: state.room.objects,
     tracks: state.room.tracks,
     fields: state.room.fields,
+    view: state.room.view,
     characters: state.user.characters
   };
 };
@@ -180,52 +189,68 @@ export default connect(
 
 const Styled = {};
 Styled.Container = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: 30px;
   left: 30px;
   right: 30px;
-  bottom: 30px;
-`
+  bottom: 30px; */
+`;
 Styled.ControlArea = styled.div`
+  /* margin: 0 auto; */
+  margin-left: auto;
   display: flex;
   flex-direction: column;
-  border-radius: 12px 12px 0 0;
+  border-radius: 12px;
   position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 10;
+  max-height: 50vh;
+  max-width: 420px;
+  /* overflow: scroll; */
+  background: #f5f5f5;
+  /* background: rgba(240, 240, 240, 0.90); */
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+`;
+Styled.ControlContentArea = styled.div`
+  height: 240px;
+  /* flex: 1; */
+  /* overflow: hidden; */
+  position: absolute;
+  z-index: -1;
+  bottom: 100%;
   left: 0;
   right: 0;
-  bottom: 0;
-  z-index: 10;
-  max-height: 60vh;
-  overflow: scroll;
-  background: #f5f5f5;
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.2);
-`
+  background: rgba(255, 255, 255, 0.1);
+`;
 Styled.ControlPanelArea = styled.div`
   flex: 1;
+  /* background: #f5f5f5; */
   /* min-height: 240px; */
   overflow: auto;
-`
+`;
 Styled.ControlNavigationArea = styled.div`
   background: #fff;
-  box-shadow: 0 -0 4px rgba(0, 0, 0, 0.2);
-  border-radius: 24px 24px 0 0;
-`
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+`;
 Styled.InformationArea = styled.div`
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   z-index: 10;
-`
+`;
 Styled.ViewportArea = styled.div`
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  background: url(/bg.jpg) 50% 50% no-repeat;
+  /* background: url(/bg.jpg) 50% 50% no-repeat; */
   background-size: cover;
-`
+`;
 
 // Styled.Container = styled.div`
 //   border-radius: 4px;

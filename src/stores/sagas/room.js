@@ -8,7 +8,7 @@ import {
 } from "redux-saga/effects";
 import { db } from "../../firebase/core";
 import { createStoreSaga } from "../../firebase/saga";
-import { DiceRoller } from 'rpg-dice-roller'
+import { DiceRoller } from "rpg-dice-roller";
 
 const roller = new DiceRoller();
 
@@ -25,9 +25,9 @@ const messageAdd = function*({ message }) {
   const uid = yield select(state => state.user.uid);
   const id = yield select(state => state.room.id);
   if (uid) {
-    const dice = roller.roll(message.text)
+    const dice = roller.roll(message.text);
     if (dice.rolls.length > 0) {
-      message.text = dice.toString()
+      message.text = dice.toString();
     }
     yield call(() =>
       db.collection(`rooms/${id}/messages`).add({
@@ -145,6 +145,22 @@ const setField = function*({ field }) {
   );
 };
 
+const updateField = function*({ field }) {
+  const id = yield select(state => state.room.id);
+  yield call(() =>
+    db
+      .collection(`rooms/${id}/fields`)
+      .doc("main")
+      .set(
+        {
+          ...field,
+          t: Date.now()
+        },
+        { merge: true }
+      )
+  );
+};
+
 // Room
 const roomInit = function*({ id }) {
   yield put({
@@ -166,6 +182,7 @@ const userSaga = function*() {
   yield takeEvery("@ROOM_OBJECT_UPDATE", updateObject);
   yield takeEvery("@ROOM_OBJECT_DELETE", deleteObject);
   yield takeEvery("@ROOM_FIELD_SET", setField);
+  yield takeEvery("@ROOM_FIELD_UPDATE", updateField);
 };
 
 export default userSaga;

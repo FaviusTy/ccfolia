@@ -26,6 +26,26 @@ const fieldsReducer = createReducer([], {
   ROOM_FIELD_CHANGES: collectionReducer
 });
 
+const viewReducer = createReducer(
+  {},
+  {
+    ROOM_INIT: () => ({}),
+    ROOM_VIEW_SET: (state, { key, value }) => {
+      if (state[key] === value) {
+        return {
+          ...state,
+          [key]: null
+        };
+      } else {
+        return {
+          ...state,
+          [key]: value
+        };
+      }
+    }
+  }
+);
+
 const formReducer = createReducer(
   {},
   {
@@ -45,5 +65,6 @@ export default combineReducers({
   fields: fieldsReducer,
   objects: objectsReducer,
   tracks: tracksReducer,
-  form: formReducer
+  form: formReducer,
+  view: viewReducer
 });

@@ -6,46 +6,60 @@ import {
   FaChessPawn,
   FaImages,
   FaSearchPlus,
-  FaSearchMinus
+  FaSearchMinus,
+  FaMusic,
+  FaTable
 } from "react-icons/fa";
 
-const RoomMenu = ({ addObject, scaleUp, scaleDown, setField }) => {
+const RoomMenu = ({
+  addObject,
+  scaleUp,
+  scaleDown,
+  setControl,
+  setMessage
+}) => {
   return (
     <Styled.Container>
-      <Styled.Item onClick={() => addObject()} type="button">
+      <Styled.Item onClick={() => setControl("objects")} type="button">
         <i>
           <FaChessPawn />
         </i>
-        <span>駒追加</span>
+        {/* <span>駒追加</span> */}
       </Styled.Item>
-      <Styled.Item onClick={() => setField()} type="button">
+      <Styled.Item onClick={() => setControl("status")} type="button">
         <i>
-          <FaImages />
+          <FaTable />
         </i>
-        <span>背景・音源変更</span>
       </Styled.Item>
-      <Styled.Item className="current" onClick={() => scaleDown()} type="button">
+      <Styled.Item
+        className="current"
+        onClick={() => setControl("messages")}
+        type="button"
+      >
         <i>
           <FaComment />
         </i>
-        {/* <span>縮小</span> */}
       </Styled.Item>
-      <Styled.Item onClick={() => scaleDown()} type="button">
+      <Styled.Item onClick={() => setControl("fields")} type="button">
+        <i>
+          <FaImages />
+        </i>
+      </Styled.Item>
+      <Styled.Item onClick={() => setControl("tracks")} type="button">
+        <i>
+          <FaMusic />
+        </i>
+      </Styled.Item>
+      {/* <Styled.Item onClick={() => scaleDown()} type="button">
         <i>
           <FaSearchMinus />
         </i>
-        {/* <span>縮小</span> */}
       </Styled.Item>
       <Styled.Item onClick={() => scaleUp()} type="button">
         <i>
           <FaSearchPlus />
         </i>
-        {/* <span>拡大</span> */}
-      </Styled.Item>
-      {/* <Styled.ItemB type="button">
-        <i><FaComment /></i>
-        <span>チャットパレット</span>
-      </Styled.ItemB> */}
+      </Styled.Item> */}
     </Styled.Container>
   );
 };
@@ -87,25 +101,24 @@ const mapDispatchToProps = {
   },
   setField: () => {
     return {
-      type: "ROOM_FORM_SET",
-      key: "field",
-      item: true
+      type: "ROOM_VIEW_SET",
+      key: "controls",
+      value: "fields"
     };
-    // return {
-    //   type: "@ROOM_FIELD_SET",
-    //   field: {
-    //     images: [
-    //       {
-    //         url: "/bg.jpg",
-    //         size: [1, 1],
-    //         position: [0, 0]
-    //       }
-    //     ],
-    //     background: {
-    //       url: "/bg.jpg"
-    //     }
-    //   }
-    // };
+  },
+  setControl: value => {
+    return {
+      type: "ROOM_VIEW_SET",
+      key: "controls",
+      value
+    };
+  },
+  setMessage: () => {
+    return {
+      type: "ROOM_VIEW_SET",
+      key: "controls",
+      value: "messages"
+    };
   }
   // showObjects: () => {
   //   return {
@@ -126,7 +139,7 @@ export default connect(
 
 const Styled = {};
 Styled.Container = styled.div`
-  padding: 8px;
+  padding: 16px 8px;
   display: flex;
   justify-content: space-between;
   /* position: absolute;
@@ -135,7 +148,7 @@ Styled.Container = styled.div`
   z-index: 10; */
 `;
 Styled.Item = styled.button`
-  margin: 8px;
+  margin: 0 8px;
   border: none;
   border-radius: 50%;
   display: flex;
@@ -148,25 +161,24 @@ Styled.Item = styled.button`
   /* bottom: -12px; */
   color: #222;
   &.current {
-    margin-top: 2px;
-    width: 42px;
-    height: 42px;
+    margin-top: -4px;
+    margin-bottom: -4px;
+    width: 44px;
+    height: 44px;
     background: #222;
     color: #fff;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   }
   i {
     box-sizing: border-box;
-    padding: 24%;
+    padding: 8px;
     width: 100%;
     height: 100%;
     line-height: 1;
-    /* background: #222; */
+    display: block;
     svg {
-      /* border: 2px solid #ccc; */
       width: 100%;
       height: 100%;
-      /* color: #222; */
     }
   }
   span {

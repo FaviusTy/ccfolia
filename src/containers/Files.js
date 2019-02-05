@@ -40,9 +40,10 @@ const Files = ({
   accept,
   tags,
   size,
-  onSelect,
+  // onSelect,
   fileAdd,
-  fileDeleteAll
+  fileDeleteAll,
+  children
 }) => {
   const handleDrop = useCallback(
     files => {
@@ -66,11 +67,7 @@ const Files = ({
       <Dropzone onDrop={handleDrop} disableClick accept={accept}>
         {({ getRootProps, getInputProps, isDragActive, open }) => {
           return (
-            <div
-              {...getRootProps()}
-              className="body"
-              data-active={isDragActive}
-            >
+            <div {...getRootProps()} data-active={isDragActive}>
               <input {...getInputProps()} />
               {isDragActive ? (
                 <StyledDropCover>
@@ -79,16 +76,15 @@ const Files = ({
                   </div>
                 </StyledDropCover>
               ) : null}
-              <StyledBody>
-                <StyledFileItem size={size}>
-                  <span onClick={() => open()}>+</span>
+              {children ? children({ files, open }) : null}
+              {/* <StyledFileItem size={size}>
+                <span onClick={() => open()}>+</span>
+              </StyledFileItem>
+              {files.map(file => (
+                <StyledFileItem size={size} key={file.id}>
+                  <File onClick={onSelect} file={file} size={size} />
                 </StyledFileItem>
-                {files.map(file => (
-                  <StyledFileItem size={size} key={file.id}>
-                    <File onClick={onSelect} file={file} size={size} />
-                  </StyledFileItem>
-                ))}
-              </StyledBody>
+              ))} */}
             </div>
           );
         }}
@@ -141,7 +137,7 @@ const mapDispatchToProps = {
 };
 
 const StyledContainer = styled.div`
-  padding: 0 8px;
+  /* padding: 0 8px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -152,7 +148,7 @@ const StyledContainer = styled.div`
     outline: none;
     display: flex;
     flex-direction: column;
-  }
+  } */
 `;
 
 const StyledBody = styled.div`

@@ -64,7 +64,7 @@ const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
       };
       onChange(id, item);
     },
-    [setPosition, onChange, id]
+    [setPosition, onChange, id, baseSize]
   );
   useEffect(() => {
     setPosition({ x, y });

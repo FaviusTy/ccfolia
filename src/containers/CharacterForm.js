@@ -53,9 +53,9 @@ const ImagesField = ({ form, field }) => {
 };
 
 const SizeField = ({ form: { setFieldValue }, field: { name, value } }) => {
-  const handleChange = useCallback((e) => {
-    setFieldValue(name, e.currentTarget.value.split(',').map((v) => ~~v))
-  })
+  const handleChange = useCallback(e => {
+    setFieldValue(name, e.currentTarget.value.split(",").map(v => ~~v));
+  });
   return (
     <select value={value[0]} onChange={handleChange}>
       <option value="1,1">x1</option>
@@ -162,14 +162,14 @@ export default compose(
 
 const Styled = {};
 Styled.Container = styled.div`
-  margin-top: -240px;
+  /* margin-top: -240px;
   margin-left: -160px;
   position: fixed;
   top: 50%;
   left: 50%;
   z-index: 10;
   width: 320px;
-  height: 480px;
+  height: 480px; */
   background: #fff;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
   form {

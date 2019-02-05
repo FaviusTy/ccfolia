@@ -1,13 +1,14 @@
 * { margin: 0; padding: 0; }
 
-/* html, body, #root .App {
-  height: 100%;
+html, body, #root .App {
+  /* height: 100%;
   width: 100%;
-  overflow: hidden;
-} */
+  overflow: hidden; */
+}
 
 html,
 body {
+  -webkit-overflow-scrolling: auto !important;
 }
 
 body {
