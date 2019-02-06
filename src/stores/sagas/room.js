@@ -3,6 +3,7 @@ import {
   call,
   put,
   fork,
+  take,
   takeLatest,
   takeEvery
 } from "redux-saga/effects";
@@ -161,6 +162,42 @@ const updateField = function*({ field }) {
   );
 };
 
+// Files
+const listenFilesChannel = function*({ id }) {
+  let uid = yield select(state => state.user.uid);
+  if (!uid) {
+    const { user } = yield take("@SIGN_IN");
+    uid = user.uid;
+  }
+  if (uid) {
+    const roomsStoreSaga = createStoreSaga(
+      db =>
+        db
+          .collection("files")
+          .where("owner", "==", uid)
+          .where("directory", "==", `rooms/${id}`),
+      "ROOM_FILE_CHANGES"
+    );
+    yield call(roomsStoreSaga);
+  }
+};
+
+const uploadAnyFiles = function*({ files }) {
+  const id = yield select(state => state.room.id);
+  let i = 0;
+  while (files.length > i) {
+    const file = files[i];
+    // const fileType = file.contentType.split('/')[0]
+    yield put({
+      type: "@FILE_ADD",
+      file: file,
+      tags: [],
+      directory: `rooms/${id}`
+    });
+    i++;
+  }
+};
+
 // Room
 const roomInit = function*({ id }) {
   yield put({
@@ -171,6 +208,7 @@ const roomInit = function*({ id }) {
   yield fork(listenTracksChannel, { id });
   yield fork(listenObjectsChannel, { id });
   yield fork(listenFieldsChannel, { id });
+  yield fork(listenFilesChannel, { id });
 };
 
 const userSaga = function*() {
@@ -183,6 +221,7 @@ const userSaga = function*() {
   yield takeEvery("@ROOM_OBJECT_DELETE", deleteObject);
   yield takeEvery("@ROOM_FIELD_SET", setField);
   yield takeEvery("@ROOM_FIELD_UPDATE", updateField);
+  yield takeEvery("@ROOM_ANYFILES_UPLOAD", uploadAnyFiles);
 };
 
 export default userSaga;

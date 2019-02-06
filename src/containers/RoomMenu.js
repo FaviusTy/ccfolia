@@ -8,7 +8,8 @@ import {
   FaSearchPlus,
   FaSearchMinus,
   FaMusic,
-  FaTable
+  FaTable,
+  FaDAndD
 } from "react-icons/fa";
 
 const RoomMenu = ({
@@ -16,6 +17,7 @@ const RoomMenu = ({
   scaleUp,
   scaleDown,
   setControl,
+  rollDice,
   setMessage
 }) => {
   return (
@@ -24,7 +26,6 @@ const RoomMenu = ({
         <i>
           <FaChessPawn />
         </i>
-        {/* <span>駒追加</span> */}
       </Styled.Item>
       <Styled.Item onClick={() => setControl("status")} type="button">
         <i>
@@ -33,11 +34,11 @@ const RoomMenu = ({
       </Styled.Item>
       <Styled.Item
         className="current"
-        onClick={() => setControl("messages")}
+        onClick={() => rollDice("1d100")}
         type="button"
       >
         <i>
-          <FaComment />
+          <FaDAndD />
         </i>
       </Styled.Item>
       <Styled.Item onClick={() => setControl("fields")} type="button">
@@ -50,16 +51,6 @@ const RoomMenu = ({
           <FaMusic />
         </i>
       </Styled.Item>
-      {/* <Styled.Item onClick={() => scaleDown()} type="button">
-        <i>
-          <FaSearchMinus />
-        </i>
-      </Styled.Item>
-      <Styled.Item onClick={() => scaleUp()} type="button">
-        <i>
-          <FaSearchPlus />
-        </i>
-      </Styled.Item> */}
     </Styled.Container>
   );
 };
@@ -118,6 +109,15 @@ const mapDispatchToProps = {
       type: "ROOM_VIEW_SET",
       key: "controls",
       value: "messages"
+    };
+  },
+  rollDice: notation => {
+    return {
+      type: "@ROOM_MESSAGE_ADD",
+      message: {
+        name: "sys",
+        text: notation
+      }
     };
   }
   // showObjects: () => {

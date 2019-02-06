@@ -3,69 +3,121 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { withFormik, Form, Field } from "formik";
+import { FormStyle, FormGroup, FormItem, FormAction } from "../components/Form";
 import Files from "./Files";
 import Spinner from "../components/Spinner";
 
-const FieldEdit = ({ setFieldValue, updateField }) => {
+const FieldEdit = ({ setFieldValue, updateField, values }) => {
   return (
     <Styled.Container>
-      <Files>
-        {({ files, open }) => {
-          return (
-            <Styled.Files>
-              <div>aa</div>
-              {files.map(file => {
-                return (
-                  <figure
-                    onClick={() => updateField({ images: [{ url: file.url }] })}
-                  >
-                    {file.uploaded ? (
-                      <img src={file.url} />
-                    ) : (
-                      <Spinner size={60} />
-                    )}
-                    <figcaption>{file.name}</figcaption>
-                  </figure>
-                );
-              })}
-            </Styled.Files>
-          );
-        }}
-      </Files>
       <Form>
-        <h2>Field</h2>
-        {/* <Field name="images[0].url" type="text" /> */}
-        {/* <Files onSelect={({ url }) => setFieldValue("images[0].url", url)}>
+        <Files className="files">
           {({ files, open }) => {
-            return <div>
-              {files.map((file) => {
-                return <p>{file.name}</p>
-              })}
-            </div>
+            return (
+              <Styled.Files>
+                {files.map(file => {
+                  return (
+                    <Styled.File>
+                      <figure
+                        onClick={() => setFieldValue("images[0].url", file.url)}
+                        className={
+                          values.images[0].url === file.url ? "current" : false
+                        }
+                      >
+                        {file.uploaded ? (
+                          <img src={file.url} />
+                        ) : (
+                          <Spinner size={60} />
+                        )}
+                        <figcaption>{file.name}</figcaption>
+                        <button type="button">DELETE</button>
+                      </figure>
+                    </Styled.File>
+                  );
+                })}
+              </Styled.Files>
+            );
           }}
-        </Files> */}
-        <Field name="baseSize" type="number" />
-        <Field name="size[0]" type="number" />
-        <Field name="size[1]" type="number" />
-        <button type="submit">SUBMIT</button>
+        </Files>
+        <FormItem>
+          <label>baseSize</label>
+          <Field name="baseSize" type="number" />
+        </FormItem>
+        <FormGroup>
+          <FormItem>
+            <label for="size[0]">X</label>
+            <Field name="size[0]" type="number" />
+          </FormItem>
+          <FormItem>
+            <label for="size[1]">Y</label>
+            <Field name="size[1]" type="number" />
+          </FormItem>
+        </FormGroup>
+        <FormAction>
+          <button type="submit">SAVE</button>
+        </FormAction>
       </Form>
     </Styled.Container>
   );
 };
 
 const Styled = {};
-Styled.Container = styled.div``;
+Styled.Container = styled(FormStyle)`
+  height: 100%;
+  form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .files {
+    flex: 1;
+  }
+`;
 Styled.Files = styled.div`
+  padding-top: 8px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
+  flex-wrap: wrap;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   figure {
-    width: 112px;
+    box-sizing: border-box;
+    margin: 8px;
+    position: relative;
+    max-width: 112px;
     height: 63px;
+    background: #fff;
+    &.current {
+      outline: 2px solid #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
     img {
       width: 100%;
       height: 100%;
+      display: block;
       object-fit: cover;
     }
+    figcaption {
+      padding: 4px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow: hidden;
+      line-height: 1;
+      font-size: 10px;
+      color: #fff;
+      opacity: 0.4;
+    }
   }
+`;
+Styled.File = styled.div`
+  width: 25%;
+  max-width: 112px;
 `;
 
 const mapStateToProps = state => {
@@ -106,8 +158,8 @@ const mapPropsToValues = ({ field }) => {
   } else {
     return {
       images: [{ url: "/bg.jpg" }],
-      baseSize: 30,
-      size: [30, 20]
+      baseSize: 60,
+      size: [15, 12]
     };
   }
 };

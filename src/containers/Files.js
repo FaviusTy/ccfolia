@@ -3,48 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import Dropzone from "react-dropzone";
 
-const getTypeFromContentType = contentType => {
-  return String(contentType).split("/")[0];
-};
-
-const File = ({ file, size, onClick }) => {
-  const handleClick = useCallback(() => {
-    onClick(file);
-  }, [file]);
-  if (!file.uploaded) return <StyledLoader size={size} />;
-  const fileType = getTypeFromContentType(file.contentType);
-  switch (fileType) {
-    case "image":
-      return (
-        <img
-          onClick={handleClick}
-          src={file.url}
-          width={size}
-          height={size}
-          draggable={false}
-        />
-      );
-    case "audio":
-      return (
-        <button type="button" onClick={handleClick}>
-          {file.name}
-        </button>
-      );
-    default:
-      return <StyledLoader size={size} />;
-  }
-};
-
-const Files = ({
-  files,
-  accept,
-  tags,
-  size,
-  // onSelect,
-  fileAdd,
-  fileDeleteAll,
-  children
-}) => {
+const Files = ({ files, accept, tags, fileAdd, fileDeleteAll, children, ...props }) => {
   const handleDrop = useCallback(
     files => {
       files.forEach(file => {
@@ -59,10 +18,7 @@ const Files = ({
   }, []);
 
   return (
-    <StyledContainer>
-      <p>
-        <a onClick={handleDeleteAllClick}>DELETE ALL</a>
-      </p>
+    <StyledContainer {...props}>
       {/* <div className=""><input type="text" /></div> */}
       <Dropzone onDrop={handleDrop} disableClick accept={accept}>
         {({ getRootProps, getInputProps, isDragActive, open }) => {
@@ -76,7 +32,7 @@ const Files = ({
                   </div>
                 </StyledDropCover>
               ) : null}
-              {children ? children({ files, open }) : null}
+              {children ? children({ files, open, fileDeleteAll }) : null}
               {/* <StyledFileItem size={size}>
                 <span onClick={() => open()}>+</span>
               </StyledFileItem>
@@ -103,10 +59,11 @@ const mapStateToProps = (
   }
 ) => {
   return {
-    files: state.user.files.filter(file => {
+    files: state.room.files.filter(file => {
       const isAcceptedFile = accept.includes(file.contentType);
       const isTaggedFile = tags.every(tag => {
         if (file.tags) {
+          return true;
           return file.tags.includes(tag);
         } else {
           return true;
@@ -149,16 +106,8 @@ const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
   } */
-`;
-
-const StyledBody = styled.div`
-  /* padding-bottom: 4px; */
-  display: flex;
-  flex: 1;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  ::-webkit-scrollbar {
-    display: none;
+  > div {
+    outline: none;
   }
 `;
 

@@ -14,7 +14,7 @@ const CharacterForm = ({ values, close }) => {
           <h2>Name</h2>
           <Field name="name" type="text" />
           <h2>Initiative</h2>
-          <Field name="name" type="text" />
+          <Field name="initiative" type="text" />
           <h2>Status</h2>
           <FieldArray name="status" component={StatusField} />
           <h2>Size</h2>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 // import { Route } from "react-router-dom";
+import { FaTimes } from "react-icons/fa";
+import Dropzone from "react-dropzone";
 
 import CharacterList from "../containers/CharacterList";
 import CharacterForm from "../containers/CharacterForm";
@@ -17,54 +19,50 @@ import FieldInfo from "../containers/FieldInfo";
 import FieldEdit from "../containers/FieldEdit";
 import TrackEdit from "../containers/TrackEdit";
 
-const Room = ({ view }) => {
+const Room = ({ view, uploadAnyFiles, closeControls }) => {
   return (
     <>
       <Background />
-      <Styled.Container>
-        <Styled.InformationArea>
-          <Tracks />
-        </Styled.InformationArea>
-        <Styled.ViewportArea>
-          <Screen />
-        </Styled.ViewportArea>
-        <Styled.ControlArea>
-          <Styled.ControlContentArea>
-            <Messages />
-          </Styled.ControlContentArea>
-          <Styled.ControlPanelArea>
-            {/* {view.controls === "objects" ? <CharacterForm /> : null} */}
-            <CharacterForm />
-            {view.controls === "fields" ? <FieldEdit /> : null}
-            {view.controls === "tracks" ? <TrackEdit /> : null}
-            {view.controls === "messages" ? <ChatBox /> : null}
-          </Styled.ControlPanelArea>
-          <Styled.ControlNavigationArea>
-            <RoomMenu />
-          </Styled.ControlNavigationArea>
-        </Styled.ControlArea>
-      </Styled.Container>
-
-      {/* <Background /> */}
-      {/* <Styled.Container>
-        <Styled.ViewportArea>
-          <Screen />
-          <RoomMenu />
-          <Styled.TopArea>
-            <Tracks />
-          </Styled.TopArea>
-          <CharacterList />
-        </Styled.ViewportArea>
-        <Styled.ChatArea>
-          <Messages />
-          <Styled.BottomArea>
-            <TrackEdit />
-            <FieldEdit />
-            <ChatBox />
-          </Styled.BottomArea>
-        </Styled.ChatArea>
-        <CharacterForm />
-      </Styled.Container> */}
+      <Dropzone onDrop={uploadAnyFiles} disableClick>
+        {({ getRootProps, getInputProps, isDragActive, open }) => {
+          return (
+            <Styled.Container {...getRootProps()} data-active={isDragActive}>
+              <input {...getInputProps()} />
+              {isDragActive ? "drop" : null}
+              <Styled.InformationArea>
+                <Tracks />
+              </Styled.InformationArea>
+              <Styled.ViewportArea>
+                <Screen />
+              </Styled.ViewportArea>
+              <Styled.ControlArea>
+                <Styled.ControlContentArea>
+                  <Messages />
+                </Styled.ControlContentArea>
+                {/* <Styled.ControlPanelArea>
+                  <CharacterForm />
+                  {view.controls === "fields" ? <FieldEdit /> : null}
+                  {view.controls === "tracks" ? <TrackEdit /> : null}
+                  {view.controls === "messages" ? <ChatBox /> : null}
+                </Styled.ControlPanelArea> */}
+                <Styled.ControlNavigationArea>
+                  <RoomMenu />
+                </Styled.ControlNavigationArea>
+              </Styled.ControlArea>
+              {view.controls ? (
+                <Styled.ControlPanelArea>
+                  {/* {view.controls === "objects" ? <CharacterForm /> : null} */}
+                  <Styled.CloseButton onClick={closeControls} type="button" />
+                  <CharacterForm />
+                  {view.controls === "fields" ? <FieldEdit /> : null}
+                  {view.controls === "tracks" ? <TrackEdit /> : null}
+                  {view.controls === "messages" ? <ChatBox /> : null}
+                </Styled.ControlPanelArea>
+              ) : null}
+            </Styled.Container>
+          );
+        }}
+      </Dropzone>
     </>
   );
 };
@@ -171,6 +169,19 @@ const mapDispatchToProps = {
       type: "@FILE_ADD",
       files
     };
+  },
+  uploadAnyFiles: files => {
+    return {
+      type: "@ROOM_ANYFILES_UPLOAD",
+      files: files
+    };
+  },
+  closeControls: () => {
+    return {
+      type: "ROOM_VIEW_SET",
+      key: "controls",
+      value: null
+    };
   }
 };
 
@@ -214,6 +225,8 @@ Styled.ControlArea = styled.div`
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 `;
 Styled.ControlContentArea = styled.div`
+  margin-bottom: -16px;
+  padding-bottom: 16px;
   height: 240px;
   /* flex: 1; */
   /* overflow: hidden; */
@@ -225,11 +238,41 @@ Styled.ControlContentArea = styled.div`
   background: rgba(255, 255, 255, 0.1);
 `;
 Styled.ControlPanelArea = styled.div`
-  flex: 1;
-  /* background: #f5f5f5; */
-  /* min-height: 240px; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+
+  /* flex: 1;
   overflow: auto;
+  border-radius: 12px; */
 `;
+Styled.CloseButton = styled.button`
+  border: none;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 1;
+  background: transparent;
+  ::after, ::before {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: #fff;
+  }
+  ::after {
+    transform: rotate(45deg);
+  }
+  ::before {
+    transform: rotate(-45deg);
+  }
+`
 Styled.ControlNavigationArea = styled.div`
   background: #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
@@ -251,101 +294,3 @@ Styled.ViewportArea = styled.div`
   /* background: url(/bg.jpg) 50% 50% no-repeat; */
   background-size: cover;
 `;
-
-// Styled.Container = styled.div`
-//   border-radius: 4px;
-//   /* overflow: hidden; */
-//   display: flex;
-//   /* height: 100vh; */
-//   min-height: 320px;
-//   position: absolute;
-//   top: 90px;
-//   left: 90px;
-//   right: 90px;
-//   bottom: 90px;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-//   /* background: #f5f5f5; */
-//   @media (max-width: 780px) {
-//     border-radius: 0;
-//     overflow: visible;
-//     display: block;
-//     position: relative;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-//     bottom: 0;
-//     box-shadow: none;
-//     padding-top: 50vh;
-//   }
-// `;
-// Styled.Background = styled.div`
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   overflow: hidden;
-//   @media (max-width: 780px) {
-//     /* display: none; */
-//   }
-// `;
-// Styled.ViewportArea = styled.div`
-//   position: relative;
-//   z-index: 1;
-//   flex: 1;
-//   width: calc(100% - 320px);
-//   @media (max-width: 780px) {
-//     width: auto;
-//     height: 50vh;
-//     /* border-bottom: 2px solid #fff; */
-//     position: fixed;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-//   }
-// `;
-// Styled.TopArea = styled.div`
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   z-index: 10;
-//   background: rgba(0, 0, 0, 0.4);
-// `;
-// Styled.ControlArea = styled.div`
-//   box-sizing: border-box;
-//   position: absolute;
-//   bottom: 0;
-//   left: 0;
-//   right: 0;
-//   height: 180px;
-//   background: rgba(0, 0, 0, 0.2);
-//   /* box-shadow: 0 0 12px rgba(0, 0, 0, 0.6); */
-//   /* display: none; */
-//   @media (max-width: 780px) {
-//     bottom: auto;
-//     top: 100%;
-//   }
-// `;
-// Styled.ChatArea = styled.div`
-//   display: flex;
-//   position: relative;
-//   min-width: 320px;
-//   /* box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.6); */
-//   /* background: rgba(0, 0, 0, 0.6); */
-//   /* background: #fff; */
-// `;
-// Styled.BottomArea = styled.div`
-//   /* background: rgba(0, 0, 0, 0.6); */
-//   position: absolute;
-//   bottom: 0;
-//   left: 0;
-//   right: 0;
-//   @media (max-width: 780px) {
-//     position: fixed;
-//   }
-// `;

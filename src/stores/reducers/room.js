@@ -26,25 +26,25 @@ const fieldsReducer = createReducer([], {
   ROOM_FIELD_CHANGES: collectionReducer
 });
 
-const viewReducer = createReducer(
-  {},
-  {
-    ROOM_INIT: () => ({}),
-    ROOM_VIEW_SET: (state, { key, value }) => {
-      if (state[key] === value) {
-        return {
-          ...state,
-          [key]: null
-        };
-      } else {
-        return {
-          ...state,
-          [key]: value
-        };
-      }
+const initialViewState = {
+  controls: "fields"
+};
+const viewReducer = createReducer(initialViewState, {
+  ROOM_INIT: () => initialViewState,
+  ROOM_VIEW_SET: (state, { key, value }) => {
+    if (state[key] === value) {
+      return {
+        ...state,
+        [key]: null
+      };
+    } else {
+      return {
+        ...state,
+        [key]: value
+      };
     }
   }
-);
+});
 
 const formReducer = createReducer(
   {},
@@ -59,6 +59,11 @@ const formReducer = createReducer(
   }
 );
 
+const filesReducer = createReducer([], {
+  ROOM_INIT: () => [],
+  ROOM_FILE_CHANGES: collectionReducer
+});
+
 export default combineReducers({
   id: identifyReducer,
   messages: messagesReducer,
@@ -66,5 +71,6 @@ export default combineReducers({
   objects: objectsReducer,
   tracks: tracksReducer,
   form: formReducer,
-  view: viewReducer
+  view: viewReducer,
+  files: filesReducer
 });

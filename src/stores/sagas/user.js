@@ -73,7 +73,7 @@ const deleteRoom = function*({ id }) {
 //   yield call(() => doc.delete());
 // };
 
-export const fileAdd = function*({ file, tags = [] }) {
+export const fileAdd = function*({ file, tags = [], directory = null }) {
   const user = yield select(state => state.user);
 
   if (!user.uid || !file) return;
@@ -93,6 +93,7 @@ export const fileAdd = function*({ file, tags = [] }) {
       contentType: file.type,
       owner: user.uid,
       size: 0,
+      directory,
       tags,
       t: Date.now()
     })
@@ -121,16 +122,6 @@ export const fileAdd = function*({ file, tags = [] }) {
 };
 
 // files
-const listenFilesChannel = function*({ user }) {
-  if (user.uid) {
-    const roomsStoreSaga = createStoreSaga(
-      db => db.collection("files").where("owner", "==", user.uid),
-      "USER_FILE_CHANGES"
-    );
-    yield call(roomsStoreSaga);
-  }
-};
-
 const fileDelete = function*({ id }) {
   const user = yield select(state => state.user);
   if (!user.uid) return;
@@ -174,8 +165,9 @@ const fileDeleteAll = function*() {
 const userInit = function*({ user }) {
   yield put({ type: "SIGN_IN", user });
   yield fork(listenRoomsChannel, { user });
-  yield fork(listenFilesChannel, { user });
+  // yield fork(listenFilesChannel, { user });
   // yield fork(listenCharactersChannel, { user });
+  // TODO: room init
 };
 
 const userSaga = function*() {
