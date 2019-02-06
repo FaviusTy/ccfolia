@@ -59,9 +59,15 @@ const Track = ({ name, url, loop, muted, volume }) => {
 };
 
 const mapStateToProps = state => {
-  return {
-    tracks: state.room.tracks
-  };
+  if (state.room.fields[0]) {
+    return {
+      tracks: state.room.fields[0].tracks || []
+    };
+  } else {
+    return {
+      tracks: []
+    };
+  }
 };
 
 const mapDispatchToProps = {};

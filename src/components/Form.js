@@ -39,6 +39,19 @@ export const FormItem = styled.div`
     font-size: 10px;
     color: #888;
   }
+  button {
+    box-sizing: border-box;
+    border: none;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    padding: 4px 8px;
+    background: #fff;
+    color: #222;
+    text-align: left;
+  }
 `;
 
 export const FormAction = styled.div`

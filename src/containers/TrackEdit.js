@@ -10,13 +10,20 @@ const TrackEdit = ({ setFieldValue, values }) => {
   return (
     <Styled.Container>
       <Form>
-        <Files
-          accept={["audio/mp3", "audio/wav"]}
-        >{({ files }) => {
-            return files.map((file) => {
-              return <button onClick={() => setFieldValue("url", file.url)} type="button">aa{file.name}</button>
-            })
-        }}</Files>
+        <Files accept={["audio/mp3", "audio/wav"]}>
+          {({ files }) => {
+            return files.map(file => {
+              return (
+                <button
+                  onClick={() => setFieldValue("url", file.url)}
+                  type="button"
+                >
+                  aa{file.name}
+                </button>
+              );
+            });
+          }}
+        </Files>
         <Field name="url" type="text" />
         <Field name="volume" type="number" step="0.01" />
         <Field name="loop" component={CheckBox} />

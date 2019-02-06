@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -7,7 +7,8 @@ import { FormStyle, FormGroup, FormItem, FormAction } from "../components/Form";
 import Files from "./Files";
 import Spinner from "../components/Spinner";
 
-const FieldEdit = ({ setFieldValue, updateField, values }) => {
+const FieldEdit = ({ setFieldValue, setValues, updateField, values }) => {
+  const [showAudioFiles, setShowAudioFiles] = useState(false);
   return (
     <Styled.Container>
       <Form>
@@ -30,7 +31,7 @@ const FieldEdit = ({ setFieldValue, updateField, values }) => {
                           <Spinner size={60} />
                         )}
                         <figcaption>{file.name}</figcaption>
-                        <button type="button">DELETE</button>
+                        {/* <button type="button">DELETE</button> */}
                       </figure>
                     </Styled.File>
                   );
@@ -39,8 +40,60 @@ const FieldEdit = ({ setFieldValue, updateField, values }) => {
             );
           }}
         </Files>
+        {showAudioFiles ? (
+          <Files className="files" accept={["audio/mp3", "audio/wav"]}>
+            {({ files }) => {
+              return (
+                <Styled.Files>
+                  {files.map(file => {
+                    return (
+                      <Styled.SelectButton
+                        onClick={() => {
+                          setFieldValue("tracks", [
+                            {
+                              ...values.tracks[0],
+                              url: file.url,
+                              name: file.name
+                            }
+                          ]);
+                          setShowAudioFiles(false);
+                        }}
+                        type="button"
+                      >
+                        {file.name}
+                      </Styled.SelectButton>
+                    );
+                  })}
+                </Styled.Files>
+              );
+            }}
+          </Files>
+        ) : null}
+        <FormGroup>
+          <FormItem>
+            <label>BGM</label>
+            <button onClick={() => setShowAudioFiles(!showAudioFiles)} type="button">
+              {values.tracks[0].name}
+            </button>
+          </FormItem>
+          <FormItem>
+            <label>Volume</label>
+            <Field name="tracks[0].volume" step={0.01} type="number" />
+          </FormItem>
+          <FormItem>
+            <label>Loop</label>
+            <button
+              onClick={() =>
+                setFieldValue("tracks[0].loop", !values.tracks[0].loop)
+              }
+              type="button"
+            >
+              {values.tracks[0].loop ? "ON" : "OFF"}
+            </button>
+          </FormItem>
+        </FormGroup>
         <FormItem>
-          <label>baseSize</label>
+          <label>Cell size</label>
           <Field name="baseSize" type="number" />
         </FormItem>
         <FormGroup>
@@ -71,14 +124,17 @@ Styled.Container = styled(FormStyle)`
   }
   .files {
     flex: 1;
+    overflow: auto;
   }
 `;
 Styled.Files = styled.div`
-  padding-top: 8px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-end;
+  /* justify-content: flex-end; */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -119,6 +175,16 @@ Styled.File = styled.div`
   width: 25%;
   max-width: 112px;
 `;
+Styled.SelectButton = styled.button`
+  box-sizing: border-box;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  display: block;
+  width: 100%;
+  background: #eee;
+  color: #888;
+`;
 
 const mapStateToProps = state => {
   return {
@@ -141,9 +207,7 @@ const mapDispatchToProps = {
   },
   close: () => {
     return {
-      type: "ROOM_FORM_SET",
-      key: "field",
-      item: null
+      type: "ROOM_VIEW_CLOSE"
     };
   }
 };
@@ -151,13 +215,15 @@ const mapDispatchToProps = {
 const mapPropsToValues = ({ field }) => {
   if (field) {
     return {
-      images: field.images,
+      images: field.images || [{ url: "" }],
+      tracks: field.tracks || [{ url: "", volume: 0.05, loop: true }],
       baseSize: field.baseSize,
       size: field.size
     };
   } else {
     return {
-      images: [{ url: "/bg.jpg" }],
+      images: [{ url: "" }],
+      tracks: [{ url: "", volume: 0.05, loop: true }],
       baseSize: 60,
       size: [15, 12]
     };

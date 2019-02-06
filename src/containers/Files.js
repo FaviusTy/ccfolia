@@ -3,7 +3,15 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import Dropzone from "react-dropzone";
 
-const Files = ({ files, accept, tags, fileAdd, fileDeleteAll, children, ...props }) => {
+const Files = ({
+  files,
+  accept,
+  tags,
+  fileAdd,
+  fileDeleteAll,
+  children,
+  ...props
+}) => {
   const handleDrop = useCallback(
     files => {
       files.forEach(file => {
@@ -106,8 +114,10 @@ const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
   } */
+  display: flex;
   > div {
     outline: none;
+    flex: 1;
   }
 `;
 

@@ -19,7 +19,7 @@ import FieldInfo from "../containers/FieldInfo";
 import FieldEdit from "../containers/FieldEdit";
 import TrackEdit from "../containers/TrackEdit";
 
-const Room = ({ view, uploadAnyFiles, closeControls }) => {
+const Room = ({ view, uploadAnyFiles, closeControls, resetMessageAll }) => {
   return (
     <>
       <Background />
@@ -37,6 +37,9 @@ const Room = ({ view, uploadAnyFiles, closeControls }) => {
               </Styled.ViewportArea>
               <Styled.ControlArea>
                 <Styled.ControlContentArea>
+                  <button onClick={() => resetMessageAll()} type="button">
+                    RESET
+                  </button>
                   <Messages />
                 </Styled.ControlContentArea>
                 {/* <Styled.ControlPanelArea>
@@ -259,7 +262,8 @@ Styled.CloseButton = styled.button`
   right: 4px;
   z-index: 1;
   background: transparent;
-  ::after, ::before {
+  ::after,
+  ::before {
     content: "";
     display: block;
     width: 32px;
@@ -272,7 +276,7 @@ Styled.CloseButton = styled.button`
   ::before {
     transform: rotate(-45deg);
   }
-`
+`;
 Styled.ControlNavigationArea = styled.div`
   background: #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
