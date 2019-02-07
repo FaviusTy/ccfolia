@@ -8,6 +8,7 @@ import {
   FaSearchPlus,
   FaSearchMinus,
   FaMusic,
+  FaCog,
   FaTable,
   FaDAndD
 } from "react-icons/fa";
@@ -46,9 +47,9 @@ const RoomMenu = ({
           <FaImages />
         </i>
       </Styled.Item>
-      <Styled.Item onClick={() => setControl("tracks")} type="button">
+      <Styled.Item onClick={() => setControl("settings")} type="button">
         <i>
-          <FaMusic />
+          <FaCog />
         </i>
       </Styled.Item>
     </Styled.Container>

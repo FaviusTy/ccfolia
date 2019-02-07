@@ -14,14 +14,14 @@ import RoomMenu from "../containers/RoomMenu";
 import Background from "../containers/Background";
 import FieldEdit from "../containers/FieldEdit";
 import TrackEdit from "../containers/TrackEdit";
+import Settings from "../containers/Settings";
 
 const Room = ({
   view,
   form,
   uploadAnyFiles,
   closeControls,
-  closeForm,
-  resetMessageAll
+  closeForm
 }) => {
   return (
     <>
@@ -40,9 +40,6 @@ const Room = ({
               </Styled.ViewportArea>
               <Styled.ControlArea>
                 <Styled.ControlContentArea>
-                  <button onClick={() => resetMessageAll()} type="button">
-                    RESET
-                  </button>
                   <Messages />
                 </Styled.ControlContentArea>
                 <Styled.ControlNavigationArea>
@@ -60,7 +57,7 @@ const Room = ({
                   {/* {view.controls === "objects" ? <CharacterForm /> : null} */}
                   <Styled.CloseButton onClick={closeControls} type="button" />
                   {view.controls === "fields" ? <FieldEdit /> : null}
-                  {view.controls === "tracks" ? <TrackEdit /> : null}
+                  {view.controls === "settings" ? <Settings /> : null}
                   {view.controls === "messages" ? <ChatBox /> : null}
                 </Styled.ControlPanelArea>
               ) : null}

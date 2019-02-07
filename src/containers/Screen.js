@@ -76,20 +76,20 @@ const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
       position={position}
       grid={[baseSize * scale, baseSize * scale]}
     >
-      <div style={{ position: "absolute", top: 0, left: 0 }}>
+      <Styled.Obj style={{ position: "absolute", top: 0, left: 0 }}>
         <img
           draggable={false}
           width={baseSize * size[0]}
           height={baseSize * size[1]}
           src={item.url || "/icon-100x100.png"}
         />
-        <button onClick={() => onDelete(item)} type="button">
-          Delete
-        </button>
         <button onClick={() => onEdit(item)} type="button">
-          Edit
+          {item.name}
         </button>
-      </div>
+        {/* <button onClick={() => onDelete(item)} type="button">
+          Delete
+        </button> */}
+      </Styled.Obj>
     </Draggable>
   );
 };
@@ -178,4 +178,19 @@ Styled.Field = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+`;
+Styled.Obj = styled.div`
+  button {
+    padding: 2px;
+    border: none;
+    border-radius: 0 0 4px 4px;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    background: #fff;
+    font-size: 10px;
+    color: #888;
+  }
 `;

@@ -39,7 +39,7 @@ const messageAdd = function*({ message }) {
   }
 };
 
-const messageResetAll = function*() {
+const messageDeleteAll = function*() {
   const id = yield select(state => state.room.id);
   const messages = yield select(state => state.room.messages);
   const targets = [...messages];
@@ -214,7 +214,7 @@ const roomInit = function*({ id }) {
 const userSaga = function*() {
   yield takeLatest("@ROOM_INIT", roomInit);
   yield takeEvery("@ROOM_MESSAGE_ADD", messageAdd);
-  yield takeEvery("@ROOM_MESSAGE_RESET_ALL", messageResetAll);
+  yield takeEvery("@ROOM_MESSAGE_DELETE_ALL", messageDeleteAll);
   yield takeEvery("@ROOM_TRACK_SET", setTrack);
   yield takeEvery("@ROOM_OBJECT_SET", setObject);
   yield takeEvery("@ROOM_OBJECT_UPDATE", updateObject);
