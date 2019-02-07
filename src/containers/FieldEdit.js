@@ -18,11 +18,11 @@ const FieldEdit = ({ setFieldValue, setValues, updateField, values }) => {
               <Styled.Files>
                 {files.map(file => {
                   return (
-                    <Styled.File>
+                    <Styled.File key={file.id}>
                       <figure
                         onClick={() => setFieldValue("images[0].url", file.url)}
                         className={
-                          values.images[0].url === file.url ? "current" : false
+                          values.images[0].url === file.url ? "current" : null
                         }
                       >
                         {file.uploaded ? (
@@ -44,10 +44,11 @@ const FieldEdit = ({ setFieldValue, setValues, updateField, values }) => {
           <Files className="files" accept={["audio/mp3", "audio/wav"]}>
             {({ files }) => {
               return (
-                <Styled.Files>
+                <Styled.Select>
                   {files.map(file => {
                     return (
                       <Styled.SelectButton
+                        key={file.id}
                         onClick={() => {
                           setFieldValue("tracks", [
                             {
@@ -64,7 +65,7 @@ const FieldEdit = ({ setFieldValue, setValues, updateField, values }) => {
                       </Styled.SelectButton>
                     );
                   })}
-                </Styled.Files>
+                </Styled.Select>
               );
             }}
           </Files>
@@ -72,7 +73,10 @@ const FieldEdit = ({ setFieldValue, setValues, updateField, values }) => {
         <FormGroup>
           <FormItem>
             <label>BGM</label>
-            <button onClick={() => setShowAudioFiles(!showAudioFiles)} type="button">
+            <button
+              onClick={() => setShowAudioFiles(!showAudioFiles)}
+              type="button"
+            >
               {values.tracks[0].name}
             </button>
           </FormItem>
@@ -98,11 +102,11 @@ const FieldEdit = ({ setFieldValue, setValues, updateField, values }) => {
         </FormItem>
         <FormGroup>
           <FormItem>
-            <label for="size[0]">X</label>
+            <label htmlFor="size[0]">X</label>
             <Field name="size[0]" type="number" />
           </FormItem>
           <FormItem>
-            <label for="size[1]">Y</label>
+            <label htmlFor="size[1]">Y</label>
             <Field name="size[1]" type="number" />
           </FormItem>
         </FormGroup>
@@ -127,12 +131,20 @@ Styled.Container = styled(FormStyle)`
     overflow: auto;
   }
 `;
+Styled.Select = styled.div`
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 Styled.Files = styled.div`
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-content: flex-end;
-  /* justify-content: flex-end; */
+  align-content: flex-start;
+  /* justify-content: flex-start; */
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   &::-webkit-scrollbar {

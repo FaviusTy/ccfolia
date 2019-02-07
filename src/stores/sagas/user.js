@@ -85,6 +85,19 @@ export const fileAdd = function*({ file, tags = [], directory = null }) {
     t: Date.now()
   });
 
+  console.log({
+      name: file.name,
+      uploaded: false,
+      url: null,
+      contentType: file.type,
+      owner: user.uid,
+      size: 0,
+      directory,
+      tags,
+      t: Date.now()
+    })
+
+
   const doc = yield call(() =>
     collectionRef.add({
       name: file.name,

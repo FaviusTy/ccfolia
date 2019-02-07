@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Rnd } from "react-rnd";
+// import { Rnd } from "react-rnd";
 import Draggable from "react-draggable";
-// import DraggableObject from "../components/Draggable";
 
 const touchmoveHandler = e => {
   e.stopPropagation();
@@ -82,7 +81,7 @@ const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
           draggable={false}
           width={baseSize * size[0]}
           height={baseSize * size[1]}
-          src={item.images[0].url || "/icon-100x100.png"}
+          src={item.url || "/icon-100x100.png"}
         />
         <button onClick={() => onDelete(item)} type="button">
           Delete
@@ -104,8 +103,10 @@ const Field = ({ images, baseSize, size, scale, children }) => {
           height: baseSize * size[1] + "px"
         }}
       >
-        {images.map(image => {
-          return <Styled.Background src={image.url} draggable={false} />;
+        {images.map((image, i) => {
+          return (
+            <Styled.Background key={i} src={image.url} draggable={false} />
+          );
         })}
         {children}
       </Styled.Field>
@@ -137,7 +138,7 @@ const mapDispatchToProps = {
   },
   edit: item => {
     return {
-      type: "USER_FORM_SET",
+      type: "ROOM_FORM_SET",
       key: "character",
       item: item
     };

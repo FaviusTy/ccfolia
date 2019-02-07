@@ -5,21 +5,24 @@ import styled from "styled-components";
 import { FaTimes } from "react-icons/fa";
 import Dropzone from "react-dropzone";
 
-import CharacterList from "../containers/CharacterList";
 import CharacterForm from "../containers/CharacterForm";
 import Screen from "../containers/Screen";
-import UserMenu from "../containers/UserMenu";
 import ChatBox from "../containers/ChatBox";
 import Messages from "../containers/Messages";
 import Tracks from "../containers/Tracks";
 import RoomMenu from "../containers/RoomMenu";
 import Background from "../containers/Background";
-import ObjectForm from "../containers/ObjectForm";
-import FieldInfo from "../containers/FieldInfo";
 import FieldEdit from "../containers/FieldEdit";
 import TrackEdit from "../containers/TrackEdit";
 
-const Room = ({ view, uploadAnyFiles, closeControls, resetMessageAll }) => {
+const Room = ({
+  view,
+  form,
+  uploadAnyFiles,
+  closeControls,
+  closeForm,
+  resetMessageAll
+}) => {
   return (
     <>
       <Background />
@@ -42,21 +45,20 @@ const Room = ({ view, uploadAnyFiles, closeControls, resetMessageAll }) => {
                   </button>
                   <Messages />
                 </Styled.ControlContentArea>
-                {/* <Styled.ControlPanelArea>
-                  <CharacterForm />
-                  {view.controls === "fields" ? <FieldEdit /> : null}
-                  {view.controls === "tracks" ? <TrackEdit /> : null}
-                  {view.controls === "messages" ? <ChatBox /> : null}
-                </Styled.ControlPanelArea> */}
                 <Styled.ControlNavigationArea>
                   <RoomMenu />
                 </Styled.ControlNavigationArea>
               </Styled.ControlArea>
+              {form.character ? (
+                <Styled.ControlPanelArea>
+                  <Styled.CloseButton onClick={closeForm} type="button" />
+                  <CharacterForm />
+                </Styled.ControlPanelArea>
+              ) : null}
               {view.controls ? (
                 <Styled.ControlPanelArea>
                   {/* {view.controls === "objects" ? <CharacterForm /> : null} */}
                   <Styled.CloseButton onClick={closeControls} type="button" />
-                  <CharacterForm />
                   {view.controls === "fields" ? <FieldEdit /> : null}
                   {view.controls === "tracks" ? <TrackEdit /> : null}
                   {view.controls === "messages" ? <ChatBox /> : null}
@@ -79,6 +81,7 @@ const mapStateToProps = (state, ownProps) => {
     tracks: state.room.tracks,
     fields: state.room.fields,
     view: state.room.view,
+    form: state.room.form,
     characters: state.user.characters
   };
 };
@@ -184,6 +187,13 @@ const mapDispatchToProps = {
       type: "ROOM_VIEW_SET",
       key: "controls",
       value: null
+    };
+  },
+  closeForm: () => {
+    return {
+      type: "ROOM_FORM_SET",
+      key: "character",
+      item: null
     };
   }
 };

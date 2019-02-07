@@ -3,52 +3,64 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { withFormik, Form, Field, FieldArray } from "formik";
-import { FaTimesCircle } from "react-icons/fa";
+import { FormStyle, FormGroup, FormItem, FormAction } from "../components/Form";
+import Files from "./Files";
+import { FaTimes } from "react-icons/fa";
+import Spinner from "../components/Spinner";
 
-const CharacterForm = ({ values, close }) => {
+const CharacterForm = ({ item, values, close, setFieldValue }) => {
   return (
     <Styled.Container>
       <Form>
-        <FieldArray name="images" component={ImagesField} />
-        <Styled.InputArea>
-          <h2>Name</h2>
+        <Files className="files">
+          {({ files, open }) => {
+            return (
+              <Styled.Files>
+                <div onClick={() => open()}>ADD</div>
+                {files.map(file => {
+                  return (
+                    <Styled.File key={file.id}>
+                      <figure
+                        onClick={() => setFieldValue("url", file.url)}
+                        className={values.url === file.url ? "current" : null}
+                      >
+                        {file.uploaded ? (
+                          <img src={file.url} />
+                        ) : (
+                          <Spinner size={60} />
+                        )}
+                        <figcaption>{file.name}</figcaption>
+                      </figure>
+                    </Styled.File>
+                  );
+                })}
+              </Styled.Files>
+            );
+          }}
+        </Files>
+        <FormItem>
+          <label htmlFor="name">Name</label>
           <Field name="name" type="text" />
-          <h2>Initiative</h2>
-          <Field name="initiative" type="text" />
-          <h2>Status</h2>
+        </FormItem>
+        <FormItem>
+          <label htmlFor="initiative">Initiative</label>
+          <Field name="initiative" type="number" />
+        </FormItem>
+        {/* <FormItem>
+          <label htmlFor="status">Status</label>
           <FieldArray name="status" component={StatusField} />
-          <h2>Size</h2>
+        </FormItem> */}
+        <FieldArray name="status" component={StatusField} />
+        <FormItem>
+          <label htmlFor="size">Size</label>
           <Field name="size" component={SizeField} />
-          {/* <h2>Profile</h2> */}
-          {/* <Field name="text" component="textarea" /> */}
-          {/* <Field name="status" component="textarea" /> */}
-          {/* <h2>Params</h2> */}
-          {/* <Field name="params" component="textarea" /> */}
-        </Styled.InputArea>
-        <button type="submit">SUBIMT</button>
+        </FormItem>
+        <FormAction>
+          <button type="submit">SAVE</button>
+        </FormAction>
       </Form>
-      <Styled.CloseButton onClick={close} />
+      {/* <Styled.CloseButton onClick={close} /> */}
     </Styled.Container>
-  );
-};
-
-const ImagesField = ({ form, field }) => {
-  const { images } = form.values;
-  return (
-    <Styled.Images>
-      {images.map((image, i) => {
-        return (
-          <div key={i}>
-            <figure>{image.url ? <img src={image.url} /> : null}</figure>
-            <Field name={`images.${i}.url`} type="text" />
-            {/* <button onClick={() => remove(i)}>remove</button> */}
-          </div>
-        );
-      })}
-      {/* <button onClick={() => push({ url: "/bg.jpg" })} type="button">
-        Add
-      </button> */}
-    </Styled.Images>
   );
 };
 
@@ -75,26 +87,36 @@ const StatusField = ({ form, push, remove }) => {
     <Styled.Status>
       {status.map((state, i) => {
         return (
-          <Styled.State key={i}>
-            <Field name={`status[${i}].key`} type="text" />
-            <Field name={`status[${i}].value`} type="number" />
-            <Field name={`status[${i}].max`} type="number" />
-            <button onClick={() => remove(i)} type="button">
-              remove
-            </button>
-          </Styled.State>
+          <FormGroup key={i}>
+            <FormItem>
+              <Field name={`status[${i}].key`} type="text" />
+            </FormItem>
+            <FormItem>
+              <Field name={`status[${i}].value`} type="number" />
+            </FormItem>
+            <FormItem>
+              <Field name={`status[${i}].max`} type="number" />
+            </FormItem>
+            {/* <FormItem width={30}>
+              <button onClick={() => remove(i)} type="button">
+                <FaTimes />
+              </button>
+            </FormItem> */}
+          </FormGroup>
         );
       })}
-      <button onClick={() => push({ url: "/bg.jpg" })} type="button">
-        Add
-      </button>
+      {/* <FormItem>
+        <button onClick={() => push({ key: "???", value:0, max: 0 })} type="button">
+          Add
+        </button>
+      </FormItem> */}
     </Styled.Status>
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    item: state.user.form.character
+    item: state.room.form.character
   };
 };
 
@@ -125,11 +147,12 @@ const mapPropsToValues = ({ item }) => {
     return {
       name: item.name,
       text: item.text,
-      images: item.images,
+      url: item.url,
+      initiative: item.initiative,
       status: item.status,
       tags: item.tags,
-      size: [1, 1],
-      position: [0, 0]
+      size: item.size || [1, 1],
+      position: item.position || [0, 0]
     };
   } else {
     return {
@@ -161,109 +184,68 @@ export default compose(
 )(CharacterFormContainer);
 
 const Styled = {};
-Styled.Container = styled.div`
-  /* margin-top: -240px;
-  margin-left: -160px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 10;
-  width: 320px;
-  height: 480px; */
-  background: #fff;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+Styled.Container = styled(FormStyle)`
+  height: 100%;
   form {
     display: flex;
     flex-direction: column;
     height: 100%;
   }
-  button[type="submit"] {
-    padding: 12px;
-    border: none;
-    background: #eee;
-    color: #888;
-  }
-  input[type="text"],
-  input[type="number"],
-  textarea {
-    box-sizing: border-box;
-    padding: 8px;
-    border: 2px solid #eee;
-    /* border-radius: 12px; */
-    display: block;
-    width: 100%;
-  }
-  textarea {
-    min-width: 100%;
-    max-width: 100%;
-  }
-  h2 {
-    margin: 4px;
-    color: #888;
-    font-size: 12px;
-    :first-child {
-      margin-top: 0;
-    }
+  .files {
+    flex: 1;
+    overflow: auto;
   }
 `;
-Styled.InputArea = styled.div`
-  padding: 12px;
-  flex: 1;
+Styled.Files = styled.div`
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  /* justify-content: flex-start; */
   overflow: auto;
-`;
-Styled.Images = styled.div`
-  border-bottom: 1px solid #eee;
-  position: relative;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   figure {
-    width: 100%;
-    height: 210px;
+    box-sizing: border-box;
+    margin: 8px;
+    position: relative;
+    max-width: 112px;
+    height: 63px;
+    background: #fff;
+    &.current {
+      outline: 2px solid #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
     img {
       width: 100%;
       height: 100%;
+      display: block;
       object-fit: cover;
-      object-position: top;
+    }
+    figcaption {
+      padding: 4px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow: hidden;
+      line-height: 1;
+      font-size: 10px;
+      color: #fff;
+      opacity: 0.4;
     }
   }
-  input[type="text"] {
-    position: absolute;
-    left: 5%;
-    right: 5%;
-    bottom: 8px;
-    width: 90%;
-  }
 `;
-Styled.Status = styled.div``;
+Styled.File = styled.div`
+  width: 25%;
+  max-width: 112px;
+`;
+
+Styled.Status = styled.div`
+`;
 Styled.State = styled.div`
-  display: flex;
-  width: 100%;
-  input[type="text"],
-  input[type="number"] {
-    border-radius: 0;
-    width: 20%;
-    flex: 1;
-  }
-`;
-
-Styled.CloseButton = styled(FaTimesCircle)`
-  width: 16px;
-  height: 16px;
-  border: 2px solid #fff;
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  border-radius: 50%;
-  background: #fff;
-  color: #444;
-  cursor: pointer;
-`;
-
-Styled.Image = styled.figure`
-  width: 100%;
-  height: 240px;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top;
-  }
 `;

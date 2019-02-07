@@ -22,7 +22,7 @@ const RoomMenu = ({
 }) => {
   return (
     <Styled.Container>
-      <Styled.Item onClick={() => setControl("objects")} type="button">
+      <Styled.Item onClick={() => addObject("objects")} type="button">
         <i>
           <FaChessPawn />
         </i>
@@ -62,20 +62,21 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   addObject: () => {
     return {
-      type: "USER_FORM_SET",
+      type: "ROOM_FORM_SET",
       key: "character",
       item: {
         id: Date.now().toString(34),
         name: "TESTMAN",
         text: "I am a TESTMAN.",
-        images: [{ url: "/bg.jpg" }],
+        // images: [{ url: "/bg.jpg" }],
+        url: "bg.jpg",
         initiative: 0,
         status: [
           { key: "HP", value: 0, max: 0 },
           { key: "MP", value: 0, max: 0 },
           { key: "SAN", value: 0, max: 0 }
         ],
-        params: [{ key: "DEX", value: 0 }],
+        // params: [{ key: "DEX", value: 0 }],
         tags: []
       }
     };

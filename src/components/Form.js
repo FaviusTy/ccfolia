@@ -17,7 +17,7 @@ export const FormItem = styled.div`
   border-bottom: 1px solid #eee;
   display: block;
   /* flex: 1; */
-  width: 100%;
+  width: ${({ width }) => width ? `${width}px` : "100%"};
   background: #fff;
   input[type="text"],
   input[type="number"] {

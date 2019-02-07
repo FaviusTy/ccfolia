@@ -5,13 +5,11 @@ import ReactHowler from "react-howler";
 // import ReactPlayer from "react-player";
 import { FaPlay, FaPause } from "react-icons/fa";
 
-// import ReactPlayer from 'react-player' // todo: support youtube
-
 const Tracks = ({ tracks }) => {
   return (
     <Styled.Container>
-      {tracks.map(track => (
-        <Track key={track.id} {...track} />
+      {tracks.map((track, i) => (
+        <Track key={i} {...track} />
       ))}
     </Styled.Container>
   );

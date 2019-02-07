@@ -27,7 +27,7 @@ const fieldsReducer = createReducer([], {
 });
 
 const initialViewState = {
-  controls: "fields"
+  controls: null
 };
 const viewReducer = createReducer(initialViewState, {
   ROOM_INIT: () => initialViewState,

@@ -20,14 +20,8 @@ const Files = ({
     },
     [...tags]
   );
-  const handleDeleteAllClick = useCallback(e => {
-    e.preventDefault();
-    fileDeleteAll();
-  }, []);
-
   return (
     <StyledContainer {...props}>
-      {/* <div className=""><input type="text" /></div> */}
       <Dropzone onDrop={handleDrop} disableClick accept={accept}>
         {({ getRootProps, getInputProps, isDragActive, open }) => {
           return (
@@ -41,14 +35,6 @@ const Files = ({
                 </StyledDropCover>
               ) : null}
               {children ? children({ files, open, fileDeleteAll }) : null}
-              {/* <StyledFileItem size={size}>
-                <span onClick={() => open()}>+</span>
-              </StyledFileItem>
-              {files.map(file => (
-                <StyledFileItem size={size} key={file.id}>
-                  <File onClick={onSelect} file={file} size={size} />
-                </StyledFileItem>
-              ))} */}
             </div>
           );
         }}
@@ -71,7 +57,6 @@ const mapStateToProps = (
       const isAcceptedFile = accept.includes(file.contentType);
       const isTaggedFile = tags.every(tag => {
         if (file.tags) {
-          return true;
           return file.tags.includes(tag);
         } else {
           return true;
@@ -102,18 +87,6 @@ const mapDispatchToProps = {
 };
 
 const StyledContainer = styled.div`
-  /* padding: 0 8px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-  flex: 1;
-  .body {
-    outline: none;
-    display: flex;
-    flex-direction: column;
-  } */
   display: flex;
   > div {
     outline: none;
@@ -125,8 +98,8 @@ const StyledDropCover = styled.div`
   padding: 4px;
   position: absolute;
   top: 0;
-  left: 8px;
-  right: 8px;
+  left: 0;
+  right: 0;
   bottom: 0;
   background: #eee;
   div {
