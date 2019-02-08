@@ -13,7 +13,7 @@ const App = () => {
     <Provider store={store}>
       <Router history={history}>
         <>
-          <Route exact path="/signin" component={Login} />
+          <Route exact path="/" component={Login} />
           <Route exact path="/home" component={Home} />
           <Route exact path="/rooms/:id" component={Room} />
         </>

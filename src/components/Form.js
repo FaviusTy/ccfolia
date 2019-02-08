@@ -55,6 +55,7 @@ export const FormItem = styled.div`
 `;
 
 export const FormAction = styled.div`
+  text-align: center;
   button {
     box-sizing: border-box;
     padding: 12px;
@@ -67,5 +68,11 @@ export const FormAction = styled.div`
     font-size: 14px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
     letter-spacing: 0.1em;
+  }
+  span {
+    margin: 8px;
+    display: inline-block;
+    font-size: 12px;
+    color: #eee;
   }
 `;

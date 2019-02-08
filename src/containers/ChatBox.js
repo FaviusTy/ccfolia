@@ -17,7 +17,10 @@ const ChatBox = ({ submitForm, values }) => {
   return (
     <StyledContainer>
       <Form>
-        <Field
+        {/* <figure>
+          <img src="/bg.jpg" alt=""/>
+        </figure> */}
+        {/* <Field
           component="select"
           name="color"
           style={{ background: values.color }}
@@ -28,7 +31,7 @@ const ChatBox = ({ submitForm, values }) => {
           <option value="#ccffcc">Green</option>
           <option value="#ffffcc">Yellow</option>
           <option value="#ccffff">Sky</option>
-        </Field>
+        </Field> */}
         <Field type="text" name="name" />
         <Field
           component="textarea"
@@ -80,6 +83,24 @@ const StyledContainer = styled.div`
   padding-bottom: calc(env(safe-area-inset-bottom) + 4px);
   display: flex;
   background: #eee;
+  /* padding-left: 64px; */
+  position: relative;
+  /* figure {
+    border: 4px solid #eee;
+    width: 60px;
+    height: 60px;
+    background: #fefefe;
+    position: absolute;
+    top: -12px;
+    left: -8px;
+    border-radius: 50%;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  } */
   form {
     display: flex;
     flex: 1;

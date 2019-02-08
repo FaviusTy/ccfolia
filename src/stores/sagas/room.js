@@ -25,6 +25,8 @@ const listenMessagesChannel = function*({ id }) {
 const messageAdd = function*({ message }) {
   const uid = yield select(state => state.user.uid);
   const id = yield select(state => state.room.id);
+  console.log(uid)
+
   if (uid) {
     const dice = roller.roll(message.text);
     if (dice.rolls.length > 0) {

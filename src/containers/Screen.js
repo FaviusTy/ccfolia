@@ -180,16 +180,22 @@ Styled.Field = styled.div`
   height: 100%;
 `;
 Styled.Obj = styled.div`
+  position: relative;
   button {
     padding: 2px;
     border: none;
-    border-radius: 0 0 4px 4px;
+    /* border-radius: 8px 8px 0 0; */
+    /* border-radius: 0 0 4px 4px; */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: block;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     width: 100%;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.9);
     font-size: 10px;
     color: #888;
   }

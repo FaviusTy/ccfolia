@@ -10,7 +10,9 @@ import {
   FaMusic,
   FaCog,
   FaTable,
-  FaDAndD
+  FaDAndD,
+  FaDiceD6,
+  FaDiceD20
 } from "react-icons/fa";
 
 const RoomMenu = ({
@@ -28,20 +30,11 @@ const RoomMenu = ({
           <FaChessPawn />
         </i>
       </Styled.Item>
-      <Styled.Item onClick={() => setControl("status")} type="button">
+      {/* <Styled.Item onClick={() => setControl("status")} type="button">
         <i>
           <FaTable />
         </i>
-      </Styled.Item>
-      <Styled.Item
-        className="current"
-        onClick={() => rollDice("1d100")}
-        type="button"
-      >
-        <i>
-          <FaDAndD />
-        </i>
-      </Styled.Item>
+      </Styled.Item> */}
       <Styled.Item onClick={() => setControl("fields")} type="button">
         <i>
           <FaImages />
@@ -52,6 +45,31 @@ const RoomMenu = ({
           <FaCog />
         </i>
       </Styled.Item>
+      {/* <Styled.Item
+        onClick={() => rollDice("1d6")}
+        type="button"
+      >
+        <i>
+          <FaDiceD6 />
+        </i>
+      </Styled.Item>
+      <Styled.Item
+        onClick={() => rollDice("1d20")}
+        type="button"
+      >
+        <i>
+          <FaDiceD20 />
+        </i>
+      </Styled.Item>
+      <Styled.Item
+        // className="current"
+        onClick={() => rollDice("1d100")}
+        type="button"
+      >
+        <i>
+          <FaDAndD />
+        </i>
+      </Styled.Item> */}
     </Styled.Container>
   );
 };
@@ -144,6 +162,7 @@ Styled.Container = styled.div`
   padding: 16px 8px;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   /* position: absolute;
   right: 8px;
   bottom: -12px;
@@ -162,14 +181,12 @@ Styled.Item = styled.button`
   /* position: absolute; */
   /* bottom: -12px; */
   color: #222;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
   &.current {
-    margin-top: -4px;
-    margin-bottom: -4px;
-    width: 44px;
-    height: 44px;
+    width: 56px;
+    height: 56px;
     background: #222;
     color: #fff;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   }
   i {
     box-sizing: border-box;

@@ -73,13 +73,14 @@ const Container = styled.div`
     .body {
       padding: 4px 8px;
       border-radius: 0 8px 8px 8px;
-      background: #eee;
+      background: #fff;
       color: #222;
     }
     h1 {
       margin-bottom: 2px;
       font-size: 12px;
       font-weight: 800;
+      color: #fff;
     }
     p {
       font-size: 14px;

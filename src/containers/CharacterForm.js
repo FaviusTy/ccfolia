@@ -8,7 +8,7 @@ import Files from "./Files";
 import { FaTimes } from "react-icons/fa";
 import Spinner from "../components/Spinner";
 
-const CharacterForm = ({ item, values, close, setFieldValue }) => {
+const CharacterForm = ({ item, values, remove, setFieldValue }) => {
   return (
     <Styled.Container>
       <Form>
@@ -38,6 +38,9 @@ const CharacterForm = ({ item, values, close, setFieldValue }) => {
             );
           }}
         </Files>
+        <FormAction>
+          <span onClick={() => remove(item.id)}>DELETE</span>
+        </FormAction>
         <FormItem>
           <label htmlFor="name">Name</label>
           <Field name="name" type="text" />
@@ -69,7 +72,7 @@ const SizeField = ({ form: { setFieldValue }, field: { name, value } }) => {
     setFieldValue(name, e.currentTarget.value.split(",").map(v => ~~v));
   });
   return (
-    <select value={value[0]} onChange={handleChange}>
+    <select value={value.join(',')} onChange={handleChange}>
       <option value="1,1">x1</option>
       <option value="2,2">x2</option>
       <option value="3,3">x3</option>
@@ -127,11 +130,12 @@ const mapDispatchToProps = {
       itemId: id,
       object: item
     };
-    // return {
-    //   type: "@CHARACTER_SET",
-    //   id: id,
-    //   character: item
-    // };
+  },
+  remove: (id) => {
+    return {
+      type: "@ROOM_OBJECT_DELETE",
+      itemId: id
+    };
   },
   close: () => {
     return {

@@ -25,7 +25,7 @@ const signInGuest = function*() {
 const listenRoomsChannel = function*({ user }) {
   if (user.uid) {
     const roomsStoreSaga = createStoreSaga(
-      db => db.collection("rooms").where("owner", "==", user.uid),
+      db => db.collection("rooms").where("owner", "==", user.uid).orderBy("t", "asc"),
       "USER_ROOM_CHANGES"
     );
     yield call(roomsStoreSaga);
@@ -36,7 +36,7 @@ const addRoom = function*() {
   const uid = yield select(state => state.user.uid);
   if (uid) {
     const collection = db.collection("rooms");
-    yield call(() => collection.add({ owner: uid }));
+    yield call(() => collection.add({ owner: uid, t: Date.now() }));
   }
 };
 
@@ -84,19 +84,6 @@ export const fileAdd = function*({ file, tags = [], directory = null }) {
   yield collectionRef.add({
     t: Date.now()
   });
-
-  console.log({
-      name: file.name,
-      uploaded: false,
-      url: null,
-      contentType: file.type,
-      owner: user.uid,
-      size: 0,
-      directory,
-      tags,
-      t: Date.now()
-    })
-
 
   const doc = yield call(() =>
     collectionRef.add({
