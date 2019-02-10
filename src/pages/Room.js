@@ -15,13 +15,7 @@ import Background from "../containers/Background";
 import FieldEdit from "../containers/FieldEdit";
 import Settings from "../containers/Settings";
 
-const Room = ({
-  view,
-  form,
-  uploadAnyFiles,
-  closeControls,
-  closeForm
-}) => {
+const Room = ({ view, form, uploadAnyFiles, closeControls, closeForm }) => {
   return (
     <>
       <Background />

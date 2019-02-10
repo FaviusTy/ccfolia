@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useCallback
+} from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 // import { Rnd } from "react-rnd";
@@ -10,17 +16,17 @@ const touchmoveHandler = e => {
 };
 
 const Screen = ({ objects, field, setting, remove, update, edit }) => {
-  const ref = useRef(null);
-  useEffect(() => {
+  const ref = useRef();
+  useLayoutEffect(() => {
     if (ref.current) {
       ref.current.addEventListener("touchmove", touchmoveHandler, {
-        passive: false
+        passive: false,
+        capture: true
       });
       return () =>
         ref.current.removeEventListener("touchmove", touchmoveHandler);
     }
   }, [ref.current]);
-  if (!field) return null;
   return (
     <Styled.Container ref={ref}>
       <Styled.Board style={{ transform: `scale(${setting.scale})` }}>
@@ -96,7 +102,7 @@ const Obj = ({ item, baseSize = 30, scale, onDelete, onEdit, onChange }) => {
 
 const Field = ({ images, baseSize, size, scale, children }) => {
   return (
-    <Draggable scale={scale}>
+    <Draggable scale={scale} onDrag={e => e.preventDefault()}>
       <Styled.Field
         style={{
           width: baseSize * size[0] + "px",
@@ -115,8 +121,9 @@ const Field = ({ images, baseSize, size, scale, children }) => {
 };
 
 const mapStateToProps = state => {
+  const field = state.room.fields[0];
   return {
-    field: state.room.fields[0],
+    field: field ? field : { images: [], baseSize: 30, size: [0, 0] },
     objects: state.room.objects,
     setting: state.setting.screen
   };

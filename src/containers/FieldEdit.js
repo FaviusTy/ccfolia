@@ -45,6 +45,21 @@ const FieldEdit = ({ setFieldValue, setValues, updateField, values }) => {
             {({ files }) => {
               return (
                 <Styled.Select>
+                  <Styled.SelectButton
+                    onClick={() => {
+                      setFieldValue("tracks", [
+                        {
+                          ...values.tracks[0],
+                          url: "",
+                          name: ""
+                        }
+                      ]);
+                      setShowAudioFiles(false);
+                    }}
+                    type="button"
+                  >
+                    --------------
+                  </Styled.SelectButton>
                   {files.map(file => {
                     return (
                       <Styled.SelectButton
@@ -237,7 +252,7 @@ const mapPropsToValues = ({ field }) => {
       images: [{ url: "" }],
       tracks: [{ url: "", volume: 0.05, loop: true }],
       baseSize: 60,
-      size: [15, 12]
+      size: [8, 6]
     };
   }
 };

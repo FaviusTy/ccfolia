@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { withFormik, Form, Field, FieldArray } from "formik";
 import { FormStyle, FormGroup, FormItem, FormAction } from "../components/Form";
 import Files from "./Files";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaPlus } from "react-icons/fa";
 import Spinner from "../components/Spinner";
 
 const CharacterForm = ({ item, values, remove, setFieldValue }) => {
@@ -16,7 +16,11 @@ const CharacterForm = ({ item, values, remove, setFieldValue }) => {
           {({ files, open }) => {
             return (
               <Styled.Files>
-                <div onClick={() => open()}>ADD</div>
+                <Styled.File>
+                  <figure>
+                    <FaPlus onClick={() => open()} />
+                  </figure>
+                </Styled.File>
                 {files.map(file => {
                   return (
                     <Styled.File key={file.id}>
@@ -72,7 +76,7 @@ const SizeField = ({ form: { setFieldValue }, field: { name, value } }) => {
     setFieldValue(name, e.currentTarget.value.split(",").map(v => ~~v));
   });
   return (
-    <select value={value.join(',')} onChange={handleChange}>
+    <select value={value.join(",")} onChange={handleChange}>
       <option value="1,1">x1</option>
       <option value="2,2">x2</option>
       <option value="3,3">x3</option>
@@ -131,7 +135,7 @@ const mapDispatchToProps = {
       object: item
     };
   },
-  remove: (id) => {
+  remove: id => {
     return {
       type: "@ROOM_OBJECT_DELETE",
       itemId: id
@@ -249,7 +253,5 @@ Styled.File = styled.div`
   max-width: 112px;
 `;
 
-Styled.Status = styled.div`
-`;
-Styled.State = styled.div`
-`;
+Styled.Status = styled.div``;
+Styled.State = styled.div``;

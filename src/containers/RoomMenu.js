@@ -45,20 +45,16 @@ const RoomMenu = ({
           <FaCog />
         </i>
       </Styled.Item>
-      {/* <Styled.Item
-        onClick={() => rollDice("1d6")}
-        type="button"
-      >
+      <Styled.Item onClick={() => rollDice("1d6")} type="button">
         <i>
           <FaDiceD6 />
+          d6
         </i>
       </Styled.Item>
-      <Styled.Item
-        onClick={() => rollDice("1d20")}
-        type="button"
-      >
+      <Styled.Item onClick={() => rollDice("1d20")} type="button">
         <i>
           <FaDiceD20 />
+          d20
         </i>
       </Styled.Item>
       <Styled.Item
@@ -68,8 +64,9 @@ const RoomMenu = ({
       >
         <i>
           <FaDAndD />
+          d100
         </i>
-      </Styled.Item> */}
+      </Styled.Item>
     </Styled.Container>
   );
 };

@@ -21,6 +21,11 @@ see: https://firebase.google.com/docs/storage/web/download-files?hl=ja
 gsutil cors set cors.json gs://{bucket}
 ```
 
+### deploy
+```
+npm install -g firebase-tools
+```
+
 ## guide
 ### chat command
 ```

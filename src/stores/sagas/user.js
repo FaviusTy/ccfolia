@@ -25,7 +25,11 @@ const signInGuest = function*() {
 const listenRoomsChannel = function*({ user }) {
   if (user.uid) {
     const roomsStoreSaga = createStoreSaga(
-      db => db.collection("rooms").where("owner", "==", user.uid).orderBy("t", "asc"),
+      db =>
+        db
+          .collection("rooms")
+          .where("owner", "==", user.uid)
+          .orderBy("t", "asc"),
       "USER_ROOM_CHANGES"
     );
     yield call(roomsStoreSaga);
@@ -73,13 +77,15 @@ const deleteRoom = function*({ id }) {
 //   yield call(() => doc.delete());
 // };
 
-export const fileAdd = function*({ file, tags = [], directory = null }) {
+export const fileAdd = function*({ file, tags = [] }) {
   const user = yield select(state => state.user);
+  const id = yield select(state => state.room.id);
+  const directory = `rooms/${id}`;
 
-  if (!user.uid || !file) return;
+  if (!user.uid || !file || !directory) return;
 
   const storageRef = storage.ref(`users/${user.uid}/files`);
-  const collectionRef = db.collection(`files`);
+  const collectionRef = db.collection(`users/${user.uid}/files`);
 
   yield collectionRef.add({
     t: Date.now()
@@ -127,7 +133,7 @@ const fileDelete = function*({ id }) {
   if (!user.uid) return;
 
   const storageRef = storage.ref(`users/${user.uid}/files`);
-  const collectionRef = db.collection(`files`);
+  const collectionRef = db.collection(`users/${user.uid}/files`);
 
   yield call(() => storageRef.child(id).delete());
   yield call(() => collectionRef.doc(id).delete());
@@ -140,7 +146,7 @@ const fileDeleteAll = function*() {
   if (!user.uid) return;
 
   const storageRef = storage.ref(`users/${user.uid}/files`);
-  const collectionRef = db.collection(`files`);
+  const collectionRef = db.collection(`users/${user.uid}/files`);
 
   yield all(
     files.map(({ id }) => {

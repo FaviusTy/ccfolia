@@ -25,7 +25,6 @@ const listenMessagesChannel = function*({ id }) {
 const messageAdd = function*({ message }) {
   const uid = yield select(state => state.user.uid);
   const id = yield select(state => state.room.id);
-  console.log(uid)
 
   if (uid) {
     const dice = roller.roll(message.text);
@@ -175,10 +174,9 @@ const listenFilesChannel = function*({ id }) {
     const roomsStoreSaga = createStoreSaga(
       db =>
         db
-          .collection("files")
-          .where("owner", "==", uid)
+          .collection(`users/${uid}/files`)
           .where("directory", "==", `rooms/${id}`),
-      "ROOM_FILE_CHANGES"
+          "ROOM_FILE_CHANGES"
     );
     yield call(roomsStoreSaga);
   }

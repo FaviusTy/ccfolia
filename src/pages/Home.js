@@ -35,7 +35,7 @@ const Home = ({ uid, name, rooms, addRoom, deleteRoom }) => {
 const Styled = {};
 Styled.Container = styled.div`
   padding-bottom: 60px;
-　p {
+  　p {
     padding: 20px;
   }
 `;
