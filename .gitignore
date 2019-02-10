@@ -23,5 +23,9 @@ yarn-error.log*
 # config
 /src/config
 
+# firebase
+.firebaserc
+.firebase
+
 # assets
 /public/bgm.mp3

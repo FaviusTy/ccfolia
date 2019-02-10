@@ -28,8 +28,7 @@ const listenRoomsChannel = function*({ user }) {
       db =>
         db
           .collection("rooms")
-          .where("owner", "==", user.uid)
-          .orderBy("t", "asc"),
+          .where("owner", "==", user.uid),
       "USER_ROOM_CHANGES"
     );
     yield call(roomsStoreSaga);
