@@ -59,7 +59,7 @@ const CharacterForm = ({ item, values, remove, setFieldValue }) => {
         </FormItem> */}
         <FieldArray name="status" component={StatusField} />
         <FormItem>
-          <label htmlFor="size">Size</label>
+          <label>Size</label>
           <Field name="size" component={SizeField} />
         </FormItem>
         <FormAction>
@@ -72,20 +72,16 @@ const CharacterForm = ({ item, values, remove, setFieldValue }) => {
 };
 
 const SizeField = ({ form: { setFieldValue }, field: { name, value } }) => {
-  const handleChange = useCallback(e => {
-    setFieldValue(name, e.currentTarget.value.split(",").map(v => ~~v));
+  const handleChange = useCallback(value => {
+    setFieldValue(name, value);
   });
   return (
-    <select value={value.join(",")} onChange={handleChange}>
-      <option value="1,1">x1</option>
-      <option value="2,2">x2</option>
-      <option value="3,3">x3</option>
-      <option value="4,4">x4</option>
-      <option value="5,5">x5</option>
-      <option value="6,6">x6</option>
-      <option value="3,4">3x4 (立ち絵)</option>
-    </select>
-  );
+    <Styled.SizeTable>
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => [1, 2, 3, 4, 5, 6, 7, 8].map((y) => {
+        return <button onClick={() => handleChange([x, y])} type="button">{x}-{y}</button>
+      }))}
+    </Styled.SizeTable>
+  )
 };
 
 const StatusField = ({ form, push, remove }) => {
@@ -252,6 +248,20 @@ Styled.File = styled.div`
   width: 25%;
   max-width: 112px;
 `;
+
+Styled.SizeTable = styled.div`
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 240px;
+  button {
+    padding: 0;
+    outline: 1px solid #eee;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+  }
+`
 
 Styled.Status = styled.div``;
 Styled.State = styled.div``;

@@ -7,6 +7,7 @@ import { store, history } from "./stores";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Room from "./pages/Room";
+import StyledRoom from "./pages/StyledRoom";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route exact path="/" component={Login} />
           <Route exact path="/home" component={Home} />
           <Route exact path="/rooms/:id" component={Room} />
+          <Route exact path="/srooms/:id" component={StyledRoom} />
         </>
       </Router>
     </Provider>
