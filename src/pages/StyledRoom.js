@@ -105,7 +105,7 @@ Styled.Messages = styled.div`
   overflow: scroll;
   /* background: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) 10%, rgba(0, 0, 0, 0)); */
   /* background: #fff; */
-  background: rgba(255, 255, 255, 0.9);
+  /* background: rgba(255, 255, 255, 0.9); */
   p {
     padding: 4px 8px;
     /* color: #fff; */
