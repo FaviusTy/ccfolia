@@ -70,22 +70,19 @@ Styled.CreateButton = styled.div`
   right: 0;
 `;
 
-const compareTimestamp = (a ,b) => {
-  const v1 = Number(a.t)
-  const v2 = Number(b.t)
+const compareTimestamp = (a, b) => {
+  const v1 = Number(a.t);
+  const v2 = Number(b.t);
   if (!v1 || !v2) {
-    return 0
+    return 0;
+  } else if (v1 === v2) {
+    return 0;
+  } else if (v1 > v2) {
+    return -1;
+  } else if (v1 < v2) {
+    return 1;
   }
-  else if (v1 === v2) {
-    return 0
-  }
-  else if (v1 > v2) {
-    return -1
-  }
-  else if (v1 < v2) {
-    return 1
-  }
-}
+};
 
 const mapStateToProps = state => {
   return {

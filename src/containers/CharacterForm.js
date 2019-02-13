@@ -77,11 +77,17 @@ const SizeField = ({ form: { setFieldValue }, field: { name, value } }) => {
   });
   return (
     <Styled.SizeTable>
-      {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => [1, 2, 3, 4, 5, 6, 7, 8].map((y) => {
-        return <button onClick={() => handleChange([x, y])} type="button">{x}-{y}</button>
-      }))}
+      {[1, 2, 3, 4, 5, 6, 7, 8].map(x =>
+        [1, 2, 3, 4, 5, 6, 7, 8].map(y => {
+          return (
+            <button onClick={() => handleChange([x, y])} type="button">
+              {x}-{y}
+            </button>
+          );
+        })
+      )}
     </Styled.SizeTable>
-  )
+  );
 };
 
 const StatusField = ({ form, push, remove }) => {
@@ -261,7 +267,7 @@ Styled.SizeTable = styled.div`
     height: 30px;
     text-align: center;
   }
-`
+`;
 
 Styled.Status = styled.div``;
 Styled.State = styled.div``;

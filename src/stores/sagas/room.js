@@ -176,7 +176,7 @@ const listenFilesChannel = function*({ id }) {
         db
           .collection(`users/${uid}/files`)
           .where("directory", "==", `rooms/${id}`),
-          "ROOM_FILE_CHANGES"
+      "ROOM_FILE_CHANGES"
     );
     yield call(roomsStoreSaga);
   }

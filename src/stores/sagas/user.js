@@ -25,10 +25,7 @@ const signInGuest = function*() {
 const listenRoomsChannel = function*({ user }) {
   if (user.uid) {
     const roomsStoreSaga = createStoreSaga(
-      db =>
-        db
-          .collection("rooms")
-          .where("owner", "==", user.uid),
+      db => db.collection("rooms").where("owner", "==", user.uid),
       "USER_ROOM_CHANGES"
     );
     yield call(roomsStoreSaga);

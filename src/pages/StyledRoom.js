@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import { FaPaperPlane, FaClipboardList } from 'react-icons/fa'
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import { FaPaperPlane, FaClipboardList } from "react-icons/fa";
 
 import CharacterForm from "../containers/CharacterForm";
 import Screen from "../containers/Screen";
@@ -13,65 +13,121 @@ import Background from "../containers/Background";
 import FieldEdit from "../containers/FieldEdit";
 import Settings from "../containers/Settings";
 
-const sentences = ["1d100", "1d6", "1d8", "1d10", "1d20", "1d100", "1d3", "1d6", "1d8", "1d10", "1d20", "1d100"]
+const sentences = [
+  "1d100",
+  "1d6",
+  "1d8",
+  "1d10",
+  "1d20",
+  "1d100",
+  "1d3",
+  "1d6",
+  "1d8",
+  "1d10",
+  "1d20",
+  "1d100"
+];
 
 const Room = ({ init, id }) => {
   useEffect(() => {
     init(id);
     return () => init(null);
   }, [id]);
-  return (<Styled.Container>
-    <Background />
-    <Styled.Screen>
-      <Screen />
-      {/* <img className="bg" src="/bg.jpg" alt="" /> */}
-    </Styled.Screen>
-    {/* <Styled.Layer>
+  return (
+    <Styled.Container>
+      <Background />
+      <Styled.Screen>
+        <Screen />
+        {/* <img className="bg" src="/bg.jpg" alt="" /> */}
+      </Styled.Screen>
+      {/* <Styled.Layer>
       <FieldEdit />
     </Styled.Layer> */}
-    <Styled.Chat>
-      <Styled.Messages>
-        <Messages />
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-        <p><strong>name:</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, corrupti.</p>
-      </Styled.Messages>
-      <Styled.ChatBox>
-        <nav>
-          <div className="menu">
-            <button type="button"><FaClipboardList /></button>
-          </div>
-          <div className="sentences">
-            {
-              sentences.map((text) => {
-                return (<div className="sentence"><button type="button">{text}</button></div>)
-              })
-            }
-          </div>
-        </nav>
-        <form>
-          <figure><img src="/bg.jpg" alt=""/></figure>
-          <textarea type="text" placeholder="Input text..."></textarea>
-          <button type="button"><FaPaperPlane /></button>
-          {/* <button type="button">SAVE</button> */}
-        </form>
-      </Styled.ChatBox>
-    </Styled.Chat>
-  </Styled.Container>)
-}
+      <Styled.Chat>
+        <Styled.Messages>
+          <Messages />
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+          <p>
+            <strong>name:</strong>Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Nihil, corrupti.
+          </p>
+        </Styled.Messages>
+        <Styled.ChatBox>
+          <nav>
+            <div className="menu">
+              <button type="button">
+                <FaClipboardList />
+              </button>
+            </div>
+            <div className="sentences">
+              {sentences.map(text => {
+                return (
+                  <div className="sentence">
+                    <button type="button">{text}</button>
+                  </div>
+                );
+              })}
+            </div>
+          </nav>
+          <form>
+            <figure>
+              <img src="/bg.jpg" alt="" />
+            </figure>
+            <textarea type="text" placeholder="Input text..." />
+            <button type="button">
+              <FaPaperPlane />
+            </button>
+            {/* <button type="button">SAVE</button> */}
+          </form>
+        </Styled.ChatBox>
+      </Styled.Chat>
+    </Styled.Container>
+  );
+};
 
-const Styled = {}
+const Styled = {};
 Styled.Container = styled.div`
   height: 100vh;
-`
+`;
 Styled.Screen = styled.div`
   height: 100%;
   width: 100%;
@@ -87,7 +143,7 @@ Styled.Screen = styled.div`
     object-fit: cover;
     filter: blur(8px) brightness(80%);
   }
-`
+`;
 Styled.Chat = styled.div`
   position: absolute;
   left: 0;
@@ -96,7 +152,7 @@ Styled.Chat = styled.div`
   max-height: 50%;
   display: flex;
   flex-direction: column;
-`
+`;
 Styled.Messages = styled.div`
   box-sizing: border-box;
   margin-bottom: -1px;
@@ -115,7 +171,7 @@ Styled.Messages = styled.div`
       color: #888;
     }
   }
-`
+`;
 Styled.Layer = styled.div`
   border-radius: 24px 24px 0 0;
   position: fixed;
@@ -127,7 +183,7 @@ Styled.Layer = styled.div`
   padding-top: 32px;
   background: rgba(255, 255, 255, 0.74);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-`
+`;
 Styled.ChatBox = styled.div`
   padding: 12px;
   background: rgba(0, 0, 0, 0.6);
@@ -230,27 +286,26 @@ Styled.ChatBox = styled.div`
       }
     }
   }
-`
-Styled.ChatPalet = styled.div`
-`
+`;
+Styled.ChatPalet = styled.div``;
 
 const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
   return {
     id
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
-  init: (id) => {
+  init: id => {
     return {
       type: "@ROOM_INIT",
       id
-    }
+    };
   }
-}
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Room)
+)(Room);

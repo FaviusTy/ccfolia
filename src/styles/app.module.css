@@ -1,0 +1,5 @@
+.App {
+  composes: _L from "./layouts.module.css";
+  composes: _C from "./components.module.css";
+  composes: _E from "./elements.module.css";
+}
