@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import Chat from "../components/Chat";
+
+import Messages from "../components/Messages";
+import ChatBox from "../components/ChatBox";
 
 const ShowCase = () => {
   return (
     <div>
-      <Chat messages={[1, 2, 3, 4, 5]} />
+      <Messages items={[1, 2, 3, 4, 5]} />
+      <ChatBox />
     </div>
   );
 };
