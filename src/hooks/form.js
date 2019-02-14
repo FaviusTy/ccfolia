@@ -1,28 +1,44 @@
 import { useState, useCallback } from "react";
+import _ from "lodash";
 
-export const useForm = (initialValues, onSubmit) => {
+export const useForm = (initialValues, handleSubmit) => {
   const [values, setValues] = useState(initialValues);
   const setFieldValue = useCallback(
     (name, value) => {
       setValues(state => {
-        return {
-          ...state,
-          [name]: value
-        };
+        const nextState = { ...state };
+        return _.set(nextState, name, value);
       });
     },
     [setValues]
   );
-  const handleChange = useCallback(
-    ({ currentTarget: { value, name } }) => {
-      setFieldValue(name, value);
+  const onChange = useCallback(
+    ({ target: { value, name, type, tagName } }) => {
+      switch (type) {
+        case "number": {
+          return setFieldValue(name, Number(value));
+        }
+        case "text": {
+          return setFieldValue(name, String(value));
+        }
+        case "checkbox": {
+          return setFieldValue(name, Boolean(value));
+        }
+        default: {
+          if (tagName === "textarea") {
+            return setFieldValue(name, String(value));
+          } else {
+            return setFieldValue(name, value);
+          }
+        }
+      }
     },
     [setValues]
   );
   const submit = useCallback(() => {
-    onSubmit(values, { setValues, setFieldValue });
+    handleSubmit(values, { setValues, setFieldValue });
   });
-  const handleSubmit = useCallback(e => {
+  const onSubmit = useCallback(e => {
     e.preventDefault();
     submit();
   });
@@ -31,7 +47,9 @@ export const useForm = (initialValues, onSubmit) => {
     setValues,
     setFieldValue,
     submit,
-    handleChange,
-    handleSubmit
+    formProps: {
+      onChange,
+      onSubmit
+    }
   };
 };

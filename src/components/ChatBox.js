@@ -42,7 +42,7 @@ const ChatBox = ({
     }
   });
   // form
-  const { values, submit, setFieldValue, handleChange, handleSubmit } = useForm(
+  const { values, submit, setFieldValue, formProps } = useForm(
     { name, imageUrl: images[0], text: "" },
     onSubmit
   );
@@ -54,7 +54,7 @@ const ChatBox = ({
       {control === "text" ? (
         <ChatPalet items={sentences} onSelect={onSelecText} />
       ) : null}
-      <Form onSubmit={handleSubmit}>
+      <Form {...formProps}>
         <Profile
           onClick={() =>
             setControl(state => (state === "image" ? null : "image"))
@@ -64,7 +64,6 @@ const ChatBox = ({
         </Profile>
         <TextAreaField
           name="text"
-          onChange={handleChange}
           onKeyPress={handleKeyPress}
           value={values.text}
         />
