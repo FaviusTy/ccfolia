@@ -1,5 +1,5 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
-export const TextField = styled.input``
-export const TextAreaField = styled.textarea``
-export const SubmitButton = styled.button``
+export const TextField = styled.input``;
+export const TextAreaField = styled.textarea``;
+export const SubmitButton = styled.button``;

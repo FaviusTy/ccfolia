@@ -13,7 +13,7 @@ export const useForm = (initialValues, handleSubmit) => {
     [setValues]
   );
   const onChange = useCallback(
-    ({ target: { value, name, type, tagName } }) => {
+    ({ target: { value, checked, name, type, tagName } }) => {
       switch (type) {
         case "number": {
           return setFieldValue(name, Number(value));
@@ -22,7 +22,7 @@ export const useForm = (initialValues, handleSubmit) => {
           return setFieldValue(name, String(value));
         }
         case "checkbox": {
-          return setFieldValue(name, Boolean(value));
+          return setFieldValue(name, Boolean(checked));
         }
         default: {
           if (tagName === "textarea") {
