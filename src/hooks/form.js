@@ -19,14 +19,18 @@ export const useForm = (initialValues, onSubmit) => {
     },
     [setValues]
   );
+  const submit = useCallback(() => {
+    onSubmit(values, { setValues, setFieldValue });
+  });
   const handleSubmit = useCallback(e => {
     e.preventDefault();
-    onSubmit(values, { setValues, setFieldValue });
+    submit();
   });
   return {
     values,
     setValues,
     setFieldValue,
+    submit,
     handleChange,
     handleSubmit
   };
