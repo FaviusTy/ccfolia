@@ -1,10 +1,10 @@
-import React, { memo, useState, useMemo, useCallback } from "react";
+import React, { memo, useState, useMemo, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Dropzone from "react-dropzone";
 
 import { useAction } from "../../hooks/redux-action";
 
-import { FaCheck, FaPlus } from "react-icons/fa";
+import { FaCheck, FaPlus, FaFileAudio } from "react-icons/fa";
 
 const arrayToMap = array => {
   return array.reduce((map, item, i) => {
@@ -17,7 +17,8 @@ const SelectFile = ({
   files = [],
   selected = [],
   onSelect,
-  onDrop,
+  // onDrop,
+  type = "image", // audio
   max = 99,
   accept = ["image/jpg", "image/png", "image/gif"],
   ...props
@@ -49,56 +50,70 @@ const SelectFile = ({
   ]);
   // dispatch
   const { addFiles } = useAction(actions);
+  // effect
+  useEffect(() => {
+    const nextState = selected.filter(targetUrl =>
+      files.some(({ url }) => url === targetUrl)
+    );
+    setSelectedUrls(nextState);
+  }, [show]);
   return (
     <Container>
-      <button onClick={() => setShow(state => !state)} {...props} />
+      <button
+        onClick={() => setShow(state => !state)}
+        type="button"
+        {...props}
+      />
       {show ? (
         <Dropzone onDrop={addFiles} disableClick accept={accept}>
           {({ getRootProps, getInputProps, isDragActive, open }) => {
             return (
               <Layer {...getRootProps()} data-active={isDragActive}>
-                <Header>
-                  <input {...getInputProps()} />
-                  <Counter>
-                    Selected {selectedUrls.length}/{max} items
-                  </Counter>
-                  <Button onClick={handleSelect} />
-                </Header>
-                <List>
-                  {files.map((file, i) => {
-                    const fileType = getFileType(file.contentType);
-                    switch (fileType) {
-                      case "image": {
-                        return (
-                          <Item
-                            selected={selectedUrlsMap[file.url]}
-                            key={i}
-                            onClick={() => handleClick(file)}
-                          >
-                            <Image src={file.url} />
-                          </Item>
-                        );
+                <Frame>
+                  <Header>
+                    <input {...getInputProps()} />
+                    <Counter>
+                      Selected {selectedUrls.length}/{max} items
+                    </Counter>
+                    <Button onClick={handleSelect} />
+                  </Header>
+                  <List>
+                    {files.map((file, i) => {
+                      const fileType = getFileType(file.contentType);
+                      if (type !== fileType) return null;
+                      switch (fileType) {
+                        case "image": {
+                          return (
+                            <ImageItem
+                              selected={selectedUrlsMap[file.url]}
+                              key={i}
+                              onClick={() => handleClick(file)}
+                            >
+                              <Image src={file.url} />
+                            </ImageItem>
+                          );
+                        }
+                        case "audio": {
+                          return (
+                            <AudioItem
+                              selected={selectedUrlsMap[file.url]}
+                              key={i}
+                              onClick={() => handleClick(file)}
+                            >
+                              {file.name}
+                            </AudioItem>
+                          );
+                        }
+                        default: {
+                          return null;
+                        }
                       }
-                      case "audio": {
-                        return (
-                          <Item
-                            selected={selectedUrlsMap[file.url]}
-                            key={i}
-                            onClick={() => handleClick(file)}
-                          >
-                            <Audio src={file.url} />
-                          </Item>
-                        );
-                      }
-                      default: {
-                        return <Item key={i}>Null</Item>;
-                      }
-                    }
-                  })}
-                </List>
-                <AddFileButton onClick={open}>
-                  <FaPlus /> Add new file
-                </AddFileButton>
+                    })}
+                  </List>
+                  <AddFileButton onClick={open}>
+                    <FaPlus /> Add new file
+                  </AddFileButton>
+                </Frame>
               </Layer>
             );
           }}
@@ -125,6 +140,14 @@ const Container = styled.div`
   /* min-height: 50vh; */
 `;
 const Layer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+`;
+const Frame = styled.div`
   margin: auto;
   width: 100%;
   max-width: 420px;
@@ -132,19 +155,20 @@ const Layer = styled.div`
   max-height: 360px;
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 100;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
 `;
 const List = styled.div`
   display: flex;
   flex: 1;
   flex-wrap: wrap;
   align-content: flex-start;
+  align-items: flex-start;
   justify-content: flex-start;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
@@ -153,7 +177,7 @@ const List = styled.div`
   }
   background: #fff;
 `;
-const Item = styled.div`
+const ImageItem = styled.div`
   box-sizing: border-box;
   position: relative;
   width: 20%;
@@ -174,6 +198,37 @@ const Item = styled.div`
     position: absolute;
     top: 4px;
     right: 4px;
+    z-index: 1;
+    line-height: 1;
+    background: ${({ selected }) => (selected ? "#484" : "#eee")};
+    color: #8c8;
+    font-size: 10px;
+    font-weight: 800;
+  }
+`;
+const AudioItem = styled.div`
+  margin-bottom: 1px;
+  padding: 12px;
+  padding-left: 24px;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #fff;
+  color: #888;
+  font-size: 12px;
+  ::after {
+    content: "";
+    margin-top: -4px;
+    box-sizing: border-box;
+    padding: 4px;
+    display: block;
+    border: 1px solid #fff;
+    position: absolute;
+    top: 50%;
+    left: 8px;
     z-index: 1;
     line-height: 1;
     background: ${({ selected }) => (selected ? "#484" : "#eee")};
@@ -205,7 +260,6 @@ const Image = styled.img`
   height: 100%;
   object-fit: cover;
 `;
-const Audio = styled.audio``;
 const Header = styled.div`
   padding: 4px;
   border-bottom: 1px solid #eee;
