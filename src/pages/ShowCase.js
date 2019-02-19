@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 
 import Messages from "../components/Messages";
 import ChatBox from "../components/ChatBox";
@@ -7,15 +8,16 @@ import FieldObjectEdit from "../components/FieldObjectEdit";
 import SceneEdit from "../components/SceneEdit";
 
 const ShowCase = () => {
-  return (
-    <div>
-      <SceneEdit />
-      <FieldObjectEdit />
-      <FieldObjectList />
-      <Messages items={[1, 2, 3, 4, 5]} />
-      <ChatBox />
-    </div>
-  );
+  return (<Container>
+    <Main></Main>
+  </Container>);
 };
+
+const Container = styled.div`
+  display: flex;
+`
+const Frame = styled.div``
+const Main = styled.div``
+const Side = styled.div``
 
 export default ShowCase;

@@ -23,27 +23,6 @@ import FileSelect from "./shared/FileSelect";
 const dfiles = [
   { url: "/bg.jpg", contentType: "image/jpeg" },
   { url: "/bg2.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
-  { url: "/bg3.jpg", contentType: "image/jpeg" },
   { url: "/bg3.jpg", contentType: "image/jpeg" }
 ];
 const FieldObjectEdit = ({ files = dfiles }) => {
