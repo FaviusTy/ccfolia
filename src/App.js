@@ -21,12 +21,10 @@ const Navigation = () => {
       position: "fixed",
       bottom: 0,
       left: 0,
-      right: 0,
       zIndex: 99999999999
     }}>
       <Link to="/">Welcome</Link>
       <Link to="/home">Home</Link>
-      <Link to="/rooms">Rooms</Link>
       <Link to="/rooms/1">Room 1</Link>
     </div>
   );
