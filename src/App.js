@@ -13,22 +13,24 @@ import { store, history } from "./stores";
 import Welcome from "./pages/proto/Welcome";
 import Home from "./pages/proto/Home";
 import Room from "./pages/proto/Room";
-import Rooms from "./pages/proto/Rooms";
-import RoomFields from "./pages/proto/Room/Fields";
-import RoomScenes from "./pages/proto/Room/Scenes";
-import RoomCharacters from "./pages/proto/Room/Characters";
 
 const Navigation = () => {
-  return <div>
-    <Link to="/">Welcome</Link>
-    <Link to="/home">Home</Link>
-    <Link to="/rooms">Rooms</Link>
-    <Link to="/rooms/1">Room 1</Link>
-    <Link to="/rooms/1/fields">Room 1 Fields</Link>
-    <Link to="/rooms/1/characters">Room 1 Characters</Link>
-    <Link to="/rooms/1/scenes">Room 1 Scenes</Link>
-  </div>
-}
+  return (
+    <div style={{
+      background: "#ccc",
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 99999999999
+    }}>
+      <Link to="/">Welcome</Link>
+      <Link to="/home">Home</Link>
+      <Link to="/rooms">Rooms</Link>
+      <Link to="/rooms/1">Room 1</Link>
+    </div>
+  );
+};
 
 const App = () => {
   return (
@@ -43,10 +45,10 @@ const App = () => {
           <Navigation />
           <Route exact path="/" component={Welcome} />
           <Route exact path="/home" component={Home} />
-          <Route exact path="/rooms" component={Rooms} />
+          {/* <Route exact path="/rooms" component={Rooms} /> */}
           <Route path="/rooms/:id" component={Room} />
-          <Route path="/rooms/:id/characters" component={RoomCharacters} />
-          <Route path="/rooms/:id/fields" component={RoomFields} />
+          {/* <Route path="/rooms/:id/characters" component={RoomCharacters} /> */}
+          {/* <Route path="/rooms/:id/fields" component={RoomFields} /> */}
         </>
       </Router>
     </Provider>

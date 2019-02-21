@@ -112,7 +112,12 @@ const SceneEdit = ({}) => {
         </FieldGroup>
 
         <FieldTitle>BGM</FieldTitle>
-        <TextField name="bgm.url" type="text" disabled defaultValue={values.bgm.url} />
+        <TextField
+          name="bgm.url"
+          type="text"
+          disabled
+          defaultValue={values.bgm.url}
+        />
         <FileSelect
           files={dfiles2}
           onSelect={urls => setFieldValue("bgm.url", urls[0] || "")}

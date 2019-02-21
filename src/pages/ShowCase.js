@@ -8,16 +8,18 @@ import FieldObjectEdit from "../components/FieldObjectEdit";
 import SceneEdit from "../components/SceneEdit";
 
 const ShowCase = () => {
-  return (<Container>
-    <Main></Main>
-  </Container>);
+  return (
+    <Container>
+      <Main />
+    </Container>
+  );
 };
 
 const Container = styled.div`
   display: flex;
-`
-const Frame = styled.div``
-const Main = styled.div``
-const Side = styled.div``
+`;
+const Frame = styled.div``;
+const Main = styled.div``;
+const Side = styled.div``;
 
 export default ShowCase;
