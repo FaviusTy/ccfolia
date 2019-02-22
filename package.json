@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
     "connected-react-router": "^6.2.2",
     "firebase": "^5.7.2",
     "form-serialize": "^0.7.2",

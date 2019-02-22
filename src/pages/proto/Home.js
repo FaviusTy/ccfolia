@@ -7,7 +7,7 @@ import { FaPlusCircle } from "react-icons/fa";
 const Home = () => {
   return <Container>
     <Background />
-    <Titlebar />
+    {/* <Titlebar /> */}
     <Profile>
       <ProfileIcon><ProfileImage src="/bg.jpg" /></ProfileIcon>
       <ProfileText>

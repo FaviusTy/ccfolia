@@ -13,6 +13,7 @@ import { store, history } from "./stores";
 import Welcome from "./pages/proto/Welcome";
 import Home from "./pages/proto/Home";
 import Room from "./pages/proto/Room";
+import CharacterSelect from "./pages/proto/Room/CharacterSelect";
 
 const Navigation = () => {
   return (
@@ -26,6 +27,7 @@ const Navigation = () => {
       <Link to="/">Welcome</Link>
       <Link to="/home">Home</Link>
       <Link to="/rooms/1">Room 1</Link>
+      <Link to="/rooms/1/sounds">Room 1 Sounds</Link>
     </div>
   );
 };
@@ -45,7 +47,9 @@ const App = () => {
           <Route exact path="/home" component={Home} />
           {/* <Route exact path="/rooms" component={Rooms} /> */}
           <Route path="/rooms/:id" component={Room} />
-          {/* <Route path="/rooms/:id/characters" component={RoomCharacters} /> */}
+          <Route path="/rooms/:id/characters" component={CharacterSelect} />
+          <Route path="/rooms/:id/images" component={CharacterSelect} />
+          <Route path="/rooms/:id/sounds" component={CharacterSelect} />
           {/* <Route path="/rooms/:id/fields" component={RoomFields} /> */}
         </>
       </Router>

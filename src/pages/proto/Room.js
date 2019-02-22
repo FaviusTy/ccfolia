@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import Titlebar from "../../components/Titlebar"
 import theme from "../../styles/theme";
-import { FaPaperPlane, FaClipboard, FaAngleUp } from "react-icons/fa";
+import { FaPaperPlane, FaClipboard, FaAngleUp, FaBell } from "react-icons/fa";
 
 const Rooms = () => {
   return (<>
     <Container>
-      <Titlebar></Titlebar>
+      {/* <Titlebar></Titlebar> */}
       <Map>
         <Plane col="30" row="30"><PlaneImage src="/bg.jpg" /></Plane>
       </Map>
@@ -20,6 +20,9 @@ const Rooms = () => {
         </SceneMenu>
       </Screen> */}
       <Chat>
+        <ChatHead>
+          <FaBell />
+        </ChatHead>
         <Messages>
           {[...Array(100)].map((_, id) => {
             return (<Message key={id}>
@@ -36,7 +39,7 @@ const Rooms = () => {
             </Message>)
           })}
         </Messages>
-        <Tab>
+        <ChatMenu>
           <TabList>
             <TabItem>Main</TabItem>
             <TabItem>A</TabItem>
@@ -44,13 +47,14 @@ const Rooms = () => {
             <TabItem>C</TabItem>
             <TabItem>D</TabItem>
             <TabItem>E</TabItem>
-            <TabItem>A</TabItem>
-            <TabItem>B</TabItem>
-            <TabItem>C</TabItem>
-            <TabItem>D</TabItem>
-            <TabItem>E</TabItem>
+            <TabItem>F</TabItem>
+            <TabItem>G</TabItem>
+            <TabItem>H</TabItem>
+            <TabItem>I</TabItem>
+            <TabItem>J</TabItem>
           </TabList>
-        </Tab>
+          <ChatMenuButton type="button"><FaClipboard /></ChatMenuButton>
+        </ChatMenu>
         <ChatBox>
           <ChatBoxIcon>
             <ChatBoxImage src="/bg.jpg" />
@@ -63,9 +67,9 @@ const Rooms = () => {
             <ChatBoxTextInput />
             <ChatBoxSendButton type="submit"><FaPaperPlane /></ChatBoxSendButton>
           </ChatBoxText>
-          <ChatBoxMenu>
+          {/* <ChatBoxMenu>
             <ChatBoxMenuButton type="button"><FaClipboard /></ChatBoxMenuButton>
-          </ChatBoxMenu>
+          </ChatBoxMenu> */}
         </ChatBox>
       </Chat>
     </Container>
@@ -83,9 +87,11 @@ const Chat = styled.div`
   /* margin: auto; */
   /* outline: 1px solid gray; */
   /* max-height: 100vh; */
-  width: 40%;
   display: flex;
   flex-direction: column;
+  position: relative;
+  width: 40%;
+  max-width: 420px;
   background: ${theme.color.white};
   /* box-shadow: 0 0 12px rgba(0, 0, 0, 0.6); */
   @media (max-width: 720px) {
@@ -137,12 +143,15 @@ const MessageBody = styled.div`
   flex: 1;
 `
 const MessageText = styled.p``
-const Tab = styled.div`
+const ChatMenu = styled.div`
   padding: 8px 12px;
+  display: flex;
 `
 const TabList = styled.div`
+  margin-right: 5px;
   display: flex;
   flex-wrap: nowrap;
+  flex: 1;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
   ::-webkit-scrollbar {
@@ -161,7 +170,7 @@ const TabItem = styled.button`
   font-weight: 800;
   font-family: sans-serif;
   & + & {
-    margin-left: 12px;
+    margin-left: 8px;
   }
 `
 const ChatBox = styled.div`
@@ -187,7 +196,7 @@ const ChatBoxNameInput = styled.input`
   box-sizing: border-box;
   padding: 8px;
   padding-right: 24px;
-  border: 1px solid #ccc;
+  border: 1px solid ${theme.color.base};
   width: 90px;
   height: 36px;
   appearance: none;
@@ -214,7 +223,7 @@ const ChatBoxTextInput = styled.textarea`
   box-sizing: border-box;
   padding: 8px;
   padding-right: 28px;
-  border: 1px solid #ccc;
+  border: 1px solid ${theme.color.base};
   resize: vertical;
   height: 36px;
   min-height: 36px;
@@ -235,7 +244,12 @@ const ChatBoxSendButton = styled.button`
   width: 20px;
   height: 20px;
   font-size: 14px;
-  color: ${theme.color.dark};
+  color: ${theme.color.base};
+`
+const ChatHead = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
 `
 const ChatBoxMenu = styled.div`
   /* margin-left: 8px; */
@@ -248,6 +262,17 @@ const ChatBoxMenuButton = styled.button`
   background: none;
   width: 36px;
   height: 36px;
+  font-size: 14px;
+  color: ${theme.color.dark};
+`
+const ChatMenuButton = styled.button`
+  /* outline: 1px solid red; */
+  padding: 5px;
+  display: block;
+  border: none;
+  background: none;
+  width: 24px;
+  height: 24px;
   font-size: 14px;
   color: ${theme.color.dark};
 `
@@ -283,10 +308,10 @@ const Map = styled.div`
   right: 0;
   bottom: 0;
   z-index: -1; */
-  width: 60%;
+  /* width: 60%; */
+  flex: 1;
   overflow: scroll;
   @media (max-width: 720px) {
-    width: 100%;
     height: 55%;
   }
 `
