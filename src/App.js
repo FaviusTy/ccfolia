@@ -17,13 +17,15 @@ import CharacterSelect from "./pages/proto/Room/CharacterSelect";
 
 const Navigation = () => {
   return (
-    <div style={{
-      background: "#ccc",
-      position: "fixed",
-      bottom: 0,
-      left: 0,
-      zIndex: 99999999999
-    }}>
+    <div
+      style={{
+        background: "#ccc",
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        zIndex: 99999999999
+      }}
+    >
       <Link to="/">Welcome</Link>
       <Link to="/home">Home</Link>
       <Link to="/rooms/1">Room 1</Link>

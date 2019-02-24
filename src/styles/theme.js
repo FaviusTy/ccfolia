@@ -9,4 +9,4 @@ export default {
     base: "#7FC4FD",
     dark: "#2699FB"
   }
-}
+};

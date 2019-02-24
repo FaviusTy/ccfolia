@@ -1,5 +1,5 @@
-import styled from "styled-components"
-import theme from "../styles/theme"
+import styled from "styled-components";
+import theme from "../styles/theme";
 
 export const Button = styled.button`
   box-sizing: border-box;
@@ -10,4 +10,4 @@ export const Button = styled.button`
   background: ${theme.color.dark};
   color: ${theme.color.light};
   font-size: 12px;
-`
+`;
