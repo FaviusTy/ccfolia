@@ -12,6 +12,10 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
+import TextField from "@material-ui/core/TextField";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -56,6 +60,37 @@ const Rooms = () => {
             );
           })}
         </List>
+        <Box>
+          <Select
+            // value={this.state.age}
+            // onChange={this.handleChange}
+            input={
+              <OutlinedInput
+                labelWidth={20}
+                name="age"
+                id="outlined-age-simple"
+              />
+            }
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+          <TextField
+            // id="outlined-multiline-flexible"
+            label="Multiline"
+            multiline
+            rowsMax="4"
+            // value={}
+            // onChange={}
+            // margin="normal"
+            // helperText="hello"
+            variant="outlined"
+          />
+        </Box>
       </Box>
     </Box>
   );

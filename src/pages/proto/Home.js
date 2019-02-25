@@ -9,156 +9,43 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
 
+// import { unstable_Box as Box } from '@material-ui/core/Box';
+import Box from "modules/material-ui-polyfill/Box";
+
+
 const Home = () => {
   return (
-    <Container>
-      <Background />
+    <Box display="flex" height="100%">
       {/* <Titlebar /> */}
-      <Profile>
-        <ProfileIcon>
-          <ProfileImage src="/bg.jpg" />
-        </ProfileIcon>
-        <ProfileText>
-          <ProfileName>DISPLAY NAME</ProfileName>
-          <ProfileDescription>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad,
-            nostrum?
-          </ProfileDescription>
-        </ProfileText>
-      </Profile>
-      <Information>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, rerum
-        dolorem rem quae ratione culpa ipsum cupiditate voluptas iusto ipsa nisi
-        sapiente nam accusantium mollitia commodi? Illo voluptate repudiandae
-        dolorem.
-      </Information>
-      <GridList>
-        {[...Array(10)].map((_, i) => {
-          return (
-            <GridListTile key={i}>
-              <img src="/bg.jpg" />
-              <GridListTileBar
-                title={"aaa"}
-                subtitle={<span>by: ccfolia</span>}
-                actionIcon={
-                  <IconButton>
-                    <InfoIcon />
-                  </IconButton>
-                }
-              />
-            </GridListTile>
-          );
-        })}
-        <RoomItem>
-          <RoomAddButton>
-            <FaPlusCircle />
-          </RoomAddButton>
-        </RoomItem>
-      </GridList>
-    </Container>
+      <Box flex={1}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio
+        laudantium facilis eos consectetur, fugiat dignissimos cumque? Odit
+        fugit exercitationem temporibus nulla, veniam, sed voluptatum eius
+        ipsam distinctio, nisi sapiente obcaecati.
+      </Box>
+      <Box width={420} overflow="scroll">
+        <GridList>
+          {[...Array(10)].map((_, i) => {
+            return (
+              <GridListTile key={i}>
+                <img src="/bg.jpg" />
+                <GridListTileBar
+                  title={"aaa"}
+                  subtitle={<span>by: ccfolia</span>}
+                  actionIcon={
+                    <IconButton>
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </GridListTile>
+            );
+          })}
+          <GridListTile>+</GridListTile>
+        </GridList>
+      </Box>
+    </Box>
   );
 };
-
-const Container = styled.div`
-  margin-left: auto;
-  max-width: 420px;
-  background: ${theme.color.white};
-`;
-const Profile = styled.div`
-  padding: 24px;
-  display: flex;
-  background: ${theme.color.light};
-  color: ${theme.color.dark};
-`;
-const ProfileIcon = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: ${theme.color.white};
-`;
-const ProfileImage = styled.img`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-const ProfileText = styled.div`
-  margin-left: 16px;
-  flex: 1;
-`;
-const ProfileName = styled.h2`
-  font-size: 14px;
-  font-weight: 800;
-`;
-const ProfileDescription = styled.div`
-  margin-top: 8px;
-  font-size: 10px;
-`;
-
-const Information = styled.p`
-  padding: 24px;
-  color: ${theme.color.dark};
-`;
-
-const RoomList = styled.div`
-  padding: 16px;
-  padding-bottom: 64px;
-  background: ${theme.color.light};
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-`;
-const RoomItem = styled.div`
-  box-sizing: border-box;
-  padding: 8px;
-  width: 50%;
-  max-width: 240px;
-`;
-const RoomVisual = styled.div`
-  padding-top: 75%;
-  width: 100%;
-  position: relative;
-`;
-const RoomImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-const RoomText = styled.div`
-  background: ${theme.color.white};
-`;
-const RoomName = styled.h2`
-  padding: 20px;
-  font-size: 12px;
-  font-weight: 800;
-`;
-const RoomAddButton = styled.button`
-  border: none;
-  width: 100%;
-  height: 100%;
-  min-height: 160px;
-  display: block;
-  background: ${theme.color.white};
-  color: ${theme.color.dark};
-  font-size: 48px;
-`;
-const Background = styled.div`
-  background-image: url(/bg.jpg);
-  background-color: ${theme.color.dark};
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-`;
 
 export default Home;
