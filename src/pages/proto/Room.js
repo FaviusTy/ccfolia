@@ -37,7 +37,7 @@ const Rooms = () => {
       </Box>
       <Box>
         <List>
-          {[...Array(100)].map((_, id) => {
+          {[...Array(10)].map((_, id) => {
             return (
               <ListItem key={id} alignItems="flex-start">
                 <ListItemAvatar>
