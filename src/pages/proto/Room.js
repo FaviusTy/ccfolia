@@ -21,12 +21,27 @@ import AddIcon from "@material-ui/icons/Add";
 import Toolbar from "@material-ui/core/Toolbar";
 import InputBase from "@material-ui/core/InputBase";
 
+import InfoIcon from "@material-ui/icons/Info";
+import Button from '@material-ui/core/Button';
+
 // import { unstable_Box as Box } from '@material-ui/core/Box';
 import Box from "modules/material-ui-polyfill/Box";
 
 const Rooms = () => {
   return (
     <Box display="flex">
+      <AppBar color="inherit" position="fixed" elevation={0}>
+        <Toolbar>
+          <Box marginRight={2}><Avatar src="/icon-200x200.png" /></Box>
+          <Typography variant="h6" color="inherit" style={{ flexGrow: 1 }}>
+            CCFOLIA
+          </Typography>
+          <IconButton><InfoIcon /></IconButton>
+          <IconButton><InfoIcon /></IconButton>
+          <IconButton><InfoIcon /></IconButton>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
       <Box>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
