@@ -44,7 +44,7 @@ const App = () => {
           {/* <Route exact path="/rooms/:id" component={Room} /> */}
           {/* <Route exact path="/srooms/:id" component={StyledRoom} /> */}
           {/* <Route exact path="/__components__" component={ShowCase} /> */}
-          <Navigation />
+          {/* <Navigation /> */}
           <Route exact path="/" component={Welcome} />
           <Route exact path="/home" component={Home} />
           {/* <Route exact path="/rooms" component={Rooms} /> */}

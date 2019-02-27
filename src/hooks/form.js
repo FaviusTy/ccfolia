@@ -42,14 +42,20 @@ export const useForm = (initialValues, handleSubmit) => {
     e.preventDefault();
     submit();
   });
+  const Form = (props) => {
+    return <form onSubmit={onSubmit} {...props}></form>;
+  }
   return {
     values,
     setValues,
     setFieldValue,
     submit,
-    formProps: {
-      onChange,
-      onSubmit
-    }
+    onChange,
+    onSubmit,
+    Form
+    // formProps: {
+    //   onChange,
+    //   onSubmit
+    // }
   };
 };
