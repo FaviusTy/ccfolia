@@ -10,8 +10,10 @@ export const LayoutGrid = styled.div`
     grid-template-rows: 56px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 `;
+
 export const LayoutItem = styled.div`
   grid-column: ${({ col }) => col};
   grid-row: ${({ row }) => row};
-  overflow: scroll;
+  /* overflow: scroll; */
+  position: relative;
 `;
